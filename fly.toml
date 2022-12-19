@@ -1,0 +1,16 @@
+# fly.toml file generated for stock-geek on 2022-12-18T21:10:25-07:00
+
+app = "stock-geek"
+kill_signal = "SIGINT"
+kill_timeout = 5
+processes = []
+
+[env]
+
+[[services]]
+  internal_port = 5432 # Postgres instance
+  protocol = "tcp"
+
+[[services.ports]]
+  handlers = ["pg_tls"]
+  port = 5432
