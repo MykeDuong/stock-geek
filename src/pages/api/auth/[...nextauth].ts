@@ -1,26 +1,24 @@
 import NextAuth, { type NextAuthOptions } from "next-auth";
-import DiscordProvider from "next-auth/providers/discord";
 
 import { env } from "../../../env/server.mjs";
 
 export const authOptions: NextAuthOptions = {
   // Include user.id on session
-  callbacks: {
-    session({ session, user }) {
-      if (session.user) {
-        session.user.id = user.id;
-      }
-      return session;
-    },
+  // callbacks: {
+  //   session({ session, user }) {
+  //     if (session.user) {
+  //       session.user.id = user.id;
+  //     }
+  //     return session;
+  //   },
+  // },
+  providers: [],
+  pages: {
+    signIn: '/auth/signin',
+    signOut: '/auth/signin',
+    error: '/auth/error', // Error code passed in query string as ?error=
+    newUser: '/auth/signup' // New users will be directed here on first sign in (leave the property out if not of interest)
   },
-  // Configure one or more authentication providers
-  providers: [
-    DiscordProvider({
-      clientId: env.DISCORD_CLIENT_ID,
-      clientSecret: env.DISCORD_CLIENT_SECRET,
-    }),
-    // ...add more providers here
-  ],
 };
 
 export default NextAuth(authOptions);
