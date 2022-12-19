@@ -1,5 +1,6 @@
 import { NextPage } from "next";
 import { useState } from "react";
+import { signIn } from 'next-auth/react';
 
 const Auth: NextPage = () => {
 
@@ -24,15 +25,25 @@ const Auth: NextPage = () => {
       alert("Incorrect email format");
       return;
     }
+    if (signUpForm.username.includes('@')) {
+      alert("The username must not contain @")
+      return
+    }
   }
 
   const handleSignIn = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     console.log(signInForm);
-    if (!signUpForm.email.includes('@')) {
-      alert("Incorrect email format");
-      return;
+    
+    let submittedForm: any = { password: signInForm.password }
+
+    if (signInForm.usernameOrEmail.includes('@')) {
+      submittedForm = { ... submittedForm, email: signInForm.usernameOrEmail }
+    } else {
+      submittedForm = { ... submittedForm, username: signInForm.usernameOrEmail }
     }
+
+    signIn("credentials", submittedForm);
   }
 
   return (
@@ -151,7 +162,7 @@ const Auth: NextPage = () => {
               className="text-slate-400 hover:text-white duration-300 mt-4"
               onClick={handleChangeForm}
             >
-              Don't have an account?
+              Don&apos;t have an account?
             </button>
             {/* Submit button */}
             <button

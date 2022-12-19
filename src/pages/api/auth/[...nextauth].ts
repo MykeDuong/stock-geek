@@ -1,4 +1,5 @@
 import NextAuth, { type NextAuthOptions } from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
 
 import { env } from "../../../env/server.mjs";
 
@@ -12,12 +13,18 @@ export const authOptions: NextAuthOptions = {
   //     return session;
   //   },
   // },
-  providers: [],
+  providers: [
+    CredentialsProvider({
+      authorize = async (credentials, req) = {
+        
+      }
+    })
+  ],
   pages: {
-    signIn: '/auth/signin',
-    signOut: '/auth/signin',
+    signIn: '/auth',
+    signOut: '/auth',
     error: '/auth/error', // Error code passed in query string as ?error=
-    newUser: '/auth/signup' // New users will be directed here on first sign in (leave the property out if not of interest)
+    newUser: '/auth' // New users will be directed here on first sign in (leave the property out if not of interest)
   },
 };
 
