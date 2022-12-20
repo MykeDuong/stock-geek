@@ -1,4 +1,6 @@
 import { router, publicProcedure, protectedProcedure } from "../trpc";
+import { z } from 'zod';
+import pool from "../../common/pg";
 
 export const authRouter = router({
   getSession: publicProcedure.query(({ ctx }) => {
@@ -7,4 +9,32 @@ export const authRouter = router({
   getSecretMessage: protectedProcedure.query(() => {
     return "you can now see this secret message!";
   }),
+  signup: publicProcedure
+    .input(
+      z.object({
+        username: z.string().min(1).max(20),
+        email: z.string().min(1).email("Must be a valid email address"),
+        password: z.string().min(5),
+      })
+    )
+    .mutation(({ input }) => {
+
+      pool.connect((err, client, release) => {
+        if (err) {
+          return console.error('Error acquiring client', err.stack)
+        }
+        client.query('SELECT NOW()', (err, result) => {
+          release()
+          if (err) {
+            return console.error('Error executing query', err.stack)
+          }
+          console.log(result.rows)
+        })
+      })
+
+      return {
+        status: 200,
+        msg: 'success',
+      }
+    })
 });

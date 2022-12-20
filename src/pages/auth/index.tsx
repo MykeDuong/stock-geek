@@ -1,20 +1,22 @@
 import { NextPage } from "next";
 import { useState } from "react";
 import { signIn } from 'next-auth/react';
+import { trpc, RouterInputs, RouterOutputs } from '../../utils/trpc';
 
 const Auth: NextPage = () => {
-
   const [signInForm, setSignInForm] = useState({ usernameOrEmail: "", password: "" }) 
   const [signUpForm, setSignUpForm] = useState({ username: "", email: "", password: "", retypedPassword: "" })
 
-  const [signUp, setSignUp] = useState(false);
+  const [isSignUp, setIsSignUp] = useState(false);
+
+  const signUp = trpc.auth.signup.useMutation();
 
   const handleChangeForm = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    setSignUp(!signUp);
+    setIsSignUp(!isSignUp);
   }
 
-  const handleSignUp = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleSignUp = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     console.log(signUpForm);
     if (signUpForm.password !== signUpForm.retypedPassword) {
@@ -29,21 +31,19 @@ const Auth: NextPage = () => {
       alert("The username must not contain @")
       return
     }
-  }
+
+    const {retypedPassword, ...submittedForm} = signUpForm
+
+    const res = await signUp.mutate(submittedForm);
+
+    console.log(res);
+
+  } 
 
   const handleSignIn = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    console.log(signInForm);
-    
-    let submittedForm: any = { password: signInForm.password }
 
-    if (signInForm.usernameOrEmail.includes('@')) {
-      submittedForm = { ... submittedForm, email: signInForm.usernameOrEmail }
-    } else {
-      submittedForm = { ... submittedForm, username: signInForm.usernameOrEmail }
-    }
-
-    signIn("credentials", submittedForm);
+    signIn("credentials", signInForm);
   }
 
   return (
@@ -51,11 +51,11 @@ const Auth: NextPage = () => {
       className="bg-workdesk h-screen w-screen bg-cover flex justify-center items-center"
     >
       <div 
-        className={`bg-coffee-700 w-1/4 rounded-md flex flex-col items-center ${signUp ? "h-4/5" : "h-3/5"}`}
+        className={`bg-coffee-700 w-1/4 rounded-md flex flex-col items-center ${isSignUp ? "h-4/5" : "h-3/5"}`}
       >
         {/* Website name */}
         <h1
-          className={`text-white text-5xl font-pacifico ${signUp ? "mt-16" : "mt-12"}`}
+          className={`text-white text-5xl font-pacifico ${isSignUp ? "mt-16" : "mt-12"}`}
         >
           Stock Geek
         </h1>
@@ -67,7 +67,7 @@ const Auth: NextPage = () => {
         </h1>
 
         {/* Form */}
-        {signUp ? 
+        {isSignUp ? 
           <form
           className="w-full pl-12 pr-12 mt-8 flex flex-col gap-0"
           >

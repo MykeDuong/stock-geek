@@ -15,7 +15,7 @@ const Home: NextPage = () => {
     if (sessionData) {
       router.push('home');
     } else {
-      router.push("/auth/");
+      router.push("/auth");
     }
   }, []);
 
