@@ -14,14 +14,17 @@
     "@trpc/next": "^10.0.0",
     "@trpc/react-query": "^10.0.0",
     "@trpc/server": "^10.0.0",
+    "@types/bcrypt": "^5.0.0",
     "@types/pg": "^8.6.5",
+    "bcrypt": "^5.1.0",
     "next": "13.0.2",
     "next-auth": "^4.18.3",
     "pg": "^8.8.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "superjson": "1.9.1",
-    "zod": "^3.18.0"
+    "zod": "^3.18.0",
+    "zustand": "^4.1.5"
   },
   "devDependencies": {
     "@types/node": "^18.0.0",

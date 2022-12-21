@@ -1,13 +1,25 @@
 import { NextPage } from "next";
-import { useState } from "react";
-import { signIn } from 'next-auth/react';
-import { trpc, RouterInputs, RouterOutputs } from '../../utils/trpc';
+import { useState, useEffect } from "react";
+import { signIn   } from 'next-auth/react';
+import { trpc } from '../../utils/trpc';
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 
 const Auth: NextPage = () => {
+  // const { data: sessionData, status } = useSession();
+  const sessionData = useSession();
+
   const [signInForm, setSignInForm] = useState({ usernameOrEmail: "", password: "" }) 
-  const [signUpForm, setSignUpForm] = useState({ username: "", email: "", password: "", retypedPassword: "" })
+  const [signUpForm, setSignUpForm] = useState({ username: "", email: "", password: "", retypedPassword: "" });
 
   const [isSignUp, setIsSignUp] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (sessionData) {
+      router.push('/home');
+    }
+  }, [])
 
   const signUp = trpc.auth.signup.useMutation();
 
@@ -18,7 +30,6 @@ const Auth: NextPage = () => {
 
   const handleSignUp = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    console.log(signUpForm);
     if (signUpForm.password !== signUpForm.retypedPassword) {
       alert("The confirm password is incorrect")
       return;
@@ -34,16 +45,19 @@ const Auth: NextPage = () => {
 
     const {retypedPassword, ...submittedForm} = signUpForm
 
-    const res = await signUp.mutate(submittedForm);
+    await signUp.mutate(submittedForm);
 
-    console.log(res);
+    if (signUp.error) {
+      alert(signUp.error.message);
+    }
 
   } 
 
-  const handleSignIn = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-
+  const handleSignIn = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    
     signIn("credentials", signInForm);
+    
+    e.preventDefault();
   }
 
   return (

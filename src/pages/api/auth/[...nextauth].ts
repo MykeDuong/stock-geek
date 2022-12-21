@@ -1,42 +1,83 @@
 import NextAuth, { type NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { findUser } from "../../../utils/pg";
+import { comparePassword } from "../../../utils/authUtils";
 
 import { env } from "../../../env/server.mjs";
+import { TRPCError } from "@trpc/server";
+
+interface Error {
+  message: string;
+}
+
+interface UserInterface {
+  id: string;
+  name: string;
+  email: string;
+  password: string;
+}
 
 export const authOptions: NextAuthOptions = {
   // Include user.id on session
   callbacks: {
-    session({ session, user }) {
-      if (session.user) {
-        session.user.id = user.id;
+    jwt: async ({ token, user }) => {
+      if (user)
+        token.user = user;
+      return token;
+    },
+    session: async ({ session, token }) =>{
+      if (token.user) {
+        session.user = token.user as UserInterface;
       }
       return session;
     },
+  },
+  session: {
+    strategy: 'jwt',
   },
   providers: [
     CredentialsProvider({
       credentials: {
         usernameOrEmail: { type: "text" },
-        password: {  type: "password" }
+        password: { type: "password" }
       },
       async authorize(credentials, req) {
-        console.log(credentials);
-        const user = { id: "1", name: "J Smith", email: "jsmith@example.com" }
-  
-        if (user) {
-          return user
-        } else {
-          return null
+        if (!credentials) throw ({ message: "credentials not found" });
+        const { usernameOrEmail, password } = credentials;
+
+        let user;
+        
+        try {
+          const result = await findUser(usernameOrEmail);
+          user = { 
+            id: result.user_id, 
+            name: result.username, 
+            email: result.email, 
+            password: result.password 
+          }
+
+          const match = comparePassword(password, user.password);
+          if (!match) throw ({ message: "Password mismatch" });          
+        } catch (err) {
+          let message = "Unknown error";
+          if (err instanceof Error) {
+            message = err.message;
+          }
+          throw new TRPCError({
+            code: "UNAUTHORIZED",
+            message
+          })
         }
+        return user;
       }
-    })
+    }),
   ],
-  // pages: {
-  //   signIn: '/auth',
-  //   signOut: '/auth',
-  //   error: '/auth/error', // Error code passed in query string as ?error=
-  //   newUser: '/auth' // New users will be directed here on first sign in (leave the property out if not of interest)
-  // },
+  pages: {
+    signIn: '/auth/',
+    signOut: '/auth/',
+    error: '/auth/error',
+    newUser: '/auth',
+  }
 };
 
 export default NextAuth(authOptions);

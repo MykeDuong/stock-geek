@@ -1,13 +1,13 @@
 import { router, publicProcedure, protectedProcedure } from "../trpc";
 import { z } from 'zod';
-import pool from "../../common/pg";
+import { hashPassword } from '../../../utils/authUtils';
+
+import { createUser } from "../../../utils/pg";
+import { TRPCError } from "@trpc/server";
 
 export const authRouter = router({
   getSession: publicProcedure.query(({ ctx }) => {
     return ctx.session;
-  }),
-  getSecretMessage: protectedProcedure.query(() => {
-    return "you can now see this secret message!";
   }),
   signup: publicProcedure
     .input(
@@ -17,10 +17,34 @@ export const authRouter = router({
         password: z.string().min(5),
       })
     )
-    .mutation(({ input }) => {
+    .mutation(async ({ input }) => {
+
+      const { username, email, password } = input;
+
+      const hashedPassword = await hashPassword(password);
+
+      let user;
+
+      try {
+        user = await createUser(username, email, hashedPassword);
+      } catch (err) {
+        const message = "Sorry, your email or username has already been used";
+        throw new TRPCError({
+          code: 'UNAUTHORIZED',
+          message,
+        })
+      }
+
       return {
+        user,
         status: 200,
         msg: 'success',
       }
-    })
+    }
+  ),
+
+  // For testing purpose;
+  getSecretMessage: protectedProcedure.query(() => {
+    return "you can now see this secret message!";
+  }),
 });

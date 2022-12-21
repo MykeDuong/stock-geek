@@ -13,7 +13,7 @@ const Home: NextPage = () => {
   
   useEffect(() => {
     if (sessionData) {
-      router.push('home');
+      router.push('/home');
     } else {
       router.push("/auth");
     }
