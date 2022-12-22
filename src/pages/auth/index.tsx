@@ -1,13 +1,13 @@
 import { NextPage } from "next";
 import { useState, useEffect } from "react";
-import { signIn   } from 'next-auth/react';
+import { signIn } from 'next-auth/react';
 import { trpc } from '../../utils/trpc';
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 
 const Auth: NextPage = () => {
   // const { data: sessionData, status } = useSession();
-  const sessionData = useSession();
+  const { data: sessionData } = useSession();
 
   const [signInForm, setSignInForm] = useState({ usernameOrEmail: "", password: "" }) 
   const [signUpForm, setSignUpForm] = useState({ username: "", email: "", password: "", retypedPassword: "" });
@@ -17,9 +17,10 @@ const Auth: NextPage = () => {
 
   useEffect(() => {
     if (sessionData) {
+      console.log(sessionData);
       router.push('/home');
     }
-  }, [])
+  }, [ sessionData ])
 
   const signUp = trpc.auth.signup.useMutation();
 
@@ -65,7 +66,7 @@ const Auth: NextPage = () => {
       className="bg-workdesk h-screen w-screen bg-cover flex justify-center items-center"
     >
       <div 
-        className={`bg-coffee-700 w-1/4 rounded-md flex flex-col items-center ${isSignUp ? "h-4/5" : "h-3/5"}`}
+        className={`bg-green-700 w-1/4 rounded-md flex flex-col items-center ${isSignUp ? "h-4/5" : "h-3/5"}`}
       >
         {/* Website name */}
         <h1

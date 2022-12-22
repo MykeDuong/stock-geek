@@ -9,9 +9,6 @@ export default pool;
 
 const createUserQuery = 'INSERT INTO users (username, email, password) VALUES ($1,	$2,	$3) RETURNING *';
 export const createUser = async ( username: string, email: string, password: string ) => {
-  console.assert(pool.totalCount === 0)
-  console.assert(pool.idleCount === 0)
-
   let success = true;
 
   const client = await pool.connect()
@@ -24,15 +21,10 @@ export const createUser = async ( username: string, email: string, password: str
     .catch((e)=> {
       success = false;
       return e;
-    })
+    }
+  )
 
-  console.assert(pool.totalCount === 1)
-  console.assert(pool.idleCount === 0)
-   
-  // tell the pool to destroy this client
   client.release(true)
-  console.assert(pool.idleCount === 0)
-  console.assert(pool.totalCount === 0)
   
   if (success) return result;
   else throw result;
@@ -55,15 +47,10 @@ export const findUser = async (usernameOrEmail: string) => {
     .catch((e)=> {
       success = false;
       return e;
-    })
+    }
+  )
 
-  console.assert(pool.totalCount === 1)
-  console.assert(pool.idleCount === 0)
-   
-  // tell the pool to destroy this client
   client.release(true)
-  console.assert(pool.idleCount === 0)
-  console.assert(pool.totalCount === 0)
   
   if (success) return result;
   else throw result;
@@ -71,30 +58,22 @@ export const findUser = async (usernameOrEmail: string) => {
 
 const findUserByIdQuery = 'SELECT * FROM users WHERE ($1 = user_id)';
 export const findUserById = async (id: string) => {
-  console.assert(pool.totalCount === 0)
-  console.assert(pool.idleCount === 0)
-
   let success = true;
 
   const client = await pool.connect()
  
   const result = await client
-    .query(findUserQuery, [id])
+    .query(findUserByIdQuery, [id])
     .then(res => {
       return res.rows[0]
     })
     .catch((e)=> {
       success = false;
       return e;
-    })
+  })
 
-  console.assert(pool.totalCount === 1)
-  console.assert(pool.idleCount === 0)
-   
-  // tell the pool to destroy this client
+  
   client.release(true)
-  console.assert(pool.idleCount === 0)
-  console.assert(pool.totalCount === 0)
   
   if (success) return result;
   else throw result;
