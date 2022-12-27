@@ -13,7 +13,11 @@ const Wrapper: NextComponentType<any, any, Props> = ({ children }) => {
       className="flex flex-row"
     >
       <SideBar />
-      children
+      <div
+        className='bg-coffee-100 w-4/5 min-h-screen'
+      >
+        {children}
+      </div>
     </div>
   )
 }

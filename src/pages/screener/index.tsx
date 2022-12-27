@@ -1,9 +1,10 @@
 import { NextPage } from "next"
+import { SearchBar } from "../../components"
 
 const Screener: NextPage = () => {
   return (
     <div>
-      Screener
+      <SearchBar />
     </div>
   )
 }
