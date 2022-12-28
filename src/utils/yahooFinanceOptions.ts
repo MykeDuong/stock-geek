@@ -1,4 +1,4 @@
-export const options = {
+const options = {
   method: 'GET',
   url: 'https://yh-finance.p.rapidapi.com/auto-complete',
   headers: {
@@ -6,3 +6,5 @@ export const options = {
     'X-RapidAPI-Host': process.env.API_HOST,
   }
 };
+
+export default options;

@@ -1,6 +1,7 @@
 import { NextPage } from "next"
 import { useRef } from 'react'
 import { AiOutlineSearch, AiOutlineWarning } from 'react-icons/ai'
+import { TickerInfo } from "../../components";
 import { trpc } from '../../utils/trpc';
 
 
@@ -73,6 +74,8 @@ const Recommendation: NextPage = () => {
           Clear Stock Input
         </button>
       </div>
+
+      <TickerInfo ticker={"AAPL"} />
     </div>
   )
 }

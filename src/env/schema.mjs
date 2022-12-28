@@ -24,6 +24,10 @@ export const serverSchema = z.object({
   DB_USER: z.string(),
   DB_PASSWORD: z.string(),
   DB_DATABASE: z.string().min(1),
+  // RAPID API
+  API_HOST: z.string(),
+  API_KEY: z.string()
+
 });
 
 /**

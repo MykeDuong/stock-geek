@@ -1,10 +1,10 @@
 import { NextPage } from "next"
-import { SearchBar } from "../../components"
+import MiniChart from "../../components/MiniChart/MiniChart"
 
 const Screener: NextPage = () => {
   return (
     <div>
-      <SearchBar />
+      <MiniChart ticker={""} />
     </div>
   )
 }
