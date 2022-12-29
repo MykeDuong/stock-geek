@@ -140,7 +140,7 @@ const Auth: NextPage = () => {
               Already have an account?</button>
             {/* Submit button */}
             <button
-              className="bg-coffee-300 text-coffee-900 mt-8 self-center px-8 py-2 rounded-lg text-lg hover:px-9 hover:py-3 hover:mt-7 duration-300"
+              className="bg-beige-400 text-beige-700 mt-8 self-center px-8 py-2 rounded-lg text-lg hover:px-9 hover:py-3 hover:mt-7 duration-300"
               type="submit"
               onClick={handleSignUp}
             >
@@ -181,7 +181,7 @@ const Auth: NextPage = () => {
             </button>
             {/* Submit button */}
             <button
-              className="bg-coffee-300 text-coffee-900 mt-8 self-center px-8 py-2 rounded-lg text-lg hover:px-9 hover:py-3 hover:mt-7 duration-300"
+              className="bg-beige-400 text-beige-700 mt-8 self-center px-8 py-2 rounded-lg text-lg hover:px-9 hover:py-3 hover:mt-7 duration-300"
               type="submit"
               onClick={handleSignIn}
             >

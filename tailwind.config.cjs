@@ -9,6 +9,9 @@ module.exports = {
       backgroundImage: {
         'workdesk': "url('/images/workdesk.jpeg')",
       },
+      boxShadow: {
+        'dark': '2px 3px 3px 3px rgba(0, 0, 0, 0.2)',
+      },
       fontFamily: {
         'sans': ['ui-sans-serif', 'system-ui'],
         'serif': ['ui-serif', 'Georgia'],
@@ -22,17 +25,20 @@ module.exports = {
       'transparent': colors.transparent,
       'black': colors.black,
       'slate': colors.slate,
-      'coffee': {
-        900: '#1A120B',
-        700: '#3C2A21',
-        600: '#562B08',
-        400: "#AA8B56",
-        300: '#D5CEA3',
-        100: '#E5E5CB',
+      'beige': {
+        700: '#83622A',
+        600: '#AA8B56',
+        500: '#CFAF78',
+        400: '#D5CEA3',
+        300: '#E5E0BD',
+        200: '#F4EFCC'
       },
       'green': {
         700: '#395144',
         600: '#4E6C50'
+      },
+      'red': {
+        700: "#941D1D",
       }
     },
   },

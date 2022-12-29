@@ -25,7 +25,7 @@ const avatarIconStyle = {
 
 const buttonStyle = 'text-white text-left text-xl h-16 pl-4 rounded-md flex flex-row items-center gap-6 hover:bg-green-600'
 
-const chosenButtonStyle = 'bg-coffee-400 hover:bg-coffee-400'
+const chosenButtonStyle = 'bg-beige-600 hover:bg-beige-600'
 
 const SideBar: NextComponentType = () => {
 
