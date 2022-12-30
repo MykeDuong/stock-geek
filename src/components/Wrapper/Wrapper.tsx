@@ -14,7 +14,7 @@ const Wrapper: NextComponentType<any, any, Props> = ({ children }) => {
     >
       <SideBar />
       <div
-        className='bg-beige-400 w-4/5 min-h-screen'
+        className='bg-beige-400 w-3/4 min-h-screen'
       >
         {children}
       </div>

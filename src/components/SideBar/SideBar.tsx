@@ -44,7 +44,7 @@ const SideBar: NextComponentType = () => {
 
   return (
     <div
-      className="bg-green-700 w-1/5 h-screen sticky flex flex-col"
+      className="bg-green-700 w-1/4 h-screen sticky flex flex-col"
     >
       <div
         className="w-100 mt-12 mb-14 mx-8 flex"

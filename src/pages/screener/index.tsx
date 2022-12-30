@@ -1,13 +1,14 @@
+import { useState } from "react";
 import { GetStaticProps, GetStaticPropsContext, InferGetStaticPropsType, NextPage } from "next"
 import { createProxySSGHelpers } from '@trpc/react-query/ssg';
 import Image from 'next/image'
 import { AiOutlineLineChart, AiFillQuestionCircle } from "react-icons/ai"
 
+import { Filter, MultiRangeSlider } from "../../components";
 import MiniChart from "../../components/MiniChart/MiniChart"
 import { trpc } from "../../utils/trpc"
 import { appRouter } from "../../server/trpc/router/_app";
 import { createContext, createContextInner } from "../../server/trpc/context";
-import { useState } from "react";
 
 const Screener: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (props) => {
 
@@ -21,7 +22,7 @@ const Screener: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (prop
       className="relative"
     >
       <div
-        className="relative overflow-hidden h-72 w-full overflow-hidden"
+        className="relative h-72 w-full overflow-hidden"
       > 
         <Image src={"/images/screener-image.png"} alt={"screener-image"} style={{"objectFit": "cover"}} fill />
       </div>
@@ -69,24 +70,7 @@ const Screener: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (prop
         </button>
       </div>
       {createScreener && 
-        <div
-          className="absolute inset-1/4 z-10 bg-beige-300 min-h-fit min-w-fit p-4 flex flex-col rounded-md"
-        >
-          <h1
-            className="text-3xl text-raleway text-semibold text-green-700"
-          >Create Filters</h1>
-          <div
-            className="flex flex-row my-2 p-3 bg-beige-200 rounded-md shadow-lg items-center"
-          >
-            <h2
-              className="text-xl font-raleway mr-1"
-            >
-              Market Capitalization
-            </h2>
-            <AiFillQuestionCircle style={{ width: '1.2rem', height: '1.2rem'}} />
-
-          </div>
-        </div>
+        <Filter />
       }
     </div>
   )
