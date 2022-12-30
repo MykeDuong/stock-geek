@@ -21,9 +21,9 @@ const Screener: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (prop
       className="relative"
     >
       <div
-        className="relative overflow-hidden h-72 w-full"
+        className="relative overflow-hidden h-72 w-full overflow-hidden"
       > 
-        <Image src={"/images/screener-image.png"} alt={"screener-image"} fill />
+        <Image src={"/images/screener-image.png"} alt={"screener-image"} style={{"objectFit": "cover"}} fill />
       </div>
       <div
         className=""
@@ -68,24 +68,26 @@ const Screener: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (prop
           View Saved Screener
         </button>
       </div>
-      <div
-        className="absolute inset-1/4 z-10 bg-beige-300 min-h-fit min-w-fit p-4 flex flex-col rounded-md"
-      >
-        <h1
-          className="text-3xl text-raleway text-semibold text-green-700"
-        >Create Filters</h1>
+      {createScreener && 
         <div
-          className="flex flex-row my-2 p-3 bg-beige-200 rounded-md shadow-lg items-center"
+          className="absolute inset-1/4 z-10 bg-beige-300 min-h-fit min-w-fit p-4 flex flex-col rounded-md"
         >
-          <h2
-            className="text-xl font-raleway mr-1"
+          <h1
+            className="text-3xl text-raleway text-semibold text-green-700"
+          >Create Filters</h1>
+          <div
+            className="flex flex-row my-2 p-3 bg-beige-200 rounded-md shadow-lg items-center"
           >
-            Market Capitalization
-          </h2>
-          <AiFillQuestionCircle style={{ width: '1.2rem', height: '1.2rem'}} />
+            <h2
+              className="text-xl font-raleway mr-1"
+            >
+              Market Capitalization
+            </h2>
+            <AiFillQuestionCircle style={{ width: '1.2rem', height: '1.2rem'}} />
 
+          </div>
         </div>
-      </div>
+      }
     </div>
   )
 }
