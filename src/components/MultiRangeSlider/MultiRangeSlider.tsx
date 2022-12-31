@@ -1,12 +1,11 @@
 import { NextComponentType } from 'next'
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useScreenerFilter, ScreenerFilterInterface } from '../../store';
+import { useScreenerFilter } from '../../store';
+import { screenerConstants } from '../../utils/constants';
 
 import styles from './MultiRangeSlider.module.css'
 
 interface PropsInterface {
-  min: number;
-  max: number;
   onChange?: (props: { min: number, max: number }) => unknown;
   size?: "small" | "medium" | "large" ;
   filterType: "marketCap" | "avgVolume" | "PE" | "DE" | "beta" | "price";
@@ -29,12 +28,14 @@ const nFormatter = (num: number, digits: number) => {
   return item ? (num / item.value).toFixed(digits).replace(rx, "$1") + item.symbol : "0";
 }
 
-const MultiRangeSlider: NextComponentType<any, any, PropsInterface> = ({ min, max, onChange, size = "medium", filterType }) => {
+const MultiRangeSlider: NextComponentType<any, any, PropsInterface> = ({ onChange, size = "medium", filterType }) => {
   const {value, setValue} = useScreenerFilter();
 
   const minValRef = useRef<HTMLInputElement>(null);
   const maxValRef = useRef<HTMLInputElement>(null);
   const range = useRef<HTMLDivElement>(null);
+
+  const { min, max } = screenerConstants[filterType];
 
   const getPercent = useCallback(
     (value: number) => {

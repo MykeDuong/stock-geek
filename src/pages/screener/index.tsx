@@ -9,13 +9,20 @@ import MiniChart from "../../components/MiniChart/MiniChart"
 import { trpc } from "../../utils/trpc"
 import { appRouter } from "../../server/trpc/router/_app";
 import { createContext, createContextInner } from "../../server/trpc/context";
+import { useScreenerFilter } from "../../store";
 
 const Screener: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (props) => {
+
+  const { value } = useScreenerFilter()
 
   const { data: trendingTickers } = trpc.ticker.getTrending.useQuery();
 
   const [createScreener, setCreateScreener] = useState(false);
   const [viewSavedScreener, setViewSavedScreener] = useState(false);
+
+  const handleSearch = () => {
+
+  }
 
   return (
     <div
@@ -74,7 +81,7 @@ const Screener: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (prop
         </div>
       </div>
       {createScreener && 
-        <Filter onClose={() => setCreateScreener(false)} />
+        <Filter onClose={() => setCreateScreener(false)} onSearch={() => andleSearch} />
       }
     </div>
   )

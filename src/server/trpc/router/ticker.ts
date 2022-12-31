@@ -28,7 +28,20 @@ export const tickerRouter = router({
       })
 
       return result.slice(0, 10);
-    }
-  ),
+    }),
+  getScreenerResult: publicProcedure
+    .input(
+      z.object({
+        marketCap: z.object({ min: z.number(), max: z.number() }),
+        avgVolume: z.object({ min: z.number(), max: z.number() }),
+        PE: z.object({ min: z.number(), max: z.number() }),
+        DE: z.object({ min: z.number(), max: z.number() }),
+        beta: z.object({ min: z.number(), max: z.number() }),
+        price: z.object({ min: z.number(), max: z.number() }),
+      })
+    )
+    .query(async (input) => {
+      return {}
+    })
   
 }); 

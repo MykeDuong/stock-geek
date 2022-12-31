@@ -7,7 +7,8 @@ import MultiRangeSlider from '../MultiRangeSlider/MultiRangeSlider'
 import { useScreenerFilter } from '../../store'
 
 interface PropsInterface {
-  onClose: (args: null | unknown) => unknown;
+  onClose: () => unknown;
+  onSearch: () => void;
 }
 
 const description = {
@@ -19,7 +20,9 @@ const description = {
   "price": "Indicate the current value to buyers and sellers (Investopedia).",
 }
 
-const Filter: NextComponentType<any, any, PropsInterface> = ({ onClose }) => {
+const Filter: NextComponentType<any, any, PropsInterface> = ({ onClose, onSearch }) => {
+  const { value, setValue, resetValue } = useScreenerFilter();
+
   const [toggleDescription, setToggleDescription] = useState({
     "marketCap": false,
     "avgVolume": false,
@@ -27,8 +30,15 @@ const Filter: NextComponentType<any, any, PropsInterface> = ({ onClose }) => {
     "DE": false,
     "beta": false,
     "price": false,
-
   })
+
+  const handleSearch = () => {
+    onSearch();
+  }
+
+  const handleReset = () => {
+    resetValue();
+  }
 
   return (
     <div
@@ -80,7 +90,7 @@ const Filter: NextComponentType<any, any, PropsInterface> = ({ onClose }) => {
         <div
           className="w-3/5"
         >
-          <MultiRangeSlider min={50*10**6} max={2 * 10**12} size={"large"} filterType="marketCap" />
+          <MultiRangeSlider size={"large"} filterType="marketCap" />
         </div>
       </div>
 
@@ -118,7 +128,7 @@ const Filter: NextComponentType<any, any, PropsInterface> = ({ onClose }) => {
         <div
           className="w-3/5"
         >
-          <MultiRangeSlider min={50*10**3} max={5 * 10**6} size={"large"} filterType="avgVolume" />
+          <MultiRangeSlider size={"large"} filterType="avgVolume" />
         </div>
       </div>
 
@@ -156,7 +166,7 @@ const Filter: NextComponentType<any, any, PropsInterface> = ({ onClose }) => {
         <div
           className="w-3/5"
         >
-          <MultiRangeSlider min={0} max={50} filterType="PE" />
+          <MultiRangeSlider filterType="PE" />
         </div>
       </div>
 
@@ -194,7 +204,7 @@ const Filter: NextComponentType<any, any, PropsInterface> = ({ onClose }) => {
         <div
           className="w-3/5"
         >
-          <MultiRangeSlider min={0} max={30} filterType="DE" />
+          <MultiRangeSlider filterType="DE" />
         </div>
       </div>
 
@@ -232,7 +242,7 @@ const Filter: NextComponentType<any, any, PropsInterface> = ({ onClose }) => {
         <div
           className="w-3/5"
         >
-          <MultiRangeSlider min={0} max={4} size="small" filterType='beta' />
+          <MultiRangeSlider size="small" filterType='beta' />
         </div>
       </div>
 
@@ -270,7 +280,7 @@ const Filter: NextComponentType<any, any, PropsInterface> = ({ onClose }) => {
         <div
           className="w-3/5"
         >
-          <MultiRangeSlider min={0} max={200} filterType="price" />
+          <MultiRangeSlider filterType="price" />
         </div>
       </div>
 
@@ -280,11 +290,13 @@ const Filter: NextComponentType<any, any, PropsInterface> = ({ onClose }) => {
       >
         <button
           className="w-24 px-2 py-2 text-white bg-green-700 rounded-lg text-xl hover:scale-105"
+          onClick={handleSearch}
         >
           Search
         </button>
         <button
           className="w-24 px-2 py-2 text-white bg-red-700 rounded-lg text-xl hover:scale-105"
+          onClick={handleReset}
         >
           Clear
         </button>

@@ -45,12 +45,12 @@ export const MiniChart: NextComponentType<any, any, PropsInterface> = ({ ticker 
           className="absolute right-14 top-3"
         >
           <button
-            className="rounded-lg bg-green-700 text-white text-sm py-1 px-3 mr-1"
+            className="rounded-lg bg-green-700 text-white text-sm py-1 px-3 mr-1 hover:scale-105"
           >
             Buy
           </button>
           <button
-            className="rounded-lg bg-red-700 text-white text-sm py-1 px-3"
+            className="rounded-lg bg-red-700 text-white text-sm py-1 px-3 hover:scale-105"
           >
             Sell
           </button>

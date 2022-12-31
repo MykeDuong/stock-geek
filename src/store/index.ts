@@ -1,12 +1,22 @@
 import create from 'zustand';
 import { persist } from 'zustand/middleware';
 
+import { screenerConstants } from '../utils/constants';
+
+// Directory
 interface DirStoreInterface {
   currentDir: string;
   changeDir: (dir: string) => void;
 }
 
-export interface ScreenerFilterInterface {
+export const useCurrentDir = create<DirStoreInterface>()(
+  (set) => ({
+    currentDir: "Home",
+    changeDir: ( dir ) => set((state) => ({ currentDir: dir})),
+  })
+)
+
+interface ScreenerFilterInterface {
   value: {
     marketCap: { min: number, max: number };
     avgVolume: { min: number, max: number };
@@ -23,27 +33,27 @@ export interface ScreenerFilterInterface {
     beta: { min: number, max: number };
     price: { min: number, max: number };
   }) => void;
+  resetValue: () => unknown;
 }
 
-export const useCurrentDir = create<DirStoreInterface>()(
-  (set) => ({
-    currentDir: "Home",
-    changeDir: ( dir ) => set((state) => ({ currentDir: dir})),
-  })
-)
+// Screener
+const intialScreener = {
+  marketCap: { min: screenerConstants.marketCap.min - 1, max: screenerConstants.marketCap.max + 1 },
+  avgVolume: { min: screenerConstants.avgVolume.min - 1, max: screenerConstants.avgVolume.max + 1 },
+  PE: { min: screenerConstants.PE.min , max: screenerConstants.PE.max },
+  DE: { min: screenerConstants.DE.min , max: screenerConstants.DE.max },
+  beta: { min: screenerConstants.beta.min , max: screenerConstants.beta.max },
+  price: { min: screenerConstants.price.min , max: screenerConstants.price.max }
+}
 
 export const useScreenerFilter = create<ScreenerFilterInterface>()(
   (set) => ({
-    value: {
-      marketCap: { min: 50 * 10**6 - 1, max: 2 * 10**12 + 1 },
-      avgVolume: { min: 50 * 10**3 - 1, max: 5 * 10**6 + 1 },
-      PE: { min: 0, max: 50 },
-      DE: { min: 0, max: 30 },
-      beta: { min: 0, max: 4 },
-      price: { min: 0, max: 200 },
-    },
+    value: intialScreener,
     setValue: (props) => set((state) => ({
       value: props
+    })),
+    resetValue: () => set((state) => ({
+      value: intialScreener
     }))
   })
 )
