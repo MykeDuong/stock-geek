@@ -19,14 +19,17 @@ const Screener: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (prop
 
   return (
     <div
-      className="relative"
+      className='relative'
     >
       <div
+        className={`relative ${createScreener && 'pointer-events-none blur-sm'} ease-out duration-100`}
+      >
+        <div
         className="relative h-72 w-full overflow-hidden"
       > 
         <Image src={"/images/screener-image.png"} alt={"screener-image"} style={{"objectFit": "cover"}} fill />
-      </div>
-      <div
+        </div>
+        <div
         className=""
       >
         <h1
@@ -52,8 +55,8 @@ const Screener: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (prop
           ))}
         </div>
         
-      </div>
-      <div
+        </div>
+        <div
         className="mt-14 flex flex-row justify-center gap-40"
       >
         <button
@@ -68,9 +71,10 @@ const Screener: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (prop
         >
           View Saved Screeners
         </button>
+        </div>
       </div>
       {createScreener && 
-        <Filter />
+        <Filter onClose={() => setCreateScreener(false)} />
       }
     </div>
   )

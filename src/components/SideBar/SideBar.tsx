@@ -34,8 +34,6 @@ const SideBar: NextComponentType = () => {
 
   const { data: userData, isSuccess } = trpc.user.getUserInfo.useQuery();
 
-  console.log(userData);
-
   const handleNavButtonClicked = (e: MouseEvent<HTMLButtonElement>) => {
     const newDir = (e.target as HTMLButtonElement).id;
     dirStore.changeDir(newDir);
@@ -43,20 +41,20 @@ const SideBar: NextComponentType = () => {
   }
 
   return (
-    <div
+    <div  
       className="bg-green-700 w-sidebar h-screen sticky flex flex-col"
     >
       <div
-        className="w-100 mt-12 mb-14 mx-12 flex"
+        className="w-100 mt-12 mb-14 mx-8 flex"
       >
         <h1
-          className="text-white font-pacifico text-6xl"
+          className="text-white font-pacifico text-5xl"
         >
           Stock Geek
         </h1>
       </div>
       <div
-        className="ml-12 flex flex-row h-16 gap-2 items-center mb-10"
+        className="ml-8 flex flex-row h-16 gap-2 items-center mb-10"
       >
         <BiUserCircle style={avatarIconStyle} />
         {isSuccess ? 
@@ -82,7 +80,7 @@ const SideBar: NextComponentType = () => {
         }
       </div>
       <div
-        className='flex flex-col mx-8 pt-4'
+        className='flex flex-col mx-4 pt-4'
       >
         <h3
           className='text-slate-400 text-2xl ml-4 mb-2 uppercase'
