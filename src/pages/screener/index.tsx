@@ -30,7 +30,7 @@ const Screener: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (prop
         className=""
       >
         <h1
-          className="text-4xl mt-8 text-center font-raleway font-semibold text-green-700 uppercase"
+          className="text-5xl mt-8 text-center font-raleway font-bold text-green-700 uppercase"
         >
           Stock Screener
         </h1>
@@ -39,7 +39,7 @@ const Screener: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (prop
         >
           <AiOutlineLineChart style={{ height: '2.4rem', width: '2.4rem'}}/>
           <h2
-            className="text-xl font-raleway font-semibold text-slate-700"
+            className="text-2xl font-raleway font-bold text-slate-700"
           >
             Trending Tickers
           </h2>
@@ -57,16 +57,16 @@ const Screener: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (prop
         className="mt-14 flex flex-row justify-center gap-40"
       >
         <button
-          className={`py-3 px-4 text-white rounded-lg hover:scale-105 ${createScreener ? "bg-beige-600" : "bg-green-700" }`}
+          className={`py-5 px-6 text-xl text-white font-raleway rounded-xl hover:scale-105 ${createScreener ? "bg-beige-600" : "bg-green-700" }`}
           onClick={() => setCreateScreener(!createScreener)}
         >
-          Create new Screener
+          Create New Screener
         </button>
         <button
-          className={`py-3 px-4 text-white rounded-lg hover:scale-105 ${viewSavedScreener ? "bg-beige-600" : "bg-green-700" }`}
+          className={`py-5 px-6 text-xl text-white font-raleway rounded-xl hover:scale-105 ${viewSavedScreener ? "bg-beige-600" : "bg-green-700" }`}
           onClick={() => setViewSavedScreener(!viewSavedScreener)}
         >
-          View Saved Screener
+          View Saved Screeners
         </button>
       </div>
       {createScreener && 
@@ -84,7 +84,6 @@ export async function getStaticProps(context: GetStaticPropsContext) {
 
   await ssg.ticker.getTrending.prefetch();
   
-
   return {
     props: {
       trpcState: ssg.dehydrate(),

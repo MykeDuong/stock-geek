@@ -6,6 +6,10 @@ module.exports = {
   content: ["./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      width: {
+        'sidebar': '22.5%',
+        'main-screen': '77.5%',
+      },
       backgroundImage: {
         'workdesk': "url('/images/workdesk.jpeg')",
       },

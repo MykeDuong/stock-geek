@@ -30,15 +30,18 @@ const nFormatter = (num: number, digits: number) => {
 }
 
 const MultiRangeSlider: NextComponentType<any, any, PropsInterface> = ({ min, max, onChange, size = "medium" }) => {
-
-  const [minVal, setMinVal] = useState(min);
-  const [maxVal, setMaxVal] = useState(max);
+  const [minVal, setMinVal] = useState(size === "large" ? min - 1 : min);
+  const [maxVal, setMaxVal] = useState(size === "large" ? max + 1 : max);
   const minValRef = useRef<HTMLInputElement>(null);
   const maxValRef = useRef<HTMLInputElement>(null);
   const range = useRef<HTMLDivElement>(null);
 
   const getPercent = useCallback(
-    (value: number) => Math.round(((value - min) / (max - min)) * 100),
+    (value: number) => {
+      if (size === "small")
+        return ((value - min) / (max - min)) * 100
+      return Math.round(((value - min) / (max - min)) * 100)
+    },
     [min, max]
   );
 
@@ -82,7 +85,7 @@ const MultiRangeSlider: NextComponentType<any, any, PropsInterface> = ({ min, ma
         <p
           className=''
         >
-          {size === "large" && nFormatter(minVal, 0)}
+          {size === "large" && (minVal === min - 1 ? `<${nFormatter(min, 0)}` : nFormatter(minVal, 0))}
           {size === "medium" && (minVal)}
           {size === "small" && (minVal)}
         </p>
@@ -92,12 +95,13 @@ const MultiRangeSlider: NextComponentType<any, any, PropsInterface> = ({ min, ma
       >
         <input 
           type="range"
-          min={min}
+          min={size === "large" ? min - 1 : min}
+          step={size === "small" ? 0.01 : 1}
           max={max}
           value={minVal}
           ref={minValRef}
           onChange={(event) => {
-            const value = Math.min(+event.target.value, maxVal - 1);
+            const value = Math.min(+event.target.value, maxVal - (size === "small" ? 0.01 : 1));
             setMinVal(value);
             event.target.value = value.toString();
           }}
@@ -107,11 +111,12 @@ const MultiRangeSlider: NextComponentType<any, any, PropsInterface> = ({ min, ma
         <input
           type="range"
           min={min}
-          max={max}
+          max={size === "large" ? max + 1 : max}
           value={maxVal}
+          step={size === "small" ? 0.01 : 1}
           ref={maxValRef}
           onChange={(event) => {
-            const value = Math.max(+event.target.value, minVal + 1);
+            const value = Math.max(+event.target.value, minVal + (size === "small" ? 0.01 : 1));
             setMaxVal(value);
             event.target.value = value.toString();
           }}
@@ -130,7 +135,7 @@ const MultiRangeSlider: NextComponentType<any, any, PropsInterface> = ({ min, ma
         <p
           className=''
         >
-          {size === "large" && nFormatter(maxVal, 0)}
+          {size === "large" && (maxVal === max + 1 ? `>${nFormatter(max, 0)}` : nFormatter(maxVal, 0))}
           {size === "medium" && (maxVal)}
           {size === "small" && (maxVal)}
         </p>

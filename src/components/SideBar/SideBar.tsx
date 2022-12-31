@@ -18,12 +18,12 @@ const buttonIconStyle = {
 }
 
 const avatarIconStyle = {
-  height: "3.2rem",
-  width: "3.2rem",
+  height: "4rem",
+  width: "4rem",
   color: 'white',
 }
 
-const buttonStyle = 'text-white text-left text-xl h-16 pl-4 rounded-md flex flex-row items-center gap-6 hover:bg-green-600'
+const buttonStyle = 'text-white text-left text-2xl h-16 pl-4 rounded-md flex flex-row items-center gap-6 hover:bg-green-600'
 
 const chosenButtonStyle = 'bg-beige-600 hover:bg-beige-600'
 
@@ -44,19 +44,19 @@ const SideBar: NextComponentType = () => {
 
   return (
     <div
-      className="bg-green-700 w-1/4 h-screen sticky flex flex-col"
+      className="bg-green-700 w-sidebar h-screen sticky flex flex-col"
     >
       <div
-        className="w-100 mt-12 mb-14 mx-8 flex"
+        className="w-100 mt-12 mb-14 mx-12 flex"
       >
         <h1
-          className="text-white font-pacifico text-4xl"
+          className="text-white font-pacifico text-6xl"
         >
           Stock Geek
         </h1>
       </div>
       <div
-        className="ml-8 flex flex-row h-16 gap-2 items-center mb-10"
+        className="ml-12 flex flex-row h-16 gap-2 items-center mb-10"
       >
         <BiUserCircle style={avatarIconStyle} />
         {isSuccess ? 
@@ -82,10 +82,10 @@ const SideBar: NextComponentType = () => {
         }
       </div>
       <div
-        className='flex flex-col mx-4 pt-4'
+        className='flex flex-col mx-8 pt-4'
       >
         <h3
-          className='text-slate-400 text-xl ml-4 mb-2 uppercase'
+          className='text-slate-400 text-2xl ml-4 mb-2 uppercase'
         >
           My Portal
         </h3>
@@ -122,7 +122,7 @@ const SideBar: NextComponentType = () => {
           Watchlist
         </button>
         <h3
-          className='text-slate-400 text-xl ml-4 mt-6 mb-2 uppercase'
+          className='text-slate-400 text-2xl ml-4 mt-6 mb-2 uppercase'
         >
           Discover
         </h3>

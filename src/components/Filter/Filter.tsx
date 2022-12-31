@@ -6,11 +6,13 @@ import MultiRangeSlider from '../MultiRangeSlider/MultiRangeSlider'
 const Filter: NextComponentType = () => {
   return (
     <div
-          className="absolute inset-1/4 z-10 bg-beige-300 min-h-fit min-w-fit p-6 flex flex-col rounded-md"
+          className="absolute inset-1/4 z-10 bg-beige-300 min-h-fit min-w-fit px-6 py-10 flex flex-col rounded-md"
         >
           <h1
-            className="text-3xl text-raleway text-semibold text-green-700 mb-2"
-          >Create Filters</h1>
+            className="text-4xl font-raleway font-semibold text-green-700 mb-4"
+          >
+            Create Filters
+          </h1>
 
           {/* Market Cap */}
           <div
