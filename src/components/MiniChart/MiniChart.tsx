@@ -31,8 +31,6 @@ export const MiniChart: NextComponentType<any, any, PropsInterface> = ({ ticker 
         "largeChartUrl": ""
       })
       container.current?.appendChild(script);
-      console.log("boom")
-
     }
   }, [ticker])
 

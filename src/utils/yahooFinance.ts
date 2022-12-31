@@ -1,31 +1,42 @@
 import axios from "axios"
+import yahooFinance from "yahoo-finance2"
 
 export const headers = {
     'X-RapidAPI-Key': process.env.API_KEY,
     'X-RapidAPI-Host': process.env.API_HOST,
 }
 
-export const getTrending = async () => {
-  const options = {
-    headers,
-    method: 'GET',
-    url: 'https://yh-finance.p.rapidapi.com/market/get-trending-tickers',
-    params: {region: 'US'},
-  }
+// export const getTrending = async () => {
+//   const options = {
+//     headers,
+//     method: 'GET',
+//     url: 'https://yh-finance.p.rapidapi.com/market/get-trending-tickers',
+//     params: {region: 'US'},
+//   }
   
-  if (process.env.NODE_ENV !== 'production') {
-    return sampleResponse.trendingTickers;
-  } 
+//   if (process.env.NODE_ENV !== 'production') {
+//     return sampleResponse.trendingTickers;
+//   } 
 
-  try {
-    return axios.request(options).then(async (response) => {
-      return response.data
-    }).catch((error) => {
-      throw error;
-    })
-  } catch (error) {
-    throw error;
-  }
+//   try {
+//     return axios.request(options).then(async (response) => {
+//       return response.data
+//     }).catch((error) => {
+//       throw error;
+//     })
+//   } catch (error) {
+//     throw error;
+//   }
+// }
+
+export const getTrending = async () => {
+  const queryOptions = { count: 20, lang: 'en-US' };
+  const { quotes } = await yahooFinance.trendingSymbols('US', queryOptions);
+  
+  const symbols = quotes.map((quote) => quote.symbol)
+
+  const result = await yahooFinance.quote(symbols)
+  return result;
 }
 
 const sampleResponse  = {

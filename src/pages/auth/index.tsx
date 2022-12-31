@@ -17,7 +17,6 @@ const Auth: NextPage = () => {
 
   useEffect(() => {
     if (sessionData) {
-      console.log(sessionData);
       router.push('/home');
     }
   }, [ sessionData ])

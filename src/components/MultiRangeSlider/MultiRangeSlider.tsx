@@ -104,8 +104,6 @@ const MultiRangeSlider: NextComponentType<any, any, PropsInterface> = ({ onChang
           onChange={(event) => {
             const inputValue = Math.min(+event.target.value, value[filterType].max - (size === "small" ? 0.01 : 1));
             setValue({ ...value, [filterType]: { ...value[filterType], min: inputValue } })
-            console.log(inputValue)
-            console.log(value);
             event.target.value = inputValue.toString();
           }}
           className={`${styles.thumb} ${styles.thumbZ3} ${(value[filterType].min > max - 100) && styles.thumbZ5}`}
