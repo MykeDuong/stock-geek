@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { GetStaticPropsContext, InferGetStaticPropsType, NextPage } from "next"
 import { createProxySSGHelpers } from '@trpc/react-query/ssg';
 import Image from 'next/image'
@@ -25,6 +25,8 @@ const Screener: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (prop
   const [viewSavedScreener, setViewSavedScreener] = useState(false);
   const [viewResult, setViewResult] = useState(false);
 
+  const [fetchResult, setFetchResult] = useState(false);
+
   const queryOptions: {
     marketCap: { min: number | null, max: number | null },
     avgVolume: { min: number | null, max: number | null },
@@ -34,8 +36,12 @@ const Screener: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (prop
     price: { min: number, max: number },
   } = { ...value };
 
-  const screenerQuery = trpc.ticker.getScreenerResult.useQuery(queryOptions, {enabled: false})
-
+  const screenerQuery = trpc.ticker.getScreenerResult.useQuery(queryOptions, {
+    enabled: fetchResult,
+    onSuccess: (data) => {
+      setFetchResult(false);
+    }
+  })
 
   const handleSearch = async () => {
     setViewResult(true);
@@ -57,14 +63,14 @@ const Screener: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (prop
       queryOptions.avgVolume.max = null;
     }
 
-    await screenerQuery.refetch();
+    setFetchResult(true)
 
     router.push(`screener/#result`);
   }
 
   return (
     <div
-      className='relative'
+      className='relative mb-10'
     >
       <div
         className={`relative ${editScreener && 'pointer-events-none blur-sm'} ease-out duration-100`}
@@ -135,7 +141,7 @@ const Screener: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (prop
                 </button>
               </div>
               <div
-                className=""
+                className="mb-8"
               >
                 {screenerQuery.isSuccess ?
                   <div
@@ -144,25 +150,49 @@ const Screener: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (prop
                     {screenerQuery.data.map(ticker => 
                       <div
                         key='ticker info for "ticker"'
-                        className="bg-beige-200 rounded-xl"
+                        className="relative bg-beige-200 rounded-xl"
                       >
+                        <div
+                          className='absolute right-12 top-2 flex flex-row gap-2'
+                        >
+                          <button
+                            className="bg-green-700 text-white font-raleway rounded-xl py-2 px-4 hover:scale-105"
+                          >
+                            Buy
+                          </button>
+                          <button
+                            className="bg-red-700 text-white font-raleway rounded-xl py-2 px-4 hover:scale-105"
+                          >
+                            Sell
+                          </button>
+                          <button
+                            className="bg-beige-700 text-white font-raleway rounded-xl py-2 px-4 hover:scale-105"
+                          >
+                            Watchlist
+                          </button>
+                        </div>
                         <TickerInfo ticker={ticker} />
                       </div>
                     )}
                   </div> 
                     : 
-                  <ClipLoader />
+                  <ClipLoader color="" />
                 }
               </div>
-              <div>
-                
+              <div
+              >
+                <button
+                  className="bg-green-700 float-right p-4 font-raleway text-white text-xl rounded-md hover:scale-105"
+                >
+                  Save Screener
+                </button>
               </div>
             </div>
           }
         </div>
       </div>
       {editScreener && 
-        <Filter onClose={() => setEditScreener(false)} onSearch={handleSearch} />
+        <Filter onClose={() => setEditScreener(false)} onSearch={() => handleSearch()} />
       }
     </div>
   )
