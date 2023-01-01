@@ -32,8 +32,8 @@ const Filter: NextComponentType<any, any, PropsInterface> = ({ onClose, onSearch
     "price": false,
   })
 
-  const handleSearch = () => {
-    onSearch();
+  const handleSearch = async () => {
+    await onSearch();
   }
 
   const handleReset = () => {

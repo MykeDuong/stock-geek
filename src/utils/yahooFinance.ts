@@ -39,6 +39,10 @@ export const getTrending = async () => {
   return result;
 }
 
+export const getQuoteList = async () => {
+  return sampleResponse.quoteList;
+}
+
 const sampleResponse  = {
   trendingTickers: {
     "finance": {
@@ -593,5 +597,6 @@ const sampleResponse  = {
       ],
       "error": null
     }
-  }
+  },
+  quoteList: ["AAPL", "GOOG", "AMD", "IBM", "META"],
 }

@@ -14,7 +14,7 @@ export const TickerInfo: NextComponentType<{}, {}, PropsInterface> = ({ ticker }
     script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-symbol-info.js'
     script.async = true;
     script.innerHTML = JSON.stringify({
-      "symbol": "NASDAQ:AAPL",
+      "symbol": ticker,
       "width": "100%",
       "locale": "en",
       "colorTheme": "light",

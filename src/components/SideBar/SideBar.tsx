@@ -1,5 +1,4 @@
-import { NextComponentType } from "next";
-import { useSession } from "next-auth/react";
+import type { NextComponentType } from "next";
 import { trpc } from '../../utils/trpc';
 import { AiOutlineHistory, AiOutlineHome } from 'react-icons/ai';
 import { BiMessageDetail, BiUserCircle } from 'react-icons/bi';
@@ -7,7 +6,7 @@ import { HiDocumentSearch, HiOutlinePresentationChartLine } from 'react-icons/hi
 import { RiStockLine } from 'react-icons/ri';
 import { TbNotebook } from 'react-icons/tb'
 import { useCurrentDir } from "../../store";
-import { MouseEvent } from "react";
+import type { MouseEvent } from "react";
 import { useRouter } from "next/router";
 import { ClipLoader } from "react-spinners";
 

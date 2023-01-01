@@ -1,6 +1,6 @@
 import { router, protectedProcedure, publicProcedure } from "../trpc";
 import { z } from 'zod';
-import { getTrending, getTrendingDirect, headers } from "../../../utils/yahooFinance";
+import { getQuoteList, getTrending, getTrendingDirect, headers } from "../../../utils/yahooFinance";
 import { Result } from "postcss";
 
 export const tickerRouter = router({
@@ -9,8 +9,9 @@ export const tickerRouter = router({
       z.object({ ticker: z.string().min(1) })
     )
     .query(async ({ input }) => {
-    }
-  ),
+      return
+    }),
+
   getTrending: publicProcedure
     .query(async () => {
       const quotes = await getTrending();
@@ -39,8 +40,12 @@ export const tickerRouter = router({
         price: z.object({ min: z.number(), max: z.number() }),
       })
     )
-    .query(async (input) => {
-      return {}
-    })
+    .query(async ({ input }) => {
+      // TODO: wire api call
+
+
+      return await getQuoteList()
+    }),
+
   
 }); 

@@ -1,23 +1,23 @@
 import { useState } from "react";
-import { GetStaticProps, GetStaticPropsContext, InferGetStaticPropsType, NextPage } from "next"
+import type { GetStaticPropsContext, InferGetStaticPropsType, NextPage } from "next"
 import { createProxySSGHelpers } from '@trpc/react-query/ssg';
 import Image from 'next/image'
-import { AiOutlineLineChart, AiFillQuestionCircle } from "react-icons/ai"
+import { AiOutlineLineChart } from "react-icons/ai"
 import { VscFilter } from "react-icons/vsc";
+import { ClipLoader } from "react-spinners";
 
-import { Filter, MultiRangeSlider, TrendingTickers } from "../../components";
-import MiniChart from "../../components/MiniChart/MiniChart"
+import { Filter, TickerInfo, TrendingTickers } from "../../components";
 import { trpc } from "../../utils/trpc"
 import { appRouter } from "../../server/trpc/router/_app";
-import { createContext, createContextInner } from "../../server/trpc/context";
-import { useCurrentDir, useScreenerFilter } from "../../store";
+import { createContextInner } from "../../server/trpc/context";
+import { useScreenerFilter } from "../../store";
 import { useRouter } from 'next/router';
+import { screenerConstants } from "../../utils/constants";
 
 const Screener: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (props) => {
   const router = useRouter();
 
   const { value } = useScreenerFilter()
-  const { currentDir } = useCurrentDir()
 
   const { data: trendingTickers } = trpc.ticker.getTrending.useQuery();
 
@@ -25,9 +25,40 @@ const Screener: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (prop
   const [viewSavedScreener, setViewSavedScreener] = useState(false);
   const [viewResult, setViewResult] = useState(false);
 
-  const handleSearch = () => {
+  const queryOptions: {
+    marketCap: { min: number | null, max: number | null },
+    avgVolume: { min: number | null, max: number | null },
+    PE: { min: number, max: number },
+    DE: { min: number, max: number },
+    beta: { min: number, max: number },
+    price: { min: number, max: number },
+  } = { ...value };
+
+  const screenerQuery = trpc.ticker.getScreenerResult.useQuery(queryOptions, {enabled: false})
+
+
+  const handleSearch = async () => {
     setViewResult(true);
     setEditScreener(false);
+
+    if (queryOptions.marketCap.min === screenerConstants.marketCap.min - 1) {
+      queryOptions.marketCap.min = null;
+    }
+
+    if (queryOptions.marketCap.max === screenerConstants.marketCap.max + 1) {
+      queryOptions.marketCap.max = null;
+    }
+
+    if (queryOptions.avgVolume.min === screenerConstants.avgVolume.min - 1) {
+      queryOptions.avgVolume.min = null;
+    }
+
+    if (queryOptions.avgVolume.max === screenerConstants.avgVolume.max + 1) {
+      queryOptions.avgVolume.max = null;
+    }
+
+    await screenerQuery.refetch();
+
     router.push(`screener/#result`);
   }
 
@@ -86,10 +117,10 @@ const Screener: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (prop
           </div>
           {viewResult &&
             <div
-              className="mt-20 mx-8"
+              className="mt-20 mx-8 flex flex-col"
             >
               <div
-                className=""
+                className="mb-6"
               >
                 <h1
                   className="text-3xl font-raleway font-semibold text-green-700 uppercase float-left"
@@ -102,14 +133,26 @@ const Screener: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (prop
                   <VscFilter style={{ height: '1.5rem', width: '1.5rem' }} />
                   Show filters
                 </button>
-                <button
-                  className="" 
-                >
-                
-                </button>
               </div>
-              <div>
-
+              <div
+                className=""
+              >
+                {screenerQuery.isSuccess ?
+                  <div
+                    className="flex flex-col gap-4"
+                  >
+                    {screenerQuery.data.map(ticker => 
+                      <div
+                        key='ticker info for "ticker"'
+                        className="bg-beige-200 rounded-xl"
+                      >
+                        <TickerInfo ticker={ticker} />
+                      </div>
+                    )}
+                  </div> 
+                    : 
+                  <ClipLoader />
+                }
               </div>
               <div>
                 
@@ -119,7 +162,7 @@ const Screener: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (prop
         </div>
       </div>
       {editScreener && 
-        <Filter onClose={() => setEditScreener(false)} onSearch={() => handleSearch()} />
+        <Filter onClose={() => setEditScreener(false)} onSearch={handleSearch} />
       }
     </div>
   )
