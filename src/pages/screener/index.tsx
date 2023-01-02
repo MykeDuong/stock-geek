@@ -148,31 +148,7 @@ const Screener: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (prop
                     className="flex flex-col gap-4"
                   >
                     {screenerQuery.data.map(ticker => 
-                      <div
-                        key='ticker info for "ticker"'
-                        className="relative bg-beige-200 rounded-xl"
-                      >
-                        <div
-                          className='absolute right-12 top-2 flex flex-row gap-2'
-                        >
-                          <button
-                            className="bg-green-700 text-white font-raleway rounded-xl py-2 px-4 hover:scale-105"
-                          >
-                            Buy
-                          </button>
-                          <button
-                            className="bg-red-700 text-white font-raleway rounded-xl py-2 px-4 hover:scale-105"
-                          >
-                            Sell
-                          </button>
-                          <button
-                            className="bg-beige-700 text-white font-raleway rounded-xl py-2 px-4 hover:scale-105"
-                          >
-                            Watchlist
-                          </button>
-                        </div>
-                        <TickerInfo ticker={ticker} />
-                      </div>
+                      <TickerInfo ticker={ticker} key={`ticker of ${ticker}`} />
                     )}
                   </div> 
                     : 

@@ -25,9 +25,33 @@ export const TickerInfo: NextComponentType<{}, {}, PropsInterface> = ({ ticker }
 
 
   return (
+    <div
+    key='ticker info for "ticker"'
+    className="relative bg-beige-200 rounded-xl"
+  >
+    <div
+      className='absolute right-2 top-14 flex flex-row gap-2'
+    >
+      <button
+        className="bg-green-700 text-white font-raleway rounded-xl py-2 px-4 hover:scale-105"
+      >
+        Buy
+      </button>
+      <button
+        className="bg-red-700 text-white font-raleway rounded-xl py-2 px-4 hover:scale-105"
+      >
+        Sell
+      </button>
+      <button
+        className="bg-beige-700 text-white font-raleway rounded-xl py-2 px-4 hover:scale-105"
+      >
+        Watchlist
+      </button>
+    </div>
     <div className="tradingview-widget-container" ref={container}>
       <div className="tradingview-widget-container__widget"></div>
     </div>
+  </div>
   )
 }
 

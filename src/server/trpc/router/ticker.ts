@@ -1,15 +1,25 @@
 import { router, protectedProcedure, publicProcedure } from "../trpc";
 import { z } from 'zod';
-import { getQuoteList, getTrending, getTrendingDirect, headers } from "../../../utils/yahooFinance";
+import { getQuoteList, getRecommendations, getTrending, headers } from "../../../utils/yahooFinance";
 import { Result } from "postcss";
 
 export const tickerRouter = router({
   getRecommendations: protectedProcedure
     .input(
-      z.object({ ticker: z.string().min(1) })
+      z.object({ searchText: z.string().min(1) })
     )
     .query(async ({ input }) => {
-      return
+      const { searchText } = input;
+      const searchTickers = searchText.split(",");
+
+      for(let i = 0; i < searchTickers.length; i++) {
+        // Trim the excess whitespace.
+        searchTickers[i] = searchTickers[i]!.replace(/^\s*/, "").replace(/\s*$/, "");
+      }
+
+      const result = await getRecommendations(searchTickers)
+      console.log(result);
+      return result;
     }),
 
   getTrending: publicProcedure
