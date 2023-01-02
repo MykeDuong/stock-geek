@@ -1,9 +1,11 @@
 import { NextPage } from "next";
 import { useState, useEffect } from "react";
 import { signIn } from 'next-auth/react';
-import { trpc } from '../../utils/trpc';
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
+
+import { trpc } from '../../utils/trpc';
+import { useAuthType } from "../../store";
 
 const Auth: NextPage = () => {
   const { data: sessionData } = useSession();
@@ -11,8 +13,9 @@ const Auth: NextPage = () => {
   const [signInForm, setSignInForm] = useState({ usernameOrEmail: "", password: "" }) 
   const [signUpForm, setSignUpForm] = useState({ username: "", email: "", password: "", retypedPassword: "" });
 
-  const [isSignUp, setIsSignUp] = useState(false);
   const router = useRouter();
+
+  const { authType, setAuthSignIn, setAuthSignUp } = useAuthType();
 
   useEffect(() => {
     if (sessionData) {
@@ -24,7 +27,10 @@ const Auth: NextPage = () => {
 
   const handleChangeForm = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    setIsSignUp(!isSignUp);
+    if (authType === "signin")
+      setAuthSignUp();
+    else
+      setAuthSignIn();
   }
 
   const handleSignUp = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -63,11 +69,11 @@ const Auth: NextPage = () => {
       className="relative bg-auth-image h-screen w-screen bg-cover flex justify-end items-center pr-60"
     >
       <div 
-        className={`relative min-w-fit px-10 bg-beige-400 rounded-md flex flex-col items-center shadow-lg ${isSignUp ? "h-4/5" : "h-3/5"}`}
+        className={`relative min-w-fit px-10 bg-beige-400 rounded-md flex flex-col items-center shadow-lg ${authType === 'signup' ? "h-4/5" : "h-3/5"}`}
       >
         {/* Website name */}
         <h1
-          className={`text-green-700 text-5xl font-pacifico ${isSignUp ? "mt-16" : "mt-12"}`}
+          className={`text-green-700 text-5xl font-pacifico ${authType === 'signup' ? "mt-16" : "mt-12"}`}
         >
           Stock Geek
         </h1>
@@ -79,7 +85,7 @@ const Auth: NextPage = () => {
         </h1>
 
         {/* Form */}
-        {isSignUp ? 
+        {authType === "signup" ? 
           <form
           className="w-full flex flex-col gap-0"
           >

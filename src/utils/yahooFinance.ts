@@ -31,7 +31,7 @@ export const headers = {
 // }
 
 export const getTrending = async () => {
-  const queryOptions = { count: 20, lang: 'en-US' };
+  const queryOptions = { count: 30, lang: 'en-US' };
   const { quotes } = await yahooFinance.trendingSymbols('US', queryOptions);
   
   const symbols = quotes.map((quote) => quote.symbol)

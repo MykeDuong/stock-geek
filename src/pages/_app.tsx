@@ -13,7 +13,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
 }) => {
   return (
     <SessionProvider session={session}>
-      {([`/auth`].includes(appProps.router.pathname)) ?
+      {([`/auth`, `/`].includes(appProps.router.pathname)) ?
         <Component {...pageProps} /> :
         <AppWrap>
           <Component {...pageProps} />

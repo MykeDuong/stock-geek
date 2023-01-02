@@ -16,6 +16,7 @@ export const useCurrentDir = create<DirStoreInterface>()(
   })
 )
 
+// Screener
 interface ScreenerFilterInterface {
   value: {
     marketCap: { min: number, max: number };
@@ -36,7 +37,6 @@ interface ScreenerFilterInterface {
   resetValue: () => unknown;
 }
 
-// Screener
 const intialScreener = {
   marketCap: { min: screenerConstants.marketCap.min - 1, max: screenerConstants.marketCap.max + 1 },
   avgVolume: { min: screenerConstants.avgVolume.min - 1, max: screenerConstants.avgVolume.max + 1 },
@@ -55,5 +55,20 @@ export const useScreenerFilter = create<ScreenerFilterInterface>()(
     resetValue: () => set((state) => ({
       value: intialScreener
     }))
+  })
+)
+
+// AuthType
+interface AuthTypeInterface {
+  authType: "signin" | "signup"
+  setAuthSignIn: () => void
+  setAuthSignUp: () => void
+}
+
+export const useAuthType = create<AuthTypeInterface>()(
+  (set) =>({
+    authType: "signin",
+    setAuthSignIn: () => set((state) => ({ authType: "signin" })),
+    setAuthSignUp: () => set((state) => ({ authType: "signup" })),
   })
 )

@@ -15,6 +15,7 @@ module.exports = {
       },
       boxShadow: {
         'dark': '2px 3px 3px 3px rgba(0, 0, 0, 0.2)',
+        'landing-box': '1px 5px 5px 5px rgba(0, 0, 0, 0.2)'
       },
       fontFamily: {
         'sans': ['ui-sans-serif', 'system-ui'],
