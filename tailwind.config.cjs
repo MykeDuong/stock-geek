@@ -11,7 +11,7 @@ module.exports = {
         'main-screen': '77.5%',
       },
       backgroundImage: {
-        'workdesk': "url('/images/workdesk.jpeg')",
+        'auth-image': "url('/images/auth-image.png')",
       },
       boxShadow: {
         'dark': '2px 3px 3px 3px rgba(0, 0, 0, 0.2)',
