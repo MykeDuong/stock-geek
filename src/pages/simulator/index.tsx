@@ -107,7 +107,7 @@ const Simulator: NextPage = () => {
           className="text-center flex flex-col gap-6 w-1/2"
         >
           <h1
-            className="font-raleway text-4xl uppercase text-red-700 font-semibold"
+            className="font-raleway text-4xl uppercase text-red-700 font-bold"
           >
             Stock Market Performance
           </h1>
