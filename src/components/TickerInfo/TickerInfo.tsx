@@ -2,10 +2,11 @@ import { NextComponentType } from "next";
 import { useEffect, useRef } from "react";
 
 interface PropsInterface {
-  ticker: string
+  ticker: string,
+  showButton?: boolean,
 }
 
-export const TickerInfo: NextComponentType<{}, {}, PropsInterface> = ({ ticker }) => {
+export const TickerInfo: NextComponentType<{}, {}, PropsInterface> = ({ ticker, showButton = true }) => {
 
   const container = useRef<HTMLDivElement>(null);
 
@@ -28,25 +29,27 @@ export const TickerInfo: NextComponentType<{}, {}, PropsInterface> = ({ ticker }
     <div
       className="relative bg-beige-200 rounded-xl shadow-lg"
     >
-      <div
-        className='absolute right-2 top-14 flex flex-row gap-2'
-      >
-        <button
-          className="bg-green-700 text-white font-raleway rounded-xl py-2 px-4 hover:scale-105"
+      {showButton && 
+        <div
+          className='absolute right-2 top-14 flex flex-row gap-2'
         >
-          Buy
-        </button>
-        <button
-          className="bg-red-700 text-white font-raleway rounded-xl py-2 px-4 hover:scale-105"
-        >
-          Sell
-        </button>
-        <button
-          className="bg-beige-700 text-white font-raleway rounded-xl py-2 px-4 hover:scale-105"
-        >
-          Watchlist
-        </button>
-      </div>
+          <button
+            className="bg-green-700 text-white font-raleway rounded-xl py-2 px-4 hover:scale-105"
+          >
+            Buy
+          </button>
+          <button
+            className="bg-red-700 text-white font-raleway rounded-xl py-2 px-4 hover:scale-105"
+          >
+            Sell
+          </button>
+          <button
+            className="bg-beige-700 text-white font-raleway rounded-xl py-2 px-4 hover:scale-105"
+          >
+            Watchlist
+          </button>
+        </div>
+      }
       <div className="tradingview-widget-container" ref={container}>
         <div className="tradingview-widget-container__widget"></div>
       </div>

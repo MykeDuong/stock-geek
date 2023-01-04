@@ -15,3 +15,9 @@ export { default as MiniChart } from './MiniChart/MiniChart';
 export { default as TrendingTickers} from './TrendingTickers/TrendingTickers';
 
 export { default as HeaderImage } from './HeaderImage/HeaderImage';
+
+export { default as MarketInfo } from './MarketInfo/MarketInfo'
+
+export { default as TickerChart } from './TickerChart/TickerChart';
+
+export { default as TickerTechnicalAnalysis } from './TickerTechnicalAnalysis/TickerTechnicalAnalysis';

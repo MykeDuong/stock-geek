@@ -1,6 +1,6 @@
 import { router, protectedProcedure, publicProcedure } from "../trpc";
 import { z } from 'zod';
-import { getQuoteList, getRecommendations, getTrending, headers } from "../../../utils/yahooFinance";
+import { getQuoteList, getRecommendations, getTickerInfo, getTrending, search } from "../../../utils/yahooFinance";
 import { Result } from "postcss";
 
 export const tickerRouter = router({
@@ -39,7 +39,7 @@ export const tickerRouter = router({
 
       return result.slice(0, 10);
     }),
-  getScreenerResult: publicProcedure
+  getScreenerResult: protectedProcedure
     .input(
       z.object({
         marketCap: z.object({ min: z.number().nullable(), max: z.number().nullable() }),
@@ -56,6 +56,35 @@ export const tickerRouter = router({
 
       return await getQuoteList()
     }),
+  search: protectedProcedure
+    .input(
+      z.object({ searchText: z.string().min(1) })
+    )
+    .query(async ({ input }) => {
+      const { searchText } = input;
+      const result = await search(searchText)
+      console.log(result);
+      return result;
+    }),
+  getTickerInfo: protectedProcedure
+    .input(
+      z.object({ ticker: z.string().min(1) })
+    )
+    .query(async ({ input }) => {
+      const { ticker } = input;
+      const queryResult = await getTickerInfo(ticker);
+      console.log(queryResult)
+      
+      const result = {
+        volume: queryResult.summaryDetail?.volume,
+        dayHigh: queryResult.summaryDetail?.dayHigh,
+        dayLow: queryResult.summaryDetail?.dayHigh,
+        bid: queryResult.summaryDetail?.bid,
+        ask: queryResult.summaryDetail?.ask,
+        fiftyTwoWeekLow: queryResult.summaryDetail?.fiftyTwoWeekLow,
+        fiftyTwoWeekHigh: queryResult.summaryDetail?.fiftyTwoWeekHigh, 
+      }
 
-  
+      return result;
+    })
 }); 
