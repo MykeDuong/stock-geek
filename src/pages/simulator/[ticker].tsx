@@ -148,7 +148,7 @@ const TickerPage: NextPage = () => {
               className="w-full flex flex-col justify-center items-center"
             >
               <div
-                className="w-2/3 min-h-[24.1rem]"
+                className="w-2/3 min-h-[24.5rem]"
               >
                 <TickerTechnicalAnalysis ticker={ticker} />
               </div>
