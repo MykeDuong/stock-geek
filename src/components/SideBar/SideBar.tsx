@@ -35,9 +35,7 @@ const SideBar: NextComponentType = () => {
 
   const handleNavButtonClicked = (e: MouseEvent<HTMLButtonElement>) => {
     const newDir = (e.target as HTMLButtonElement).id;
-    dirStore.changeDir(newDir);
     router.push("/" + newDir);
-    console.log(router.query);
   }
 
   return (

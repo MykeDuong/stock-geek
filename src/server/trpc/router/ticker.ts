@@ -82,7 +82,12 @@ export const tickerRouter = router({
         bid: queryResult.summaryDetail?.bid,
         ask: queryResult.summaryDetail?.ask,
         fiftyTwoWeekLow: queryResult.summaryDetail?.fiftyTwoWeekLow,
-        fiftyTwoWeekHigh: queryResult.summaryDetail?.fiftyTwoWeekHigh, 
+        fiftyTwoWeekHigh: queryResult.summaryDetail?.fiftyTwoWeekHigh,
+        name: queryResult.price?.longName,
+        sector: queryResult.assetProfile?.sector,
+        industry: queryResult.assetProfile?.industry,
+        employees: queryResult.assetProfile?.fullTimeEmployees,
+        summary: queryResult.assetProfile?.longBusinessSummary,
       }
 
       return result;

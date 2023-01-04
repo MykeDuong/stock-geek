@@ -100,7 +100,7 @@ export const search = async ( searchText: string ) => {
 }
 
 export const getTickerInfo = async ( ticker: string ) => {
-  const queryOptions: QuoteSummaryOptions = { modules: ['summaryDetail', "assetProfile"] }; // defaults
+  const queryOptions: QuoteSummaryOptions = { modules: ['price', 'summaryDetail', "assetProfile"] };
   const result = await yahooFinance.quoteSummary(ticker, queryOptions);
   return result;
 }

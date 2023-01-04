@@ -10,10 +10,15 @@ interface DirStoreInterface {
 }
 
 export const useCurrentDir = create<DirStoreInterface>()(
-  (set) => ({
-    currentDir: "Home",
-    changeDir: ( dir ) => set((state) => ({ currentDir: dir})),
-  })
+  persist(
+    (set) => ({
+      currentDir: "home",
+      changeDir: ( dir ) => set((state) => ({ currentDir: dir })),
+    }),
+    {
+      name: "Stock Geek"
+    }
+  )
 )
 
 // Screener

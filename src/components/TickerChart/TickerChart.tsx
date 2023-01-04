@@ -23,11 +23,11 @@ const TickerChart: NextComponentType<any, any, PropsInterface> = ({ ticker }) =>
 
   useEffect(() => {
     setCode(createCode(5));
-  }, [router.query.slug])
+  }, [router])
 
   useEffect(() => {
-    const firstScript = document.createElement('script');
-    firstScript.src = "https://s3.tradingview.com/tv.js"
+    // const firstScript = document.createElement('script');
+    // firstScript.src = "https://s3.tradingview.com/tv.js"
     const secondScript = document.createElement('script');
     secondScript.innerHTML = "new TradingView.MediumWidget(" + JSON.stringify({
       "symbols": [
@@ -52,9 +52,10 @@ const TickerChart: NextComponentType<any, any, PropsInterface> = ({ ticker }) =>
       "valuesTracking": "1",
       "chartType": "line",
       "backgroundColor": "rgba(0, 0, 0, 0)",
-      "container_id": `tradingview_${code}`
+      "container_id": `tradingview_19283`
     }) + ")"
-    container.current!.appendChild(firstScript);
+    console.log(code)
+    // container.current!.appendChild(firstScript);
     container.current!.appendChild(secondScript);
   }, [])
 
@@ -64,8 +65,9 @@ const TickerChart: NextComponentType<any, any, PropsInterface> = ({ ticker }) =>
       className="w-full h-full min-h-[20rem]"
     >
       <div className="tradingview-widget-container" ref={container}>
-        <div id={`tradingview_${code}`}></div>
+        <div id={`tradingview_19283`}></div>
       </div>
+      {console.log(code)}
     </div>
   )
 }

@@ -13,6 +13,11 @@ const TickerPage: NextPage = () => {
   const ticker = tickerRoute as string;
 
   const tickerInfoQuery= trpc.ticker.getTickerInfo.useQuery({ ticker })
+ 
+  const [viewProfile, setViewProfile] = useState(false)
+  const [viewTrade, setViewTrade] = useState(false)
+
+
 
   return (
     <div>
@@ -46,10 +51,10 @@ const TickerPage: NextPage = () => {
         >
           {/* Ticker Information */}
           <div
-            className="flex flex-col w-1/2"
+            className="flex flex-col w-7/12"
           >
             <div
-              className="w-full flex flex-row gap-10"
+              className="w-full flex flex-row gap-4"
             >
               <div
                 className="w-1/2 flex flex-col gap-6"
@@ -153,11 +158,10 @@ const TickerPage: NextPage = () => {
                 <TickerTechnicalAnalysis ticker={ticker} />
               </div>
             </div>
-
           </div>
 
           <div
-            className="w-1/2 h-full"
+            className="w-5/12 h-full"
           >
             {ticker !== '' &&
               <TickerChart ticker={ticker} />
@@ -168,24 +172,119 @@ const TickerPage: NextPage = () => {
       
       {/* Profile and Trade */}
       <div
-        className={`mx-10`}
+        className={`mx-10 p-2 ${viewProfile && 'min-h-screen'} ${viewTrade && 'min-h-screen'}`}
+        id='additionalInfo'
       >
         {/* Button */}
         <div
-          className="pr-12 mt-4 flex flex-row gap-10 justify-start w-1/2"
+          className="pr-6 mt-4 flex flex-row gap-10 justify-start w-7/12"
+          onClick={() => {
+            setViewTrade(false)
+
+            setViewProfile(!viewProfile);
+            router.push(router.asPath + '/#additionalInfo')
+          }}
         >
           <button
-            className="py-4 w-1/2 bg-green-700 rounded-lg font-raleway text-xl text-white"
+            className="py-4 w-1/2 bg-green-700 rounded-lg font-raleway text-xl text-white hover:scale-105"
           >
             Company Profile
           </button>
           <button
-            className="py-4 w-1/2 bg-green-700 rounded-lg font-raleway text-xl text-white"
+            className="py-4 w-1/2 bg-green-700 rounded-lg font-raleway text-xl text-white hover:scale-105"
+            onClick={() => {
+
+              setViewProfile(false)
+              
+              setViewTrade(!viewTrade);
+              router.push(router.asPath + '/#additionalInfo')
+            }}
           >
             Trade
           </button>
         </div>
         
+        {viewProfile && 
+          <div
+            className="w-7/12 pr-6 mt-20 flex flex-col gap-10"
+          >
+            <div
+              className="flex flex-col gap-2"
+            >
+              <h2
+                className="capitalize font-raleway text-3xl text-green-700 font-semibold"
+              >
+                Company Name
+              </h2>
+              <hr className="h border-slate-500" />
+              <p
+                className="font-raleway text-xl"
+              >
+                {tickerInfoQuery.data?.name}
+              </p>
+            </div>
+            <div
+              className="flex flex-col gap-2"
+            >
+              <h2
+                className="capitalize font-raleway text-3xl text-green-700 font-semibold"
+              >
+                Sector
+              </h2>
+              <hr className="h border-slate-500" />
+              <p
+                className="font-raleway text-xl"
+              >
+                {tickerInfoQuery.data?.sector}
+              </p>
+            </div>
+            <div
+              className="flex flex-col gap-2"
+            >
+              <h2
+                className="capitalize font-raleway text-3xl text-green-700 font-semibold"
+              >
+                Industry
+              </h2>
+              <hr className="h border-slate-500" />
+              <p
+                className="font-raleway text-xl"
+              >
+                {tickerInfoQuery.data?.industry}
+              </p>
+            </div>
+            <div
+              className="flex flex-col gap-2"
+            >
+              <h2
+                className="capitalize font-raleway text-3xl text-green-700 font-semibold"
+              >
+                Employees
+              </h2>
+              <hr className="h border-slate-500" />
+              <p
+                className="font-raleway text-lg"
+              >
+                {tickerInfoQuery.data?.employees?.toLocaleString('en-US')}
+              </p>
+            </div>
+            <div
+              className="flex flex-col gap-2"
+            >
+              <h2
+                className="capitalize font-raleway text-3xl text-green-700 font-semibold"
+              >
+                Business Summary
+              </h2>
+              <hr className="h border-slate-500" />
+              <p
+                className="font-raleway text-xl"
+              >
+                {tickerInfoQuery.data?.summary}
+              </p>
+            </div>
+          </div>
+        }
         
 
       </div>

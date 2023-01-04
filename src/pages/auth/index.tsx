@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 
 import { trpc } from '../../utils/trpc';
-import { useAuthType } from "../../store";
+import { useAuthType, useCurrentDir } from "../../store";
 
 const Auth: NextPage = () => {
   const { data: sessionData } = useSession();
@@ -16,10 +16,12 @@ const Auth: NextPage = () => {
   const router = useRouter();
 
   const { authType, setAuthSignIn, setAuthSignUp } = useAuthType();
+  const { currentDir } = useCurrentDir();
 
   useEffect(() => {
     if (sessionData) {
-      router.push('/home');
+      console.log(currentDir);
+      router.push('/' + currentDir);
     }
   }, [ sessionData ])
 
