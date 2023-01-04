@@ -33,7 +33,7 @@ const Simulator: NextPage = () => {
       className="max-h-screen"
     >
       <h1
-        className="text-4xl font-raleway text-green-700 uppercase font-semibold mt-10 mb-6 text-center"
+        className="text-5xl font-raleway text-green-700 uppercase font-bold mt-10 mb-6 text-center"
       >
         Trade Simulator
       </h1>
