@@ -40,7 +40,7 @@ const Simulator: NextPage = () => {
       <p
         className="font-raleway text-2xl font-semibold text-center mb-5"
       >
-        Enter a stock symbol to Search
+        Enter a Stock Symbol to Search
       </p>
       <div
         className="flex flex-row gap-2 w-full justify-center mb-5"
@@ -107,7 +107,7 @@ const Simulator: NextPage = () => {
           className="text-center flex flex-col gap-6 w-1/2"
         >
           <h1
-            className="font-raleway text-4xl uppercase text-red-700 font-medium"
+            className="font-raleway text-4xl uppercase text-red-700 font-semibold"
           >
             Stock Market Performance
           </h1>
