@@ -1,4 +1,5 @@
 import { NextComponentType } from "next";
+import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 
 interface PropsInterface {
@@ -7,6 +8,7 @@ interface PropsInterface {
 
 export const MiniChart: NextComponentType<any, any, PropsInterface> = ({ ticker }) => {
 
+  const router = useRouter()
   const container = useRef<HTMLDivElement>(null);
   const [scripted, setScripted] = useState(false);
 
@@ -43,14 +45,10 @@ export const MiniChart: NextComponentType<any, any, PropsInterface> = ({ ticker 
           className="absolute right-14 top-3"
         >
           <button
-            className="rounded-lg bg-green-700 text-white text-sm py-1 px-3 mr-1 hover:scale-105"
+            className="rounded-lg bg-green-700 text-white text-sm py-1 px-3 hover:scale-105"
+            onClick={() => router.push('/simulator/' + ticker)}
           >
-            Buy
-          </button>
-          <button
-            className="rounded-lg bg-red-700 text-white text-sm py-1 px-3 hover:scale-105"
-          >
-            Sell
+            Trade
           </button>
         </div>
       )}

@@ -1,4 +1,5 @@
 import { NextComponentType } from "next";
+import { useRouter } from "next/router";
 import { useEffect, useRef } from "react";
 
 interface PropsInterface {
@@ -8,6 +9,7 @@ interface PropsInterface {
 
 export const TickerInfo: NextComponentType<{}, {}, PropsInterface> = ({ ticker, showButton = true }) => {
 
+  const router = useRouter()
   const container = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -35,14 +37,11 @@ export const TickerInfo: NextComponentType<{}, {}, PropsInterface> = ({ ticker, 
         >
           <button
             className="bg-green-700 text-white font-raleway rounded-xl py-2 px-4 hover:scale-105"
+            onClick={() => router.push('/simulator/' + ticker )}
           >
-            Buy
+            Trade
           </button>
-          <button
-            className="bg-red-700 text-white font-raleway rounded-xl py-2 px-4 hover:scale-105"
-          >
-            Sell
-          </button>
+          
           <button
             className="bg-beige-700 text-white font-raleway rounded-xl py-2 px-4 hover:scale-105"
           >
