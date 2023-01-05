@@ -28,13 +28,13 @@ const Home: NextPage = () => {
 
   return (
     <div
-      className="min-h-screen bg-green-600"
+      className="min-h-screen bg-green-600 overflow-x-hidden"
     >
       <div
-        className='w-screen h-screen bg-green-700'
+        className='w-screen max-w-screen h-screen bg-green-700'
       >
         <div
-          className="relative w-screen min-h-[26rem] overflow-hidden"
+          className="relative max-w-screen w-screen min-h-[26rem] overflow-hidden"
         >
           <Image src="/images/landing-page-image.png" alt="landing-page-image" fill style={{ objectFit: 'cover' }} />
           <div
