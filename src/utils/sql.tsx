@@ -22,4 +22,13 @@ export const findUserByIdQuery = `
   WHERE ($1 = user_id)
 `
 
-
+export const addToWatchlist = `
+  INSERT INTO watchlist(
+    user_id,
+    ticker
+  )
+  VALUES (
+    $1,
+    upper($2)
+  )
+`
