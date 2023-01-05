@@ -1,5 +1,7 @@
 import { Pool, PoolConfig } from 'pg';
 
+import * as sql from './sql';
+
 const config: PoolConfig = {
   connectionString: `postgres://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_DATABASE}?options`,
 }
@@ -7,14 +9,13 @@ const config: PoolConfig = {
 const pool = new Pool(config);
 export default pool;
 
-const createUserQuery = 'INSERT INTO users (username, email, password) VALUES ($1,	$2,	$3) RETURNING *';
 export const createUser = async ( username: string, email: string, password: string ) => {
   let success = true;
 
   const client = await pool.connect()
  
   const result = await client
-    .query(createUserQuery, [username, email, password])
+    .query(sql.createUserQuery, [username, email, password])
     .then(res => {
       return res.rows[0]
     })
@@ -30,7 +31,6 @@ export const createUser = async ( username: string, email: string, password: str
   else throw result;
 }
 
-const findUserQuery = 'SELECT * FROM users WHERE ($1 = username OR $1 = email)';
 export const findUser = async (usernameOrEmail: string) => {
   console.assert(pool.totalCount === 0)
   console.assert(pool.idleCount === 0)
@@ -40,7 +40,7 @@ export const findUser = async (usernameOrEmail: string) => {
   const client = await pool.connect()
  
   const result = await client
-    .query(findUserQuery, [usernameOrEmail])
+    .query(sql.findUserQuery, [usernameOrEmail])
     .then(res => {
       return res.rows[0]
     })
@@ -56,14 +56,13 @@ export const findUser = async (usernameOrEmail: string) => {
   else throw result;
 }
 
-const findUserByIdQuery = 'SELECT * FROM users WHERE ($1 = user_id)';
 export const findUserById = async (id: string) => {
   let success = true;
 
   const client = await pool.connect()
  
   const result = await client
-    .query(findUserByIdQuery, [id])
+    .query(sql.findUserByIdQuery, [id])
     .then(res => {
       return res.rows[0]
     })

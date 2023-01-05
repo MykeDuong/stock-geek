@@ -2,7 +2,7 @@ import type { NextComponentType } from "next";
 import type { MouseEvent } from "react";
 import { useRouter } from "next/router";
 import { signOut } from 'next-auth/react'
-import { AiOutlineHistory, AiOutlineHome } from 'react-icons/ai';
+import { AiOutlineHistory, AiOutlineHome, AiOutlineInfoCircle, AiOutlineLogout } from 'react-icons/ai';
 import { BiMessageDetail, BiUserCircle } from 'react-icons/bi';
 import { HiDocumentSearch, HiOutlinePresentationChartLine } from 'react-icons/hi';
 import { RiStockLine } from 'react-icons/ri';
@@ -23,7 +23,7 @@ const avatarIconStyle = {
   color: 'white',
 }
 
-const buttonStyle = 'text-white text-left text-2xl h-16 pl-4 rounded-md flex flex-row items-center gap-6 hover:bg-green-600'
+const buttonStyle = 'text-white text-left text-2xl h-14 pl-4 rounded-md flex flex-row items-center gap-6 hover:bg-green-600'
 
 const chosenButtonStyle = 'bg-beige-600 hover:bg-beige-600'
 
@@ -44,8 +44,9 @@ const SideBar: NextComponentType = () => {
     <div  
       className="bg-green-700 w-sidebar h-screen max-h-screen fixed flex flex-col"
     >
+      {/* Logo */}
       <div
-        className="w-100 mt-12 mb-14 mx-8 flex"
+        className="w-100 my-10 mx-8 flex"
       >
         <h1
           className="text-white font-pacifico text-5xl"
@@ -53,6 +54,8 @@ const SideBar: NextComponentType = () => {
           Stock Geek
         </h1>
       </div>
+      
+      {/* User Info */}
       <div
         className="ml-8 flex flex-row h-16 gap-2 items-center mb-10"
       >
@@ -79,11 +82,13 @@ const SideBar: NextComponentType = () => {
           </div>
         }
       </div>
+
+      {/* Pages */}
       <div
-        className='flex flex-col mx-4 pt-4'
+        className='flex flex-col mx-4'
       >
         <h3
-          className='text-slate-400 text-2xl ml-4 mb-2 uppercase'
+          className='text-slate-400 text-2xl ml-4 uppercase'
         >
           My Portal
         </h3>
@@ -120,7 +125,7 @@ const SideBar: NextComponentType = () => {
           Watchlist
         </button>
         <h3
-          className='text-slate-400 text-2xl ml-4 mt-6 mb-2 uppercase'
+          className='text-slate-400 text-2xl ml-4 mt-2 uppercase'
         >
           Discover
         </h3>
@@ -148,13 +153,27 @@ const SideBar: NextComponentType = () => {
           <BiMessageDetail style={buttonIconStyle} />
           Recommendations
         </button>
+        <h3
+          className='text-slate-400 text-2xl ml-4 mt-2 uppercase'
+        >
+          others
+        </h3>
+        <button
+          id=""
+          className={`${buttonStyle}`}
+          onClick={handleNavButtonClicked}
+        >
+          <AiOutlineInfoCircle style={buttonIconStyle} />
+          About us
+        </button>
+        <button
+          className={`${buttonStyle} hover:bg-red-700`}
+          onClick={() => signOut()}
+        >
+          <AiOutlineLogout style={buttonIconStyle} />
+          Log out
+        </button>
       </div>
-      <button
-        className="absolute left-8 bottom-4 bg-red-700 font-raleway text-xl text-white px-6 py-3 rounded-lg hover:scale-105"
-        onClick={() => signOut()}
-      >
-        Log Out
-      </button>
     </div>
   )
 }

@@ -30,10 +30,10 @@ const Simulator: NextPage = () => {
 
   return (
     <div
-      className="max-h-screen"
+      className="max-h-screen bg-beige-400"
     >
       <h1
-        className="text-5xl font-raleway text-green-700 uppercase font-bold mt-10 mb-6 text-center"
+        className="text-5xl font-raleway text-green-700 uppercase font-bold mt-6 mb-6 text-center"
       >
         Trade Simulator
       </h1>
@@ -114,11 +114,11 @@ const Simulator: NextPage = () => {
           <p
             className="font-raleway text-xl"
           >
-            Check out the top five gaining, losing, and most active stocks for the day. It updates based on current market activity - so you’ll always see the most relevant stocks.
+            Check out the top gaining, losing, and most active stocks for the day. It updates based on current market activity - so you’ll always see the most relevant stocks.
           </p>
         </div>
         <div
-          className="w-1/2 h-[40rem]"
+          className="w-1/2 h-[36rem]"
         >
           <MarketInfo />
         </div>
