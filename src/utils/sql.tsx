@@ -1,3 +1,4 @@
+// USERS
 export const createUserQuery = `
   INSERT INTO users (
     username,
@@ -22,6 +23,7 @@ export const findUserByIdQuery = `
   WHERE ($1 = user_id)
 `
 
+// WATCHLIST
 export const addToWatchlist = `
   INSERT INTO watchlist(
     user_id,
