@@ -1,15 +1,16 @@
 import type { NextComponentType } from "next";
-import { trpc } from '../../utils/trpc';
+import type { MouseEvent } from "react";
+import { useRouter } from "next/router";
+import { signOut } from 'next-auth/react'
 import { AiOutlineHistory, AiOutlineHome } from 'react-icons/ai';
 import { BiMessageDetail, BiUserCircle } from 'react-icons/bi';
 import { HiDocumentSearch, HiOutlinePresentationChartLine } from 'react-icons/hi';
 import { RiStockLine } from 'react-icons/ri';
 import { TbNotebook } from 'react-icons/tb'
-import { useCurrentDir } from "../../store";
-import type { MouseEvent } from "react";
-import { useRouter } from "next/router";
 import { ClipLoader } from "react-spinners";
 
+import { trpc } from '../../utils/trpc';
+import { useCurrentDir } from "../../store";
 
 const buttonIconStyle = {
   height: "30px",
@@ -35,12 +36,13 @@ const SideBar: NextComponentType = () => {
 
   const handleNavButtonClicked = (e: MouseEvent<HTMLButtonElement>) => {
     const newDir = (e.target as HTMLButtonElement).id;
+    dirStore.changeDir(newDir);
     router.push("/" + newDir);
   }
 
   return (
     <div  
-      className="bg-green-700 w-sidebar h-screen fixed flex flex-col"
+      className="bg-green-700 w-sidebar h-screen max-h-screen fixed flex flex-col"
     >
       <div
         className="w-100 mt-12 mb-14 mx-8 flex"
@@ -147,6 +149,12 @@ const SideBar: NextComponentType = () => {
           Recommendations
         </button>
       </div>
+      <button
+        className="absolute left-8 bottom-4 bg-red-700 font-raleway text-xl text-white px-6 py-3 rounded-lg hover:scale-105"
+        onClick={() => signOut()}
+      >
+        Log Out
+      </button>
     </div>
   )
 }

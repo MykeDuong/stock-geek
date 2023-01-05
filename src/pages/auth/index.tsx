@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 
 import { trpc } from '../../utils/trpc';
 import { useAuthType, useCurrentDir } from "../../store";
+import { TbAlertCircle } from "react-icons/tb";
 
 const Auth: NextPage = () => {
   const { data: sessionData } = useSession();
@@ -25,7 +26,13 @@ const Auth: NextPage = () => {
     }
   }, [ sessionData ])
 
-  const signUp = trpc.auth.signup.useMutation();
+  const signUp = trpc.auth.signup.useMutation({
+    onSuccess: (data) => {
+      const form = { usernameOrEmail: signUpForm.email, password: signUpForm.password }
+      signIn("credentials", form);
+    },
+    onError: (error) => alert(error),
+  });
 
   const handleChangeForm = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -53,11 +60,6 @@ const Auth: NextPage = () => {
     const {retypedPassword, ...submittedForm} = signUpForm
 
     await signUp.mutate(submittedForm);
-
-    if (signUp.error) {
-      alert(signUp.error.message);
-    }
-
   } 
 
   const handleSignIn = async (e: React.MouseEvent<HTMLButtonElement>) => {

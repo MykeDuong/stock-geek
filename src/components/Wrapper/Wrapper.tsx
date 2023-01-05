@@ -1,7 +1,7 @@
-import { NextComponentType } from "next";
+import type { NextComponentType } from "next";
+import type { ReactElement } from "react";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
-import { ReactElement, useEffect } from "react";
+
 import SideBar from "../SideBar/SideBar";
 
 interface Props {
@@ -10,14 +10,9 @@ interface Props {
 
 
 const Wrapper: NextComponentType<any, any, Props> = ({ children }) => {
-  const router = useRouter()
-  const { data: sessionData } = useSession();
-
-  useEffect(() => {
-    if (!sessionData) {
-      router.push('/auth')
-    }
-  }, [sessionData]);
+  const {  data: sessionData } = useSession({
+    required: true,
+  });
 
   return (sessionData && 
     <div

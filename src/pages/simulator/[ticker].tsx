@@ -1,7 +1,7 @@
 import type { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import React, { useEffect, useRef, useState } from 'react'
-import { AiFillQuestionCircle } from 'react-icons/ai'
+import { AiFillEye, AiFillQuestionCircle } from 'react-icons/ai'
 import { BiArrowBack } from 'react-icons/bi'
 import { RiArrowDownSLine } from 'react-icons/ri'
 import { TickerChart, TickerInfo, TickerTechnicalAnalysis, Error } from '../../components'
@@ -21,6 +21,8 @@ const TickerPage: NextPage = () => {
   const ticker = tickerRoute as string;
   
   const additionalInfo = useRef<HTMLDivElement>(null)
+  const quantityRef = useRef<HTMLInputElement>(null)
+
   const [viewProfile, setViewProfile] = useState(false)
   const [viewTrade, setViewTrade] = useState(false)
   const [preview, setPreview] = useState(false)
@@ -483,13 +485,36 @@ const TickerPage: NextPage = () => {
               >
                 {/* Quantity */}
                 <label
-                  className="font-raleway font-semibold text-xl text-green-700 flex flex-col w-80"
+                  className="flex flex-col w-80"
                 >
-                  Quantity
+                  <div>
+                    <h2
+                      className="float-left font-raleway font-semibold text-xl text-green-700"
+                    >
+                      Quantity
+                    </h2>
+                    <button
+                      className="float-right h-fit flex flex-row gap-1 items-center"
+                      onClick={() => {
+                        let maxQuant = 0
+                        if (transactionInfo.type === "buy") {
+                          maxQuant = Math.floor(userData.cash / transactionInfo.ask)
+                        } else {
+                          // TODO: update maxQuant
+                        }
+                        setTransactionInfo({ ...transactionInfo, quantity: maxQuant });
+                      }}
+                    >
+                      <AiFillEye />
+                      <p>Show Max</p>
+                    </button>
+                  </div>
                   <input
+                    ref={quantityRef}
                     className="text-2xl bg-transparent relative border border-solid rounded-md border-black h-14 font-normal font-raleway text-black px-3 "
                     type="number"
                     min='0'
+                    value={transactionInfo.quantity}
                     pattern="[0-9]*"
                     onChange={(e) => {
                       setTransactionInfo({ ...transactionInfo, quantity: +e.target.value});
