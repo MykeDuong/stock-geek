@@ -18,7 +18,6 @@ export const tickerRouter = router({
       }
 
       const result = await getRecommendations(searchTickers)
-      console.log(result);
       return result;
     }),
 
@@ -63,7 +62,6 @@ export const tickerRouter = router({
     .query(async ({ input }) => {
       const { searchText } = input;
       const result = await search(searchText)
-      console.log(result);
       return result;
     }),
   getTickerInfo: protectedProcedure
@@ -73,7 +71,6 @@ export const tickerRouter = router({
     .query(async ({ input }) => {
       const { ticker } = input;
       const queryResult = await getTickerInfo(ticker);
-      console.log(queryResult)
       
       const result = {
         volume: queryResult.summaryDetail?.volume,

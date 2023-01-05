@@ -12,7 +12,7 @@ interface PropsInterface {
 const Error: NextComponentType<any, any, PropsInterface> = ({ message, onClose }) => {
   return (
     <div
-      className={popupClass}
+      className={`${popupClass} top-[15%] bg-beige-300 rounded-lg shadow-md`}
     >
       <button
         className="absolute top-2 right-2 pointer-events-auto"

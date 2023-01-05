@@ -4,10 +4,19 @@ import React, { useEffect, useRef, useState } from 'react'
 import { AiFillEye, AiFillQuestionCircle } from 'react-icons/ai'
 import { BiArrowBack } from 'react-icons/bi'
 import { RiArrowDownSLine } from 'react-icons/ri'
-import { TickerChart, TickerInfo, TickerTechnicalAnalysis, Error } from '../../components'
+import { Transaction } from 'yahoo-finance2/dist/esm/src/modules/quoteSummary-iface'
+
+import { TickerChart, TickerInfo, TickerTechnicalAnalysis, Error, PreviewOrder } from '../../components'
 import { trpc } from '../../utils/trpc'
 
 type ErrorType = "ZERO_QUANTITY" | "OVERSELL" | "OVERBUY" | null;
+
+type TransactionoInfoType = {
+  type: 'buy' | "sell",
+  quantity: number,
+  bid: number,
+  ask: number,
+}
 
 const errorMessage = {
   ZERO_QUANTITY: "Please enter a quantity larger than 0.",
@@ -29,7 +38,7 @@ const TickerPage: NextPage = () => {
   const [error, setError] = useState<ErrorType>(null);
   const [openType, setOpenType] = useState(false);
 
-  const [transactionInfo, setTransactionInfo] = useState({
+  const [transactionInfo, setTransactionInfo] = useState<TransactionInfoType>({
     type: "buy",
     quantity: 0,
     bid: 0,
@@ -514,7 +523,7 @@ const TickerPage: NextPage = () => {
                     className="text-2xl bg-transparent relative border border-solid rounded-md border-black h-14 font-normal font-raleway text-black px-3 "
                     type="number"
                     min='0'
-                    value={transactionInfo.quantity}
+                    value={transactionInfo.quantity !== 0 ? transactionInfo.quantity : ''}
                     pattern="[0-9]*"
                     onChange={(e) => {
                       setTransactionInfo({ ...transactionInfo, quantity: +e.target.value});
@@ -603,6 +612,15 @@ const TickerPage: NextPage = () => {
       } 
 
       {/* Preview and Trade */}
+      {preview &&
+        <PreviewOrder
+          ticker={ticker}
+          type={transactionInfo.type}
+          price={transactionInfo.type === "buy" ? transactionInfo.ask : transactionInfo.bid}
+          quantity={transactionInfo.quantity}
+          onClose={() => setPreview(false)}
+        />
+      }
     </div>
   )
 }

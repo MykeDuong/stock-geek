@@ -23,3 +23,5 @@ export { default as TickerChart } from './TickerChart/TickerChart';
 export { default as TickerTechnicalAnalysis } from './TickerTechnicalAnalysis/TickerTechnicalAnalysis';
 
 export { default as Error } from './Error/Error';
+
+export { default as PreviewOrder } from './PreviewOrder/PreviewOrder';

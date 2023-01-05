@@ -51,8 +51,6 @@ export const getRecommendations = async (searchTickers: string[] ) => {
     .flat(1)
     .map(ticker => ticker.symbol)
 
-  console.log(duplicableResult);
-
   const result =  duplicableResult.filter((ticker, index) => {
       return duplicableResult.indexOf(ticker) === index;
     });

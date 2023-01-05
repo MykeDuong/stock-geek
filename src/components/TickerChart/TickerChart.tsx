@@ -54,7 +54,6 @@ const TickerChart: NextComponentType<any, any, PropsInterface> = ({ ticker }) =>
       "backgroundColor": "rgba(0, 0, 0, 0)",
       "container_id": `tradingview_19283`
     }) + ")"
-    console.log(code)
     // container.current!.appendChild(firstScript);
     container.current!.appendChild(secondScript);
   }, [])
@@ -67,7 +66,6 @@ const TickerChart: NextComponentType<any, any, PropsInterface> = ({ ticker }) =>
       <div className="tradingview-widget-container" ref={container}>
         <div id={`tradingview_19283`}></div>
       </div>
-      {console.log(code)}
     </div>
   )
 }

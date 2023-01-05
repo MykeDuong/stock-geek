@@ -26,7 +26,6 @@ const Home: NextPage = () => {
     router.push('/auth');
   }
 
-
   return (
     <div
       className="min-h-screen bg-green-600"
