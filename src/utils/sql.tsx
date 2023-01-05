@@ -44,3 +44,5 @@ export const viewWatchlist = `
   SELECT * FROM watchlist
   WHERE user_id = $1
 `
+
+// TRADE HISTORY
