@@ -88,6 +88,7 @@ export const tickerRouter = router({
         industry: queryResult.assetProfile?.industry,
         employees: queryResult.assetProfile?.fullTimeEmployees,
         summary: queryResult.assetProfile?.longBusinessSummary,
+        marketState: queryResult.price?.marketState,
       }
 
       return result;

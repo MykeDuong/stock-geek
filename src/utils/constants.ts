@@ -6,3 +6,5 @@ export const screenerConstants = {
   beta: { min: 0, max: 4 },
   price: { min: 0, max: 200 },
 }
+
+export const popupClass = 'fixed left-[41.87%] right-[19.37%] top-[15%] z-10 bg-beige-300 min-h-fit min-w-fit px-6 py-10 flex flex-col rounded-lg shadow-md'

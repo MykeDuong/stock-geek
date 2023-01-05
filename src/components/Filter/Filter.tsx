@@ -5,6 +5,7 @@ import { VscChromeClose } from 'react-icons/vsc'
 
 import MultiRangeSlider from '../MultiRangeSlider/MultiRangeSlider'
 import { useScreenerFilter } from '../../store'
+import { popupClass } from '../../utils/constants'
 
 interface PropsInterface {
   onClose: () => unknown;
@@ -42,7 +43,7 @@ const Filter: NextComponentType<any, any, PropsInterface> = ({ onClose, onSearch
 
   return (
     <div
-      className="fixed left-[41.87%] right-[19.37%] top-[15%] z-10 bg-beige-300 min-h-fit min-w-fit px-6 py-10 flex flex-col rounded-lg shadow-md"
+      className={popupClass}
     >
       <button
         className="absolute top-2 right-2 pointer-events-auto"

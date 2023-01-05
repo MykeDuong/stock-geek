@@ -1,28 +1,66 @@
 import type { NextPage } from 'next'
 import { useRouter } from 'next/router'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
+import { AiFillQuestionCircle } from 'react-icons/ai'
 import { BiArrowBack } from 'react-icons/bi'
-import { TickerChart, TickerInfo, TickerTechnicalAnalysis } from '../../components'
+import { RiArrowDownSLine } from 'react-icons/ri'
+import { TickerChart, TickerInfo, TickerTechnicalAnalysis, Error } from '../../components'
 import { trpc } from '../../utils/trpc'
 
-const TickerPage: NextPage = () => {
+type ErrorType = "ZERO_QUANTITY" | "OVERSELL" | "OVERBUY" | null;
 
+const errorMessage = {
+  ZERO_QUANTITY: "Please enter a quantity larger than 0.",
+  OVERSELL: "You may have entered a quantity larger than the number of chosen stock in your portfolio. Please try again.",
+  OVERBUY: "You may not have enough cash in your account to make this transaction. Please try again.",
+}
+
+const TickerPage: NextPage = () => {
   const router = useRouter();
   const { ticker: tickerRoute } = router.query;
-
   const ticker = tickerRoute as string;
-
-  const tickerInfoQuery= trpc.ticker.getTickerInfo.useQuery({ ticker })
- 
+  
+  const additionalInfo = useRef<HTMLDivElement>(null)
   const [viewProfile, setViewProfile] = useState(false)
   const [viewTrade, setViewTrade] = useState(false)
+  const [preview, setPreview] = useState(false)
+  const [error, setError] = useState<ErrorType>(null);
+  const [openType, setOpenType] = useState(false);
+
+  const [transactionInfo, setTransactionInfo] = useState({
+    type: "buy",
+    quantity: 0,
+    bid: 0,
+    ask: 0
+  });
 
 
+  const tickerInfoQuery = trpc.ticker.getTickerInfo.useQuery(
+    { ticker }, 
+    { 
+      onSuccess: (data) => {
+        setTransactionInfo({ ...transactionInfo, bid: data.bid!, ask: data.ask! })
+      }
+    }
+  )
+
+  const { data: userData } = trpc.user.getUserInfo.useQuery();
+
+  useEffect(() => {
+    if (viewProfile || viewTrade) {
+      additionalInfo.current?.scrollIntoView();
+    }
+  }, [viewProfile, viewTrade]);
 
   return (
-    <div>
-      {/* Back and TickerInfo */}
+    <div
+      className="relative"
+    >
       <div
+        className={`${(error || preview) && 'pointer-events-none blur-sm'}`}
+      >
+        {/* Back */}
+        <div
         className="w-full h-20 pt-4 px-10"
       >
         <button
@@ -32,12 +70,13 @@ const TickerPage: NextPage = () => {
           <BiArrowBack style={{ height: '1.2rem', width: '1.2rem' }} />
           Back to Search Results
         </button>
-      </div>
+        </div>
 
-      {/* Ticker Information */}
-      <div
+        {/* Ticker Data */}
+        <div
         className="mx-10"
       >
+        {/* Ticker Info */}
         <div
           className="mb-6"
         >
@@ -53,12 +92,15 @@ const TickerPage: NextPage = () => {
           <div
             className="flex flex-col w-7/12"
           >
+            {/* Essential Information */}
             <div
               className="w-full flex flex-row gap-4"
             >
+              {/* Left Col */}
               <div
                 className="w-1/2 flex flex-col gap-6"
               >
+                {/* Volume */}
                 <div
                   className="border-b min-h-fit px-1 py-2 overflow-auto"
                 >
@@ -73,6 +115,8 @@ const TickerPage: NextPage = () => {
                     {tickerInfoQuery.data?.volume?.toLocaleString("en-US")}
                   </p>
                 </div>
+
+                {/* Day High */}
                 <div
                   className="border-b min-h-fit px-1 py-2 overflow-auto"
                 >
@@ -87,6 +131,8 @@ const TickerPage: NextPage = () => {
                     {tickerInfoQuery.data?.dayHigh}
                   </p>
                 </div>
+
+                {/* Day Low */}
                 <div
                   className="border-b min-h-fit px-1 py-2 overflow-auto"
                 >
@@ -102,9 +148,11 @@ const TickerPage: NextPage = () => {
                   </p>
                 </div>
               </div>
+              {/* Right Col */}
               <div
                 className="w-1/2 flex flex-col gap-6"
               >
+                {/* Bid/Ask price */}
                 <div
                   className="border-b min-h-fit px-1 py-2 overflow-auto"
                 >
@@ -119,13 +167,15 @@ const TickerPage: NextPage = () => {
                     {`${tickerInfoQuery.data?.bid}/${tickerInfoQuery.data?.ask}`}
                   </p>
                 </div>
+
+                {/* 52-week High */}
                 <div
                   className="border-b min-h-fit px-1 py-2 overflow-auto"
                 >
                   <p
                     className="font-raleway text-xl font-semibold float-left"
                   >
-                    52 Week High ($)
+                    52-week High ($)
                   </p>
                   <p
                     className="font-raleway text-xl float-right"
@@ -133,13 +183,15 @@ const TickerPage: NextPage = () => {
                     {tickerInfoQuery.data?.fiftyTwoWeekHigh}
                   </p>
                 </div>
+
+                {/* 52-week Low */}
                 <div
                   className="border-b min-h-fit px-1 py-2 overflow-auto"
                 >
                   <p
                     className="font-raleway text-xl font-semibold float-left"
                   >
-                    52 Week Low ($)
+                    52-week Low ($)
                   </p>
                   <p
                     className="font-raleway text-xl float-right"
@@ -149,6 +201,8 @@ const TickerPage: NextPage = () => {
                 </div>
               </div>
             </div>
+
+            {/* Technical Analysis */}
             <div
               className="w-full flex flex-col justify-center items-center"
             >
@@ -160,6 +214,7 @@ const TickerPage: NextPage = () => {
             </div>
           </div>
 
+          {/* Ticker Chart */}
           <div
             className="w-5/12 h-full"
           >
@@ -168,45 +223,41 @@ const TickerPage: NextPage = () => {
             }
           </div>
         </div>
-      </div>
-      
-      {/* Profile and Trade */}
-      <div
+        </div>
+
+        {/* Profile and Trade */}
+        <div
         className={`mx-10 p-2 ${viewProfile && 'min-h-screen'} ${viewTrade && 'min-h-screen'}`}
-        id='additionalInfo'
+        ref={additionalInfo}
       >
         {/* Button */}
         <div
           className="pr-6 mt-4 flex flex-row gap-10 justify-start w-7/12"
-          onClick={() => {
-            setViewTrade(false)
-
-            setViewProfile(!viewProfile);
-            router.push(router.asPath + '/#additionalInfo')
-          }}
         >
           <button
-            className="py-4 w-1/2 bg-green-700 rounded-lg font-raleway text-xl text-white hover:scale-105"
+            className={`py-4 w-1/2 rounded-lg font-raleway text-xl text-white ${viewProfile ? 'bg-beige-600' : 'bg-green-700'} hover:scale-105`}
+            onClick={() => {
+              setViewTrade(false)
+              setViewProfile(!viewProfile);
+            }}
           >
             Company Profile
           </button>
           <button
-            className="py-4 w-1/2 bg-green-700 rounded-lg font-raleway text-xl text-white hover:scale-105"
+            className={`py-4 w-1/2 rounded-lg font-raleway text-xl text-white ${viewTrade ? 'bg-beige-600' : 'bg-green-700'} hover:scale-105`}
             onClick={() => {
-
-              setViewProfile(false)
-              
+              setViewProfile(false);
               setViewTrade(!viewTrade);
-              router.push(router.asPath + '/#additionalInfo')
             }}
           >
             Trade
           </button>
         </div>
-        
-        {viewProfile && 
+
+        {/* Profile */}
+        {viewProfile &&
           <div
-            className="w-7/12 pr-6 mt-20 flex flex-col gap-10"
+            className="w-7/12 pr-6 mt-20 mb-10 flex flex-col gap-10"
           >
             <div
               className="flex flex-col gap-2"
@@ -263,7 +314,7 @@ const TickerPage: NextPage = () => {
               </h2>
               <hr className="h border-slate-500" />
               <p
-                className="font-raleway text-lg"
+                className="font-raleway text-xl"
               >
                 {tickerInfoQuery.data?.employees?.toLocaleString('en-US')}
               </p>
@@ -285,9 +336,248 @@ const TickerPage: NextPage = () => {
             </div>
           </div>
         }
-        
 
+        {/* Trade */}
+        {viewTrade &&
+          <div
+            className=" mt-20 mb-10 flex flex-col gap-10"
+          >
+            {/* Account Detail */}
+            <div
+              className="w-7/12 pr-6 flex flex-row gap justify-between"
+            >
+              {/* Account value */}
+              <div
+                className="w-2/5 flex-col"
+              >
+                <div
+                  className="flex flex-row gap-2 items-center"
+                >
+                  <p
+                    className="capitalize font-raleway text-xl text-green-700 font-semibold"
+                  >
+                    Account Value
+                  </p>
+                  <AiFillQuestionCircle />
+                </div>
+                <p
+                  className="font-raleway text-xl"
+                >
+                  {`$${userData.cash.toLocaleString('en-US')}`}
+                </p>
+              </div>
+
+              {/* Buying Power */}
+              <div
+                className="w-2/5 flex-col border-l border-r px-5"
+              >
+                <div
+                  className="flex flex-row gap-2 items-center"
+                >
+                  <p
+                    className="capitalize font-raleway text-xl text-green-700 font-semibold"
+                  >
+                    Buying Power
+                  </p>
+                  <AiFillQuestionCircle />
+                </div>
+                <p
+                  className="font-raleway text-xl"
+                >
+                  $10,000.00
+                </p>
+              </div>
+
+              {/* Cash */}
+              <div
+                className="w-1/5 flex-col px-5"
+              >
+                <div
+                  className="flex flex-row gap-2 items-center"
+                >
+                  <p
+                    className="capitalize font-raleway text-xl text-green-700 font-semibold"
+                  >
+                    Cash
+                  </p>
+                  <AiFillQuestionCircle />
+                </div>
+                <p
+                  className="font-raleway text-xl"
+                >
+                  $10,000.00
+                </p>
+              </div>
+            </div>
+
+            {/* Transaction information */}
+            <div
+              className="flex flex-col gap-12"
+            >
+              {/* First Row */}
+              <div
+                className=" flex flex-row"
+              >
+                {/* Action */}
+                <div
+                  className="relative flex flex-col w-80"
+                >
+                  <p
+                    className="font-raleway font-semibold text-xl text-green-700"
+                  >
+                    Action
+                  </p>
+                  <div
+                    className="bg-transparent relative border border-solid rounded-md border-black h-14 font-normal font-raleway text-black"
+                  >
+                    <button
+                      className="px-3 h-full w-full"
+                      onClick={() => setOpenType(!openType)}
+                    >
+                      <p
+                        className="float-left text-xl capitalize"
+                      >
+                        {transactionInfo.type}
+                      </p>
+                      <div
+                        className="float-right mt-2"
+                      >
+                        <RiArrowDownSLine />
+                      </div>
+                    </button>
+
+                    {/* Drop down */}
+                    {openType &&
+                      <div
+                        className="absolute z-10 top-14 w-full bg-beige-500 rounded-md flex flex-col"
+                      >
+                        <button
+                          value="buy"
+                          className="font-raleway text-xl capitalize p-3 text-left hover:bg-beige-600 rounded-md"
+                          onClick={(e) => {
+                            setTransactionInfo({ ...transactionInfo, type: e.target.value })
+                            setOpenType(false)
+                          }}
+                        >
+                          buy
+                        </button>
+                        <button
+                          value="sell"
+                          className="font-raleway text-xl capitalize p-3 text-left hover:bg-beige-600 rounded-md"
+                          onClick={(e) => {
+                            setTransactionInfo({ ...transactionInfo, type: e.target.value })
+                            setOpenType(false)
+                          }}
+                        >
+                          sell
+                        </button>
+                      </div>
+                    }
+                  </div>
+                </div>
+              </div>
+
+              {/* Second Row */}
+              <div
+                className="flex flex-row gap-20"
+              >
+                {/* Quantity */}
+                <label
+                  className="font-raleway font-semibold text-xl text-green-700 flex flex-col w-80"
+                >
+                  Quantity
+                  <input
+                    className="text-2xl bg-transparent relative border border-solid rounded-md border-black h-14 font-normal font-raleway text-black px-3 "
+                    type="number"
+                    min='0'
+                    pattern="[0-9]*"
+                    onChange={(e) => {
+                      setTransactionInfo({ ...transactionInfo, quantity: +e.target.value});
+                    }}
+                  />
+                </label>
+
+                {/* Estimate Price */}
+                <div
+                  className="flex flex-col w-80"
+                >
+                  <h2
+                    className="font-raleway font-semibold text-xl text-green-700"
+                  >
+                    Est. Price
+                  </h2>
+                  <div
+                    className="px-3 border border-solid rounded-md border-black h-14 flex items-center"
+                  >
+                    <p
+                      className="font-raleway text-black text-2xl"
+                    >
+                      {transactionInfo.type === "buy" ? transactionInfo.ask : transactionInfo.bid}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Total Value */}
+                <div
+                  className="flex flex-col w-80"
+                >
+                  <h2
+                    className="font-raleway font-semibold text-xl text-green-700"
+                  >
+                    Total Value
+                  </h2>
+                  <div
+                    className="px-3 border border-solid rounded-md border-black h-14 flex items-center"
+                  >
+                    <p
+                      className="font-raleway text-black text-2xl"
+                    >
+                      {(transactionInfo.quantity * (transactionInfo.type === "buy" ? transactionInfo.ask : transactionInfo.bid)).toLocaleString('en-US')}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Transaction command */}
+            <div
+              className="pr-4 mt-4 flex flex-row gap-10 justify-start w-7/12"
+            >
+              <button
+                className={`py-4 w-1/2 rounded-lg font-raleway text-xl text-white bg-red-700 hover:scale-105`}
+                onClick={() => {
+                  setTransactionInfo({ ...transactionInfo, type: "buy", quantity: 0 })
+                }}
+              >
+                Clear Order
+              </button>
+              <button
+                className={`py-4 w-1/2 rounded-lg font-raleway text-xl text-white bg-green-700 hover:scale-105`}
+                onClick={() => {
+                  if (transactionInfo.quantity  === 0) {
+                    setError("ZERO_QUANTITY")
+                  } else if (transactionInfo.type === "buy" && userData.cash < (transactionInfo.quantity * transactionInfo.ask)) {
+                    setError("OVERBUY")
+                  // TODO: if oversell (holdings)
+                  } else {
+                    setPreview(true);
+                  }
+                }}
+              >
+                Preview Order
+              </button>
+            </div>
+          </div>
+        }
+        </div>
       </div>
+      
+      {/* Error */}
+      {error && 
+        <Error message={errorMessage[error]} onClose={() => setError(null)} />
+      } 
+
+      {/* Preview and Trade */}
     </div>
   )
 }

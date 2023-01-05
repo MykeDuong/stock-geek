@@ -21,3 +21,5 @@ export { default as MarketInfo } from './MarketInfo/MarketInfo'
 export { default as TickerChart } from './TickerChart/TickerChart';
 
 export { default as TickerTechnicalAnalysis } from './TickerTechnicalAnalysis/TickerTechnicalAnalysis';
+
+export { default as Error } from './Error/Error';
