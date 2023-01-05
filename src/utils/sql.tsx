@@ -37,3 +37,8 @@ export const deleteFromWatchlist = `
   DELETE FROM watchlist
   WHERE (user_id = $1 AND ticker ILIKE $2)
 `
+
+export const viewWatchlist = `
+  SELECT * FROM watchlist
+  WHERE user_id = $1
+`
