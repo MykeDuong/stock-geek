@@ -32,3 +32,8 @@ export const addToWatchlist = `
     upper($2)
   )
 `
+
+export const deleteFromWatchlist = `
+  DELETE FROM watchlist
+  WHERE (user_id = $1 AND ticker ILIKE $2)
+`
