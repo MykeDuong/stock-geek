@@ -79,7 +79,7 @@ export const findUserById = async (id: string) => {
   else throw result;
 }
 
-
+// Watchlist
 export const findInWatchlist  =async ( userId: string, ticker: string ) => {
   let success = true;
 
@@ -102,7 +102,27 @@ export const findInWatchlist  =async ( userId: string, ticker: string ) => {
   else throw result;
 }
 
-// Watchlist
+export const getWatchlist = async ( userId: string ) => {
+  let success = true;
+
+  const client = await pool.connect()
+ 
+  const result = await client
+    .query(sql.viewWatchlist, [userId])
+    .then(res => {
+      return res.rows;
+    })
+    .catch((e)=> {
+      success = false;
+      return e;
+  })
+
+  client.release(true)
+  
+  if (success) return result;
+  else throw result;
+}
+
 export const addToWatchlist = async ( userId: string, ticker: string ) => {
   let success = true;
 

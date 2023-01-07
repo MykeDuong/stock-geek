@@ -267,7 +267,7 @@ const TickerPage: NextPage = () => {
           <button
             className={`py-4 w-1/3 rounded-lg font-raleway text-xl text-white ${watchlisted ? 'bg-beige-600 pointer-events-none' : 'bg-green-700 hover:scale-105'}`}
             onClick={() => {
-              // setWatchlisted(true);
+              setWatchlisted(true);
               addToWatchlistQuery.mutate({ ticker })
             }}
           >

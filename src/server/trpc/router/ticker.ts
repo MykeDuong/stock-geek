@@ -1,7 +1,7 @@
 import { router, protectedProcedure, publicProcedure } from "../trpc";
-import { z } from 'zod';
-import { getQuoteList, getRecommendations, getTickerInfo, getTrending, search } from "../../../utils/yahooFinance";
-import { addToWatchlist } from "../../../utils/pg";
+import { number, z } from 'zod';
+import { getMultipleTickers, getQuoteList, getRecommendations, getTickerInfo, getTrending, search } from "../../../utils/yahooFinance";
+import { addToWatchlist, getWatchlist } from "../../../utils/pg";
 import { TRPCError } from "@trpc/server";
 import { defaultError } from "../../../utils/serverConstants";
 
@@ -22,7 +22,6 @@ export const tickerRouter = router({
       const result = await getRecommendations(searchTickers)
       return result;
     }),
-
   getTrending: publicProcedure
     .query(async () => {
       const quotes = await getTrending();
@@ -111,5 +110,32 @@ export const tickerRouter = router({
         }
         throw new TRPCError(defaultError)
       }
+    }),
+  getWatchlist: protectedProcedure
+    .query(async ({ ctx }) => {
+      const userId = ctx.session.user.id;
+      const dbResult = await getWatchlist(userId);
+      const result = dbResult.map((row: { user_id: number; ticker: string; }) => row.ticker);
+      return result;
+    }),
+  getMultipleTickers: protectedProcedure
+    .query(async ({ ctx }) => {
+      // Get from DB
+      const userId = ctx.session.user.id;
+      const dbResult = await getWatchlist(userId);
+      const tickers = dbResult.map((row: { user_id: number; ticker: string; }) => row.ticker);
+
+      const infoResult = await getMultipleTickers(tickers);
+
+      // TODO: Check lastPrice, change, %change
+      return infoResult.map((tickerInfo, index) => ({
+        index,
+        ticker: tickerInfo.symbol,
+        company: tickerInfo.longName,
+        lastPrice: tickerInfo.regularMarketPrice,
+        change: tickerInfo.postMarketChange,
+        percentageChange: tickerInfo.postMarketChange,
+        marketCap: tickerInfo.marketCap,
+      }))
     })
-}); 
+});
