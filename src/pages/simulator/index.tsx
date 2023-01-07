@@ -5,7 +5,7 @@ import { AiOutlineWarning } from "react-icons/ai"
 
 import { MarketInfo, SearchBar } from "../../components"
 import { trpc } from "../../utils/trpc"
-import { pageTitleClass } from "../../utils/clientConstants"
+import { pageTitleClass } from "../../utils/clientUtils"
 
 const Simulator: NextPage = () => {
   const router = useRouter();

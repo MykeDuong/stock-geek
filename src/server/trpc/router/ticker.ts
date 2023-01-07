@@ -3,7 +3,7 @@ import { number, z } from 'zod';
 import { getMultipleTickers, getQuoteList, getRecommendations, getTickerInfo, getTrending, search } from "../../../utils/yahooFinance";
 import { addToWatchlist, getWatchlist } from "../../../utils/pg";
 import { TRPCError } from "@trpc/server";
-import { defaultError } from "../../../utils/serverConstants";
+import { defaultError } from "../../../utils/serverUtils";
 
 export const tickerRouter = router({
   getRecommendations: protectedProcedure

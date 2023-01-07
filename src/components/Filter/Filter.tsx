@@ -5,7 +5,7 @@ import { VscChromeClose } from 'react-icons/vsc'
 
 import MultiRangeSlider from '../MultiRangeSlider/MultiRangeSlider'
 import { useScreenerFilter } from '../../store'
-import { popupClass } from '../../utils/clientConstants'
+import { popupClass } from '../../utils/clientUtils'
 
 interface PropsInterface {
   onClose: () => unknown;

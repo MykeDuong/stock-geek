@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useRef, useState } from 'react'
 import { AiOutlineSearch, AiOutlineWarning } from 'react-icons/ai'
 import { HeaderImage, SearchBar, TickerInfo } from "../../components";
-import { pageTitleClass } from "../../utils/clientConstants";
+import { pageTitleClass } from "../../utils/clientUtils";
 import { trpc } from '../../utils/trpc';
 
 

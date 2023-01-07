@@ -12,7 +12,7 @@ import { appRouter } from "../../server/trpc/router/_app";
 import { createContextInner } from "../../server/trpc/context";
 import { useScreenerFilter } from "../../store";
 import { useRouter } from 'next/router';
-import { pageTitleClass, screenerConstants } from "../../utils/clientConstants";
+import { pageTitleClass, screenerConstants } from "../../utils/clientUtils";
 
 const Screener: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (props) => {
   const router = useRouter();
