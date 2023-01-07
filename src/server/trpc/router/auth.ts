@@ -42,9 +42,4 @@ export const authRouter = router({
       }
     }
   ),
-
-  // For testing purpose;
-  getSecretMessage: protectedProcedure.query(() => {
-    return "you can now see this secret message!";
-  }),
 });

@@ -1,7 +1,9 @@
 import { router, protectedProcedure, publicProcedure } from "../trpc";
 import { z } from 'zod';
 import { getQuoteList, getRecommendations, getTickerInfo, getTrending, search } from "../../../utils/yahooFinance";
-import { Result } from "postcss";
+import { addToWatchlist } from "../../../utils/pg";
+import { TRPCError } from "@trpc/server";
+import { defaultError } from "../../../utils/serverConstants";
 
 export const tickerRouter = router({
   getRecommendations: protectedProcedure
@@ -89,5 +91,25 @@ export const tickerRouter = router({
       }
 
       return result;
+    }),
+  addToWatchlist: protectedProcedure
+    .input(
+      z.object({ ticker: z.string().min(1) })
+    )
+    .mutation(async (req) => {
+      const { input : { ticker }, ctx } = req;
+      const userId = ctx.session.user.id;
+
+      try {
+        await addToWatchlist(userId, ticker);
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: err.message,
+          })
+        }
+        throw new TRPCError(defaultError)
+      }
     })
 }); 

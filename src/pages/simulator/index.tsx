@@ -2,8 +2,10 @@ import { NextPage } from "next"
 import { useRouter } from "next/router"
 import { useRef, useState } from "react"
 import { AiOutlineWarning } from "react-icons/ai"
-import { MarketInfo, SearchBar, TickerInfo } from "../../components"
+
+import { MarketInfo, SearchBar } from "../../components"
 import { trpc } from "../../utils/trpc"
+import { pageTitleClass } from "../../utils/clientConstants"
 
 const Simulator: NextPage = () => {
   const router = useRouter();
@@ -33,7 +35,7 @@ const Simulator: NextPage = () => {
       className="max-h-screen bg-beige-400"
     >
       <h1
-        className="text-5xl font-raleway text-green-700 uppercase font-bold mt-6 mb-6 text-center"
+        className={`${pageTitleClass} my-6`}
       >
         Trade Simulator
       </h1>

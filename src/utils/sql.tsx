@@ -23,6 +23,11 @@ export const findUserByIdQuery = `
   WHERE ($1 = user_id)
 `
 
+export const findInWatchlist = `
+  SELECT * FROM watchlist
+	WHERE user_id = $1 AND ticker = $2
+`
+
 // WATCHLIST
 export const addToWatchlist = `
   INSERT INTO watchlist(
@@ -34,7 +39,6 @@ export const addToWatchlist = `
     upper($2)
   )
 `
-
 export const deleteFromWatchlist = `
   DELETE FROM watchlist
   WHERE (user_id = $1 AND ticker ILIKE $2)

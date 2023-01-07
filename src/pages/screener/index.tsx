@@ -12,7 +12,7 @@ import { appRouter } from "../../server/trpc/router/_app";
 import { createContextInner } from "../../server/trpc/context";
 import { useScreenerFilter } from "../../store";
 import { useRouter } from 'next/router';
-import { screenerConstants } from "../../utils/constants";
+import { pageTitleClass, screenerConstants } from "../../utils/clientConstants";
 
 const Screener: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (props) => {
   const router = useRouter();
@@ -84,7 +84,7 @@ const Screener: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (prop
           className=""
         >
           <h1
-            className="text-5xl mt-8 text-center font-raleway font-bold text-green-700 uppercase"
+            className={`${pageTitleClass} mt-8`}
           >
             Stock Screener
           </h1>

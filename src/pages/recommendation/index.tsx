@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { useRef, useState } from 'react'
 import { AiOutlineSearch, AiOutlineWarning } from 'react-icons/ai'
 import { HeaderImage, SearchBar, TickerInfo } from "../../components";
+import { pageTitleClass } from "../../utils/clientConstants";
 import { trpc } from '../../utils/trpc';
 
 
@@ -38,7 +39,7 @@ const Recommendation: NextPage = () => {
       <HeaderImage src="/images/recommendation-image.png" alt="recommendation-image" />
 
       <h1
-        className="text-green-700 text-5xl mt-6 mb-16 font-raleway font-bold uppercase"
+        className={`${pageTitleClass} mt-6 mb-16`}
       >
         Stock Recommendation
       </h1>

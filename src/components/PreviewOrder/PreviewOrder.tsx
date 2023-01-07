@@ -1,7 +1,7 @@
 import { NextComponentType } from 'next'
 import React from 'react'
 import { VscChromeClose } from 'react-icons/vsc';
-import { popupClass } from '../../utils/constants';
+import { popupClass } from '../../utils/clientConstants';
 
 interface PropsInterface {
   type: "buy" | "sell";

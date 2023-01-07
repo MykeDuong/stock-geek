@@ -4,14 +4,13 @@ import React, { useEffect, useRef, useState } from 'react'
 import { AiFillEye, AiFillQuestionCircle } from 'react-icons/ai'
 import { BiArrowBack } from 'react-icons/bi'
 import { RiArrowDownSLine } from 'react-icons/ri'
-import { Transaction } from 'yahoo-finance2/dist/esm/src/modules/quoteSummary-iface'
 
 import { TickerChart, TickerInfo, TickerTechnicalAnalysis, Error, PreviewOrder } from '../../components'
 import { trpc } from '../../utils/trpc'
 
 type ErrorType = "ZERO_QUANTITY" | "OVERSELL" | "OVERBUY" | null;
 
-type TransactionoInfoType = {
+type TransactionInfoType = {
   type: 'buy' | "sell",
   quantity: number,
   bid: number,
@@ -34,6 +33,7 @@ const TickerPage: NextPage = () => {
 
   const [viewProfile, setViewProfile] = useState(false)
   const [viewTrade, setViewTrade] = useState(false)
+  const [watchlisted, setWatchlisted] = useState(false)
   const [preview, setPreview] = useState(false)
   const [error, setError] = useState<ErrorType>(null);
   const [openType, setOpenType] = useState(false);
@@ -45,9 +45,10 @@ const TickerPage: NextPage = () => {
     ask: 0
   });
 
+  const addToWatchlistQuery = trpc.ticker.addToWatchlist.useMutation();
 
   const tickerInfoQuery = trpc.ticker.getTickerInfo.useQuery(
-    { ticker }, 
+    { ticker },
     { 
       onSuccess: (data) => {
         setTransactionInfo({ ...transactionInfo, bid: data.bid!, ask: data.ask! })
@@ -246,7 +247,7 @@ const TickerPage: NextPage = () => {
           className="pr-6 mt-4 flex flex-row gap-10 justify-start w-7/12"
         >
           <button
-            className={`py-4 w-1/2 rounded-lg font-raleway text-xl text-white ${viewProfile ? 'bg-beige-600' : 'bg-green-700'} hover:scale-105`}
+            className={`py-4 w-1/3 rounded-lg font-raleway text-xl text-white ${viewProfile ? 'bg-beige-600' : 'bg-green-700'} hover:scale-105`}
             onClick={() => {
               setViewTrade(false)
               setViewProfile(!viewProfile);
@@ -255,13 +256,22 @@ const TickerPage: NextPage = () => {
             Company Profile
           </button>
           <button
-            className={`py-4 w-1/2 rounded-lg font-raleway text-xl text-white ${viewTrade ? 'bg-beige-600' : 'bg-green-700'} hover:scale-105`}
+            className={`py-4 w-1/3 rounded-lg font-raleway text-xl text-white ${viewTrade ? 'bg-beige-600' : 'bg-green-700'} hover:scale-105`}
             onClick={() => {
               setViewProfile(false);
               setViewTrade(!viewTrade);
             }}
           >
             Trade
+          </button>
+          <button
+            className={`py-4 w-1/3 rounded-lg font-raleway text-xl text-white ${watchlisted ? 'bg-beige-600 pointer-events-none' : 'bg-green-700 hover:scale-105'}`}
+            onClick={() => {
+              // setWatchlisted(true);
+              addToWatchlistQuery.mutate({ ticker })
+            }}
+          >
+            {watchlisted ? 'Added to Watchlist' : "Add to Watchlist"}
           </button>
         </div>
 

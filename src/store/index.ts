@@ -1,7 +1,7 @@
 import create from 'zustand';
 import { persist } from 'zustand/middleware';
 
-import { screenerConstants } from '../utils/constants';
+import { screenerConstants } from '../utils/clientConstants';
 
 // Directory
 interface DirStoreInterface {
