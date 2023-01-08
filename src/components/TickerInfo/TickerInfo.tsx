@@ -1,6 +1,7 @@
 import { NextComponentType } from "next";
 import { useRouter } from "next/router";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { trpc } from "../../utils/trpc";
 
 interface PropsInterface {
   ticker: string,
@@ -9,8 +10,17 @@ interface PropsInterface {
 
 export const TickerInfo: NextComponentType<{}, {}, PropsInterface> = ({ ticker, showButton = true }) => {
 
+  const [watchlisted, setWatchlisted] = useState(false);
+
+  const addToWatchlistQuery = trpc.ticker.addToWatchlist.useMutation();
+
   const router = useRouter()
   const container = useRef<HTMLDivElement>(null);
+
+  const handleWatchlist = () => {
+    addToWatchlistQuery.mutate({ ticker });
+    setWatchlisted(true);
+  }
 
   useEffect(() => {
     const script = document.createElement('script');
@@ -43,9 +53,10 @@ export const TickerInfo: NextComponentType<{}, {}, PropsInterface> = ({ ticker, 
           </button>
           
           <button
-            className="bg-beige-700 text-white font-raleway rounded-xl py-2 px-4 hover:scale-105"
+            className={`bg-beige-700 text-white font-raleway rounded-xl py-2 px-4 ${watchlisted ? 'pointer-events-none': 'hover:scale-105'}`}
+            onClick={handleWatchlist}
           >
-            Watchlist
+            {watchlisted ? 'Watchlisted' : "Watchlist"}
           </button>
         </div>
       }

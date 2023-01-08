@@ -1,5 +1,7 @@
 import type { NextPage, NextComponentType } from "next"
-import { useRef, useState, forwardRef } from "react";
+import { useRouter } from "next/router";
+import { useRef, useState, forwardRef, useImperativeHandle } from "react";
+import { RiCloseLine } from "react-icons/ri";
 import { ClipLoader } from 'react-spinners';
 
 import { HeaderImage } from "../../components"
@@ -14,7 +16,23 @@ interface RowPropsInterface {
   change?: number;
   percentageChange?: number;
   marketCap?: number;
+  onRemove?: (ticker: string) => void
   header?: boolean
+}
+
+type TickerType = {
+  index: number;
+  ticker: string;
+  company: string | undefined;
+  lastPrice: number | undefined;
+  change: number | undefined;
+  percentageChange: number | undefined;
+  marketCap: number | undefined;
+}
+
+type WatchlistRowHandle = { 
+  getTicked: () => boolean,
+  getTicker: () => string | undefined
 }
 
 const textClass = "font-raleway font-semibold text-xl"
@@ -22,19 +40,23 @@ const textClass = "font-raleway font-semibold text-xl"
 const Watchlist: NextPage = () => {
 
   const [availability, setAvailability] = useState(false);
-  const tickerRef = useRef<(HTMLInputElement|null)[]>([]);
+  const [tickers, setTickers] = useState<TickerType[]>([])
+  const tickerRef = useRef<WatchlistRowHandle[]>([]);
 
-  // const watchlistQuery = trpc.ticker.getWatchlist.useQuery()
+  const removeTickerMutation = trpc.ticker.deleteFromWatchlist.useMutation({
+    onSuccess: () => {multipleTickerQuery.refetch()}
+  });
+
   const multipleTickerQuery = trpc.ticker.getMultipleTickers.useQuery(undefined, {
-    onSuccess: () => {
+    onSuccess: (data) => {
       setAvailability(true);
+      setTickers(data)
     }
   })
 
-  const handleRemoveFromWatchlist = () => {
-    const toBeRemoved: string[] = [];
-    
-
+  const handleDeleteFromWatchlist = async (ticker : string) => {
+    setTickers(tickers.filter((singleTicker) => singleTicker.ticker !== ticker))
+    removeTickerMutation.mutate({ ticker });
   }
 
   return (
@@ -51,8 +73,8 @@ const Watchlist: NextPage = () => {
           className="relative flex flex-col ml-10 mr-4"
         >
           <WatchlistRow header={true}/>
-          <hr className="bg-slate-400 border-slate-400 mx-6 my-2"  />
-          {multipleTickerQuery.data!.map(tickerInfo =>
+          <hr className="bg-slate-400 border-slate-400 my-2"  />
+          {tickers.map(tickerInfo =>
             <WatchlistRow
               key={`key of row in watchlist for ${tickerInfo.ticker}`}
               index={tickerInfo.index}
@@ -62,19 +84,9 @@ const Watchlist: NextPage = () => {
               change={tickerInfo.change}
               percentageChange={tickerInfo.percentageChange}
               marketCap={tickerInfo.marketCap}
-              ref={(ref) => (tickerRef.current?.push(ref))}
+              onRemove={handleDeleteFromWatchlist}
             />
           )}
-          <div
-            className="relative mx-0 mt-10"
-          >
-            <button
-              className="float-right bg-red-700 font-raleway text-lg text-white rounded-lg w-fit px-6 py-4 hover:scale-105"
-              onClick={handleRemoveFromWatchlist}
-            >
-              Remove chosen tickers
-            </button> 
-          </div>
         </div>
         :
         <div>
@@ -85,25 +97,14 @@ const Watchlist: NextPage = () => {
   )
 }
 
-const WatchlistRow = forwardRef<HTMLInputElement, RowPropsInterface>(({ index, ticker, company, lastPrice, change, percentageChange, marketCap, header = false }, ref) => {
-  console.log(index);
+const WatchlistRow: NextComponentType<any, any, RowPropsInterface> = ({ index, ticker, company, lastPrice, change, percentageChange, marketCap, onRemove, header = false }) => {
+  const router = useRouter();
   return (
     <div
       className={`flex flex-row h-14 px-2 rounded-lg items-center ${(index !== undefined && index % 2 !== 0) ? 'bg-beige-300' : ''}`}
     >
       <div
-        className="w-[3%]"
-      >
-        {!header &&
-          <input
-            type="checkbox"
-            ref={ref}
-            onClick={(e) => { }}
-          />
-        }
-      </div>
-      <div
-        className="flex flex-row items-center gap-6 w-[97%]"
+        className="flex flex-row items-center gap-6 w-full"
       >
         <p
           className={`w-[10%] ${textClass}`}
@@ -111,7 +112,7 @@ const WatchlistRow = forwardRef<HTMLInputElement, RowPropsInterface>(({ index, t
           {header ? "Symbol" : ticker}
         </p>
         <p
-          className={`w-[30%] ${textClass}`}
+          className={`w-[27%] ${textClass}`}
         >
           {header ? "Company Name" : company}
         </p>
@@ -136,7 +137,7 @@ const WatchlistRow = forwardRef<HTMLInputElement, RowPropsInterface>(({ index, t
           {header ? " Market Cap" : (marketCap ? nFormatter(marketCap, 2) : '')}
         </p>
         <div
-          className={`w-[12%]`}
+          className={`w-[15%]`}
         >
           {header ?
             <p
@@ -145,17 +146,27 @@ const WatchlistRow = forwardRef<HTMLInputElement, RowPropsInterface>(({ index, t
               Action
             </p>
             :
-            <button
-              className="font-raleway text-md text-white bg-green-700 py-2 px-3 rounded-lg hover:scale-105"
+            <div
+              className="flex flex-row gap-2"
             >
-              Trade
-            </button>
+              <button
+                className="font-raleway text-md text-white bg-green-700 py-2 px-3 rounded-lg hover:scale-105"
+                onClick={() => router.push(`/simulator/${ticker}`)}
+              >
+                Trade
+              </button>
+              <button
+                className="font-raleway text-md text-white bg-red-700 py-2 px-3 rounded-lg hover:scale-105"
+                onClick={() => onRemove && ticker && onRemove(ticker)}
+              >
+                Remove
+              </button>
+            </div>
           }
         </div>
       </div>
     </div>
   )
-})
-WatchlistRow.displayName="Watchlist Row"
+}
 
 export default Watchlist

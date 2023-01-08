@@ -153,3 +153,24 @@ export const addToWatchlist = async ( userId: string, ticker: string ) => {
   if (success) return result;
   else throw result;
 }
+
+export const deleteFromWatchlist = async ( userId: string, ticker: string ) => {
+  let success = true;
+
+  const client = await pool.connect()
+ 
+  const result = await client
+    .query(sql.deleteFromWatchlist, [userId, ticker])
+    .then(res => {
+      return res.rows;
+    })
+    .catch((e)=> {
+      success = false;
+      return e;
+  })
+
+  client.release(true)
+  
+  if (success) return result;
+  else throw result;
+}

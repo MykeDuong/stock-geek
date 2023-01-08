@@ -28,15 +28,12 @@ const buttonStyle = 'text-white text-left text-2xl h-14 pl-4 rounded-md flex fle
 const chosenButtonStyle = 'bg-beige-600 hover:bg-beige-600'
 
 const SideBar: NextComponentType = () => {
-
-  const dirStore = useCurrentDir();
   const router = useRouter();
 
   const { data: userData, isSuccess } = trpc.user.getUserInfo.useQuery();
 
   const handleNavButtonClicked = (e: MouseEvent<HTMLButtonElement>) => {
     const newDir = (e.target as HTMLButtonElement).id;
-    dirStore.changeDir(newDir);
     router.push("/" + newDir);
   }
 
@@ -94,7 +91,7 @@ const SideBar: NextComponentType = () => {
         </h3>
         <button
           id='home'
-          className={`${buttonStyle} ${dirStore.currentDir === "home" && chosenButtonStyle}`}
+          className={`${buttonStyle} ${router.route.startsWith("/home") && chosenButtonStyle}`}
           onClick={handleNavButtonClicked}
         >
           <AiOutlineHome style={buttonIconStyle} />
@@ -102,7 +99,7 @@ const SideBar: NextComponentType = () => {
         </button>
         <button
           id="portfolio"
-          className={`${buttonStyle} ${dirStore.currentDir === "portfolio" && chosenButtonStyle}`}
+          className={`${buttonStyle} ${router.route.startsWith("/portfolio") && chosenButtonStyle}`}
           onClick={handleNavButtonClicked}
         >
           <HiOutlinePresentationChartLine style={buttonIconStyle} />
@@ -110,7 +107,7 @@ const SideBar: NextComponentType = () => {
         </button>
         <button
           id="history"
-          className={`${buttonStyle} ${dirStore.currentDir === "history" && chosenButtonStyle}`}
+          className={`${buttonStyle} ${router.route.startsWith("/history") && chosenButtonStyle}`}
           onClick={handleNavButtonClicked}
         >
           <AiOutlineHistory style={buttonIconStyle} />
@@ -118,7 +115,7 @@ const SideBar: NextComponentType = () => {
         </button>
         <button
           id="watchlist"
-          className={`${buttonStyle} ${dirStore.currentDir === "watchlist" && chosenButtonStyle}`}
+          className={`${buttonStyle} ${router.route.startsWith("/watchlist") && chosenButtonStyle}`}
           onClick={handleNavButtonClicked}
         >
           <TbNotebook style={buttonIconStyle} />
@@ -131,7 +128,7 @@ const SideBar: NextComponentType = () => {
         </h3>
         <button
           id="screener"
-          className={`${buttonStyle} ${dirStore.currentDir === "screener" && chosenButtonStyle}`}
+          className={`${buttonStyle} ${router.route.startsWith("/screener") && chosenButtonStyle}`}
           onClick={handleNavButtonClicked}
         >
           <HiDocumentSearch style={buttonIconStyle} />
@@ -139,7 +136,7 @@ const SideBar: NextComponentType = () => {
         </button>
         <button
           id="simulator"
-          className={`${buttonStyle} ${dirStore.currentDir === "simulator" && chosenButtonStyle}`}
+          className={`${buttonStyle} ${router.route.startsWith("/simulator") && chosenButtonStyle}`}
           onClick={handleNavButtonClicked}
         >
           <RiStockLine style={buttonIconStyle} />
@@ -147,7 +144,7 @@ const SideBar: NextComponentType = () => {
         </button>
         <button
           id="recommendation"
-          className={`${buttonStyle} ${dirStore.currentDir === "recommendation" && chosenButtonStyle}`}
+          className={`${buttonStyle} ${router.route.startsWith("/recommendation") && chosenButtonStyle}`}
           onClick={handleNavButtonClicked}
         >
           <BiMessageDetail style={buttonIconStyle} />
