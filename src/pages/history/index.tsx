@@ -37,7 +37,6 @@ const History: NextPage = () => {
 
   const historyQuery = trpc.ticker.getHistory.useQuery(undefined,{
     onSuccess: (data) => {
-      console.log(data);
       setTickers(data);
       setAvailability(true);
     }
@@ -59,7 +58,7 @@ const History: NextPage = () => {
           <hr className="bg-slate-400 border-slate-400 my-2"  />
           {tickers.map(tickerInfo =>
             <WatchlistRow
-              key={`key of row in watchlist for ${tickerInfo.ticker}`}
+              key={`key of row in watchlist for ${tickerInfo.ticker} at index ${tickerInfo.index}`}
               index={tickerInfo.index}
               ticker={tickerInfo.ticker}
               company={tickerInfo.company}

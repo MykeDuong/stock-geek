@@ -131,7 +131,6 @@ export const addToWatchlist = async ( userId: string, ticker: string ) => {
   try {
     const existed = await findInWatchlist(userId, ticker);
     if (existed.rows.length !== 0) {
-      console.log(existed);
       throw Error( 'Watchlisted ')
     } 
   } catch (err) {
@@ -175,7 +174,7 @@ export const deleteFromWatchlist = async ( userId: string, ticker: string ) => {
   else throw result;
 }
 
-
+// Trade History - Transactions
 export interface HistoryRowInterface {
   user_id: number;
   date: Date;
@@ -186,16 +185,63 @@ export interface HistoryRowInterface {
   total_value: number;
 }
 
-// Trade History
 export const getHistory = async ( userId: string ) => {
   let success = true;
 
   const client = await pool.connect()
  
   const result = await client
-    .query(sql.viewHistory, [userId])
+    .query(sql.viewTransactions, [userId])
     .then(res => {
       return res.rows
+    })
+    .catch((e)=> {
+      success = false;
+      return e;
+  })
+
+  
+  client.release(true)
+  
+  if (success) return result;
+  else throw result;
+}
+
+export const makeTransaction = async ( userId: string, ticker: string, type: string, price: number, quantity: number) => {
+  let success = true;
+
+  const client = await pool.connect()
+ 
+  const result = await client
+    .query(sql.addNewTransaction, [userId, ticker, type, price, quantity])
+    .then(res => {
+      return res
+    })
+    .catch((e)=> {
+      success = false;
+      return e;
+  })
+
+  
+  client.release(true)
+  
+  if (success) return result;
+  else throw result;
+}
+
+// Holdings
+export const getHoldingsByTicker = async ( userId: string, ticker: string ) => {
+  let success = true;
+
+  const client = await pool.connect()
+ 
+  const result = await client
+    .query(sql.viewHoldingsByTicker, [userId, ticker])
+    .then(res => {
+      if (res.rows[0].quantity) {
+        return parseInt(res.rows[0].quantity)
+      }
+      return 0;
     })
     .catch((e)=> {
       success = false;

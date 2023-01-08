@@ -1,7 +1,9 @@
 import { NextComponentType } from 'next'
+import { useRouter } from 'next/router';
 import React from 'react'
 import { VscChromeClose } from 'react-icons/vsc';
 import { popupClass } from '../../utils/clientUtils';
+import { trpc } from '../../utils/trpc';
 
 interface PropsInterface {
   type: "buy" | "sell";
@@ -12,9 +14,16 @@ interface PropsInterface {
 }
 
 const PreviewOrder: NextComponentType<any, any, PropsInterface> = ({ type, ticker, price, quantity, onClose }) => {
+  const router = useRouter();
+
+  const makeTransaction = trpc.ticker.makeTransaction.useMutation({
+    onSuccess: () => {
+      router.push('/history');
+    }
+  });
 
   const handleSubmit = async () => {
-    // TODO: submit transaction
+    makeTransaction.mutate({ ticker, price, quantity, type })
   }
 
   return (

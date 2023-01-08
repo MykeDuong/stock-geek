@@ -69,7 +69,7 @@ const SideBar: NextComponentType = () => {
             <h3
               className="text-slate-400 text-lg"
             >
-              Current account: ${(new Intl.NumberFormat('en-US', { minimumFractionDigits: 2 }).format(parseInt(userData.cash)))}
+              Current cash: ${(new Intl.NumberFormat('en-US', { minimumFractionDigits: 2 }).format(parseInt(userData.cash)))}
             </h3>
           </div> :
           <div>

@@ -1,7 +1,7 @@
 import { router, protectedProcedure, publicProcedure } from "../trpc";
 import { number, z } from 'zod';
 import { getMultipleTickers, getMultipleTickersAsObjects, getQuoteList, getRecommendations, getTickerInfo, getTrending, search } from "../../../utils/yahooFinance";
-import { addToWatchlist, deleteFromWatchlist, getHistory, getWatchlist, HistoryRowInterface } from "../../../utils/pg";
+import { addToWatchlist, deleteFromWatchlist, getHistory, getHoldingsByTicker, getWatchlist, HistoryRowInterface, makeTransaction } from "../../../utils/pg";
 import { TRPCError } from "@trpc/server";
 import { defaultError } from "../../../utils/serverUtils";
 
@@ -72,7 +72,7 @@ export const tickerRouter = router({
     .query(async ({ input }) => {
       const { ticker } = input;
       const queryResult = await getTickerInfo(ticker);
-      
+
       const result = {
         volume: queryResult.summaryDetail?.volume,
         dayHigh: queryResult.summaryDetail?.dayHigh,
@@ -113,7 +113,7 @@ export const tickerRouter = router({
     }),
   deleteFromWatchlist: protectedProcedure
     .input(
-       z.object({ ticker: z.string().min(1) })
+      z.object({ ticker: z.string().min(1) })
     )
     .mutation(async (req) => {
       const { input : { ticker }, ctx } = req;
@@ -169,5 +169,54 @@ export const tickerRouter = router({
         totalValue: row.total_value,
         transactionType: row.transaction_type,
       }))
+    }),
+  getAvailability: protectedProcedure
+    .input(
+      z.object({ ticker: z.string().min(1) })
+    )
+    .query(async ({ ctx, input }) => {
+      const userId = ctx.session.user.id;
+      const { ticker } = input;
+      const result = await getHoldingsByTicker(userId, ticker);
+      if (typeof result === 'number') {
+        return result;
+      } else {
+        throw defaultError;
+      }
+    }),
+  makeTransaction: protectedProcedure
+    .input(
+      z.object({
+        ticker: z.string().min(1),
+        quantity: z.number().min(1),
+        price: z.number().min(0),
+        type: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const userId = ctx.session.user.id;
+      const { ticker, quantity, price, type } = input;
+
+      if (type !== "buy" && type !== "sell") {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Invalid Transaction action. Please try again."
+        })
+      }
+
+      if (type === "sell") {
+        const currentQuantity: number = await getHoldingsByTicker(userId, ticker);
+        if (currentQuantity < quantity) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "You do not have enough tickers to sell. Please try again."
+          })
+        }
+      }
+
+      await makeTransaction(userId, ticker, type, price, quantity);
+      return {
+        message: "Success"
+      }
     })
 });

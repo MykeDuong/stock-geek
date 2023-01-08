@@ -49,9 +49,22 @@ export const viewWatchlist = `
   WHERE user_id = $1
 `
 
-// TRADE HISTORY
-export const viewHistory = `
+// TRANSACTIONS - TRADE HISTORY
+export const viewTransactions = `
   SELECT *, (quantity*stock_price) AS Total_Value FROM transactions
   WHERE user_id = $1
   ORDER BY date
+`
+
+
+
+// Holdings
+export const viewHoldingsByTicker = `
+  SELECT SUM(quantity) AS quantity FROM holdings
+  WHERE user_id = $1 AND ticker = upper($2)
+`
+
+export const addNewTransaction = `
+  INSERT INTO transactions (user_id,ticker,transaction_type,stock_price,quantity)
+  VALUES ($1,UPPER($2),$3,$4,$5)
 `
