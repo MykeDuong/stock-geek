@@ -79,6 +79,89 @@ export const findUserById = async (id: string) => {
   else throw result;
 }
 
+// Screener
+export interface ScreenerInfoInterface {
+  screener_id: string,
+  screener_name: string,
+  create_time: Date,
+}
+
+
+export const saveScreener = async (inputQuery: {
+  userId: string,
+  name: string,
+  marketCapMax: number | null,
+  marketCapMin: number | null,
+  volumeMin: number | null,
+  volumeMax: number | null,
+  peMin: number,
+  peMax: number,
+  deMin: number,
+  deMax: number,
+  betaMin: number,
+  betaMax: number,
+  priceMin: number,
+  priceMax: number,
+}) => {
+  let success = true;
+
+  const client = await pool.connect()
+ 
+  const result = await client
+    .query(sql.saveScreener, [
+      inputQuery.userId,
+      inputQuery.name,
+      inputQuery.marketCapMax,
+      inputQuery.marketCapMin,
+      inputQuery.volumeMin,
+      inputQuery.volumeMax,
+      inputQuery.peMin,
+      inputQuery.peMax,
+      inputQuery.deMin,
+      inputQuery.deMax,
+      inputQuery.betaMin,
+      inputQuery.betaMax,
+      inputQuery.priceMin,
+      inputQuery.priceMax,
+    ])
+    .then(res => {
+      return res
+    })
+    .catch((e)=> {
+      success = false;
+      return e;
+  })
+
+  client.release(true)
+  
+  if (success) return result;
+  else throw result;
+}
+
+export const viewScreeners = async ( userId: string ) => {
+  let success = true;
+
+  const client = await pool.connect()
+ 
+  const result = await client
+    .query(sql.getScreeners, [userId])
+    .then(res => {
+      console.log(res.rows);
+      return res.rows as ScreenerInfoInterface[]
+    })
+    .catch((e)=> {
+      success = false;
+      return e;
+  })
+
+  
+  client.release(true)
+  
+  if (success) return result;
+  else throw result;
+}
+
+
 // Watchlist
 export const findInWatchlist  =async ( userId: string, ticker: string ) => {
   let success = true;

@@ -80,7 +80,7 @@ const Auth: NextPage = () => {
         >
           Stock Geek
         </h1>
-        <hr className="bg-green-700 h w-full mt-8 mb-8" />
+        <hr className="border-green-700 h w-full mt-8 mb-8" />
         <h1
           className="text-green-700 text-3xl font-raleway font-medium mb-8 px-3"
         >

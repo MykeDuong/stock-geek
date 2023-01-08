@@ -1,14 +1,10 @@
-import { NextComponentType, type NextPage } from "next";
+import type { NextComponentType, NextPage } from "next";
 import Image from 'next/image'
-import Head from "next/head";
-import Link from "next/link";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 
-import { trpc } from "../utils/trpc";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
 import { AiOutlineStock } from "react-icons/ai";
-import { RiMoneyDollarBoxLine, RiMoneyDollarCircleLine } from "react-icons/ri";
+import { RiMoneyDollarCircleLine } from "react-icons/ri";
 import { useAuthType } from "../store";
 
 const Home: NextPage = () => {

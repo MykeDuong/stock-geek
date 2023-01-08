@@ -25,7 +25,7 @@ const Error: NextComponentType<any, any, PropsInterface> = ({ message, onClose }
       >
         Error
       </h1>
-      <hr className="bg-green-700" />
+      <hr className="border-green-700" />
       <p
         className="pt-6 text-xl font-raleway text-black"
       >

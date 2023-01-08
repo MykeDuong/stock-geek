@@ -1,11 +1,4 @@
-export const screenerConstants = {
-  marketCap: { min: 50 * 10**6, max: 2 * 10**12 },
-  avgVolume: { min: 50 * 10**3, max: 5 * 10**6 },
-  PE: { min: 0, max: 50 },
-  DE: { min: 0, max: 30 },
-  beta: { min: 0, max: 4 },
-  price: { min: 0, max: 200 },
-}
+import { screenerConstants } from "./constants";
 
 export const popupClass = 'fixed left-[41.87%] right-[19.37%] z-10 min-h-fit min-w-fit px-6 py-10 flex flex-col'
 
@@ -26,4 +19,32 @@ export const nFormatter = (num: number, digits: number) => {
     return num >= item.value;
   });
   return item ? (num / item.value).toFixed(digits).replace(rx, "$1") + item.symbol : "0";
+}
+
+export const formatScreener = (value: {
+  marketCap: { min: number | null, max: number | null },
+  avgVolume: { min: number | null, max: number | null },
+  PE: { min: number, max: number },
+  DE: { min: number, max: number },
+  beta: { min: number, max: number },
+  price: { min: number, max: number },
+}) => {
+  const retVal = structuredClone(value)
+  if (retVal.marketCap.min === screenerConstants.marketCap.min - 1) {
+    retVal.marketCap.min = null;
+  }
+
+  if (retVal.marketCap.max === screenerConstants.marketCap.max + 1) {
+    retVal.marketCap.max = null;
+  }
+
+  if (retVal.avgVolume.min === screenerConstants.avgVolume.min - 1) {
+    retVal.avgVolume.min = null;
+  }
+
+  if (retVal.avgVolume.max === screenerConstants.avgVolume.max + 1) {
+    retVal.avgVolume.max = null;
+  }
+
+  return retVal;
 }

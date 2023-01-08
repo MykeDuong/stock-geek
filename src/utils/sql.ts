@@ -23,9 +23,35 @@ export const findUserByIdQuery = `
   WHERE ($1 = user_id)
 `
 
-export const findInWatchlist = `
-  SELECT * FROM watchlist
-	WHERE user_id = $1 AND ticker = $2
+// SCREENER
+export const saveScreener = `
+  INSERT INTO screener (
+    user_id,
+    screener_name,
+    market_cap_max,
+    market_cap_min,
+    volume_min,
+    volume_max,
+    pe_min,
+    pe_max,
+    de_min,
+    de_max,
+    beta_min,
+    beta_max,
+    price_min,
+    price_max)
+  VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)
+`
+
+export const getScreeners = `
+  SELECT screener_id,screener_name,create_time FROM screener
+  WHERE user_id = $1
+  ORDER BY create_time
+`
+
+export const getScreenersById = `
+  SELECT * FROM screener
+  WHERE screener_id = $1
 `
 
 // WATCHLIST
@@ -44,6 +70,11 @@ export const deleteFromWatchlist = `
   WHERE (user_id = $1 AND ticker ILIKE $2)
 `
 
+export const findInWatchlist = `
+  SELECT * FROM watchlist
+	WHERE user_id = $1 AND ticker = $2
+`
+
 export const viewWatchlist = `
   SELECT * FROM watchlist
   WHERE user_id = $1
@@ -55,8 +86,6 @@ export const viewTransactions = `
   WHERE user_id = $1
   ORDER BY date
 `
-
-
 
 // Holdings
 export const viewHoldingsByTicker = `

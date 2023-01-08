@@ -1,7 +1,7 @@
 import { router, protectedProcedure, publicProcedure } from "../trpc";
 import { number, z } from 'zod';
 import { getMultipleTickers, getMultipleTickersAsObjects, getQuoteList, getRecommendations, getTickerInfo, getTrending, search } from "../../../utils/yahooFinance";
-import { addToWatchlist, deleteFromWatchlist, getHistory, getHoldingsByTicker, getWatchlist, HistoryRowInterface, makeTransaction } from "../../../utils/pg";
+import { addToWatchlist, deleteFromWatchlist, getHistory, getHoldingsByTicker, getWatchlist, HistoryRowInterface, ScreenerInfoInterface, makeTransaction, saveScreener, viewScreeners } from "../../../utils/pg";
 import { TRPCError } from "@trpc/server";
 import { defaultError } from "../../../utils/serverUtils";
 
@@ -56,20 +56,77 @@ export const tickerRouter = router({
 
       return await getQuoteList()
     }),
+  viewScreeners: protectedProcedure
+    .query(async ({ ctx }) => {
+      const userId = ctx.session.user.id;
+
+      try {
+        const result: ScreenerInfoInterface[] = await viewScreeners( userId );
+        return result.map(screener => ({
+          id: screener.screener_id,
+          name: screener.screener_name,
+          date: screener.create_time
+        }));
+      } catch (err) {
+        if (err instanceof Error) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: err.message
+          })
+        } else {
+          throw defaultError
+        }
+      }
+
+    }),
   saveScreener: protectedProcedure
     .input(
       z.object({
         name: z.string().min(1),
-        marketCap: z.object({ min: z.number().nullable(), max: z.number().nullable() }),
-        avgVolume: z.object({ min: z.number().nullable(), max: z.number().nullable() }),
+        marketCap: z.object({ 
+          min: z.number().nullable(), 
+          max: z.number().nullable()
+        }),
+        avgVolume: z.object({ 
+          min: z.number().nullable(), 
+          max: z.number().nullable() 
+        }),
         PE: z.object({ min: z.number(), max: z.number() }),
         DE: z.object({ min: z.number(), max: z.number() }),
         beta: z.object({ min: z.number(), max: z.number() }),
         price: z.object({ min: z.number(), max: z.number() }),
       })
     )
-    .mutation(async () => {
-      
+    .mutation(async ({ ctx, input }) => {
+      const userId = ctx.session.user.id;
+      const inputQuery = {
+        userId,
+        name: input.name,
+        marketCapMax: input.marketCap.max,
+        marketCapMin: input.marketCap.min,
+        volumeMin: input.avgVolume.min,
+        volumeMax: input.avgVolume.max,
+        peMin: input.PE.min,
+        peMax: input.PE.max,
+        deMin: input.DE.min,
+        deMax: input.DE.max,
+        betaMin: input.beta.min,
+        betaMax: input.beta.max,
+        priceMin: input.price.min,
+        priceMax: input.price.max,
+      }
+      try {
+        await saveScreener(inputQuery)
+      } catch (err) {
+        if (err instanceof Error) {
+          throw new TRPCError({
+            code: 'BAD_REQUEST',
+            message: err.message,
+          })
+        } else {
+          throw defaultError;
+        }
+      }
     }),
   search: protectedProcedure
     .input(

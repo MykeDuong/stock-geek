@@ -6,38 +6,43 @@ import { AiOutlineLineChart } from "react-icons/ai"
 import { VscFilter } from "react-icons/vsc";
 import { ClipLoader } from "react-spinners";
 
-import { Filter, SaveScreener, TickerInfo, TrendingTickers } from "../../components";
+import { Filter, SavedScreeners, SaveScreener, TickerInfo, TrendingTickers } from "../../components";
 import { trpc } from "../../utils/trpc"
 import { appRouter } from "../../server/trpc/router/_app";
 import { createContextInner } from "../../server/trpc/context";
 import { useScreenerFilter } from "../../store";
 import { useRouter } from 'next/router';
-import { pageTitleClass, screenerConstants } from "../../utils/clientUtils";
+import { formatScreener, pageTitleClass } from "../../utils/clientUtils";
+import { screenerConstants } from "../../utils/constants";
 
 const Screener: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (props) => {
+
+  // Router
   const router = useRouter();
 
+  // Store
   const { value } = useScreenerFilter()
 
+  // Queries/Mutations
   const { data: trendingTickers } = trpc.ticker.getTrending.useQuery();
 
+  // States
   const [editScreener, setEditScreener] = useState(false);
-  const [viewSavedScreener, setViewSavedScreener] = useState(false);
+  const [viewSavedScreeners, setViewSavedScreeners] = useState(false);
   const [viewResult, setViewResult] = useState(false);
-  const [viewSaveScreener, setViewSaveScreener] = useState(false);
-
+  const [viewSaveScreener, setViewSaveScreener] = useState(false)
   const [fetchResult, setFetchResult] = useState(false);
 
-  const queryOptions: {
+  const [queryValue, setQueryValue] = useState<{
     marketCap: { min: number | null, max: number | null },
     avgVolume: { min: number | null, max: number | null },
     PE: { min: number, max: number },
     DE: { min: number, max: number },
     beta: { min: number, max: number },
     price: { min: number, max: number },
-  } = { ...value };
+  }>(formatScreener(value));
 
-  const screenerQuery = trpc.ticker.getScreenerResult.useQuery(queryOptions, {
+  const screenerQuery = trpc.ticker.getScreenerResult.useQuery(queryValue, {
     enabled: fetchResult,
     onSuccess: () => {
       setFetchResult(false);
@@ -47,23 +52,8 @@ const Screener: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (prop
   const handleSearch = async () => {
     setViewResult(true);
     setEditScreener(false);
-
-    if (queryOptions.marketCap.min === screenerConstants.marketCap.min - 1) {
-      queryOptions.marketCap.min = null;
-    }
-
-    if (queryOptions.marketCap.max === screenerConstants.marketCap.max + 1) {
-      queryOptions.marketCap.max = null;
-    }
-
-    if (queryOptions.avgVolume.min === screenerConstants.avgVolume.min - 1) {
-      queryOptions.avgVolume.min = null;
-    }
-
-    if (queryOptions.avgVolume.max === screenerConstants.avgVolume.max + 1) {
-      queryOptions.avgVolume.max = null;
-    }
-
+    
+    setQueryValue(formatScreener(value));
     setFetchResult(true)
 
     router.push(`screener/#result`);
@@ -74,7 +64,7 @@ const Screener: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (prop
       className='relative mb-10'
     >
       <div
-        className={`relative ${editScreener && 'pointer-events-none blur-sm'} ease-out duration-100`}
+        className={`relative ${(editScreener || viewSaveScreener || viewSavedScreeners) && 'pointer-events-none blur-sm'} ease-out duration-100`}
       >
         <div
           className="relative h-72 w-full overflow-hidden"
@@ -116,8 +106,8 @@ const Screener: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (prop
               Create New Screener
             </button>
             <button
-              className={`py-5 px-6 text-xl text-white font-raleway rounded-xl hover:scale-105 ${viewSavedScreener ? "bg-beige-600" : "bg-green-700" }`}
-              onClick={() => setViewSavedScreener(!viewSavedScreener)}
+              className={`py-5 px-6 text-xl text-white font-raleway rounded-xl hover:scale-105 ${viewSavedScreeners ? "bg-beige-600" : "bg-green-700" }`}
+              onClick={() => setViewSavedScreeners(!viewSavedScreeners)}
             >
               View Saved Screeners
             </button>
@@ -136,6 +126,7 @@ const Screener: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (prop
                 </h1>
                 <button
                   className={`flex flex-row items-center gap-2 float-right bg-red-700 text-white py-4 px-4 font-raleway text-xl rounded-lg hover:scale-105`}
+                  onClick={() => setEditScreener(true)}
                 >
                   <VscFilter style={{ height: '1.5rem', width: '1.5rem' }} />
                   Show filters
@@ -174,6 +165,15 @@ const Screener: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (prop
       }
       {viewSaveScreener && 
         <SaveScreener onClose={() => {setViewSaveScreener(false)}} />
+      }
+      {viewSavedScreeners && 
+        <SavedScreeners 
+          onClose={() => setViewSavedScreeners(false)}
+          onSelect={async () => {
+            setViewSavedScreeners(false);
+            await handleSearch();
+          }}
+        />
       }
     </div>
   )

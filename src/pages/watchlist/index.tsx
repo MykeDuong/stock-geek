@@ -66,7 +66,7 @@ const Watchlist: NextPage = () => {
           className="relative flex flex-col ml-10 mr-4"
         >
           <WatchlistRow header={true}/>
-          <hr className="bg-slate-400 border-slate-400 my-2"  />
+          <hr className="border-slate-400 my-2"  />
           {tickers.map(tickerInfo =>
             <WatchlistRow
               key={`key of row in watchlist for ${tickerInfo.ticker}`}

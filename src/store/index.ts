@@ -1,25 +1,7 @@
 import create from 'zustand';
 import { persist } from 'zustand/middleware';
 
-import { screenerConstants } from '../utils/clientUtils';
-
-// Directory
-interface DirStoreInterface {
-  currentDir: string;
-  changeDir: (dir: string) => void;
-}
-
-export const useCurrentDir = create<DirStoreInterface>()(
-  persist(
-    (set) => ({
-      currentDir: "home",
-      changeDir: ( dir ) => set((state) => ({ currentDir: dir })),
-    }),
-    {
-      name: "Stock Geek"
-    }
-  )
-)
+import { screenerConstants } from '../utils/constants';
 
 // Screener
 interface ScreenerFilterInterface {

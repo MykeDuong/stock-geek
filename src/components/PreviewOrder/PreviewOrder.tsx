@@ -45,7 +45,7 @@ const PreviewOrder: NextComponentType<any, any, PropsInterface> = ({ type, ticke
         >
           Preview Order
         </h1>
-        <hr className="bg-green-700" />
+        <hr className="border-green-700" />
 
         {/* Ticker & Quantity */}
         <div
@@ -101,7 +101,7 @@ const PreviewOrder: NextComponentType<any, any, PropsInterface> = ({ type, ticke
             value={0}
           />
           </div>
-          <hr className="bg-green-700" />
+          <hr className="border-green-700" />
           <div
           className="mt-5 mx-12 flex flex-col gap-8"
         >

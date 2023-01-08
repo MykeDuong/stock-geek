@@ -1,7 +1,8 @@
 import { NextComponentType } from 'next'
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useScreenerFilter } from '../../store';
-import { screenerConstants, nFormatter } from '../../utils/clientUtils';
+import { nFormatter } from '../../utils/clientUtils';
+import { screenerConstants } from '../../utils/constants';
 
 import styles from './MultiRangeSlider.module.css'
 

@@ -1,9 +1,10 @@
 import type { NextComponentType } from 'next'
 import React, { useRef, useState } from 'react'
 import { VscChromeClose } from 'react-icons/vsc'
-import { any } from 'zod'
 import { useScreenerFilter } from '../../store'
-import { popupClass } from '../../utils/clientUtils'
+import { formatScreener, popupClass } from '../../utils/clientUtils'
+import { screenerConstants } from '../../utils/constants'
+import { trpc } from '../../utils/trpc'
 
 interface PropsInterface {
   onClose: () => void
@@ -11,10 +12,21 @@ interface PropsInterface {
 
 const SaveScreener: NextComponentType<any, any, PropsInterface> = ({ onClose }) => {
 
+  // Store
   const { value } = useScreenerFilter();
+
+  // Refs
   const inputRef = useRef<HTMLInputElement>(null)
 
+  // Stataes
   const [error, setError] = useState(false);
+
+  // Queries/Mutations
+  const saveScreenerQuery = trpc.ticker.saveScreener.useMutation({
+    onSuccess: () => {
+      onClose();
+    }
+  });
 
   const handleSave = () => {
     const name = inputRef.current?.value;
@@ -22,7 +34,9 @@ const SaveScreener: NextComponentType<any, any, PropsInterface> = ({ onClose }) 
       setError(true);
       return;
     }
-    console.log(name);
+    
+    const queryValue = formatScreener(value)
+    saveScreenerQuery.mutate({ name, ...queryValue });
   }
 
   return (
@@ -38,15 +52,16 @@ const SaveScreener: NextComponentType<any, any, PropsInterface> = ({ onClose }) 
       <h1
         className="text-4xl font-raleway font-semibold text-green-700"
       >
-        Save Filters
+        Save Screener
       </h1>
+      <hr className="border-green-700 my-10" />
       
       <label
-        className="flex flex-col gap-2 font-raleway text-2xl mt-6"
+        className="flex flex-col gap-2 font-raleway text-2xl text-beige-700"
       >
-        Type a name for your new filter
+        Screener Name
         <input
-          className=" font-raleway text-xl text-slate-800 bg-transparent border-b outline-none"
+          className=" font-raleway text-xl text-slate-800 bg-transparent border-b border-slate-400 outline-none"
           type="text"
           placeholder="e.g Small stock"
           ref={inputRef}
@@ -63,7 +78,7 @@ const SaveScreener: NextComponentType<any, any, PropsInterface> = ({ onClose }) 
         className="relative mx-0 mt-6"
       > 
         <button
-          className="float-right py-2 px-4 bg-green-700 font-raleway text-white rounded-lg"
+          className="float-right py-3 w-40 bg-green-700 font-raleway text-white text-xl rounded-lg hover:scale-105"
           onClick={handleSave}
         >
           Save
