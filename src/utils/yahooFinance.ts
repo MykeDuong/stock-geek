@@ -1,7 +1,6 @@
 import axios from "axios"
 import yahooFinance from "yahoo-finance2"
-import { QuoteSummaryOptions } from "yahoo-finance2/dist/esm/src/modules/quoteSummary";
-import { tickerRouter } from "../server/trpc/router/ticker";
+import type { QuoteSummaryOptions } from "yahoo-finance2/dist/esm/src/modules/quoteSummary";
 
 export const headers = {
     'X-RapidAPI-Key': process.env.API_KEY,
@@ -35,27 +34,8 @@ export const getRecommendations = async (searchTickers: string[] ) => {
   return shuffleArray(result);
 }
 
-
 export const getQuoteList = async () => {
   return sampleResponse.quoteList;
-}
-
-const shuffleArray = (array: any[]) => {
-  let currentIndex = array.length, randomIndex;
-
-  // While there remain elements to shuffle.
-  while (currentIndex != 0) {
-
-    // Pick a remaining element.
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex--;
-
-    // And swap it with the current element.
-    [array[currentIndex], array[randomIndex]] = [
-      array[randomIndex], array[currentIndex]];
-  }
-
-  return array;
 }
 
 export const search = async ( searchText: string ) => {
@@ -83,6 +63,31 @@ export const getTickerInfo = async ( ticker: string ) => {
 export const getMultipleTickers = async ( tickers: string[] ) => {
   const result = await yahooFinance.quote(tickers);
   return result;
+}
+
+export const getMultipleTickersAsObjects = async ( tickers: string[] ) => {
+  const result = await yahooFinance.quote(tickers, { return: 'object' });
+  return result;
+}
+
+
+
+const shuffleArray = (array: any[]) => {
+  let currentIndex = array.length, randomIndex;
+
+  // While there remain elements to shuffle.
+  while (currentIndex != 0) {
+
+    // Pick a remaining element.
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+
+    // And swap it with the current element.
+    [array[currentIndex], array[randomIndex]] = [
+      array[randomIndex], array[currentIndex]];
+  }
+
+  return array;
 }
 
 const sampleResponse  = {

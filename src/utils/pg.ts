@@ -174,3 +174,37 @@ export const deleteFromWatchlist = async ( userId: string, ticker: string ) => {
   if (success) return result;
   else throw result;
 }
+
+
+export interface HistoryRowInterface {
+  user_id: number;
+  date: Date;
+  ticker: string;
+  transaction_type:'buy' | 'sell';
+  stock_price: number;
+  quantity: number;
+  total_value: number;
+}
+
+// Trade History
+export const getHistory = async ( userId: string ) => {
+  let success = true;
+
+  const client = await pool.connect()
+ 
+  const result = await client
+    .query(sql.viewHistory, [userId])
+    .then(res => {
+      return res.rows
+    })
+    .catch((e)=> {
+      success = false;
+      return e;
+  })
+
+  
+  client.release(true)
+  
+  if (success) return result;
+  else throw result;
+}

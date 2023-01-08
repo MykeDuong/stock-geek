@@ -1,7 +1,6 @@
 import type { NextPage, NextComponentType } from "next"
 import { useRouter } from "next/router";
-import { useRef, useState, forwardRef, useImperativeHandle } from "react";
-import { RiCloseLine } from "react-icons/ri";
+import {  useState } from "react";
 import { ClipLoader } from 'react-spinners';
 
 import { HeaderImage } from "../../components"
@@ -30,24 +29,18 @@ type TickerType = {
   marketCap: number | undefined;
 }
 
-type WatchlistRowHandle = { 
-  getTicked: () => boolean,
-  getTicker: () => string | undefined
-}
-
 const textClass = "font-raleway font-semibold text-xl"
 
 const Watchlist: NextPage = () => {
 
   const [availability, setAvailability] = useState(false);
   const [tickers, setTickers] = useState<TickerType[]>([])
-  const tickerRef = useRef<WatchlistRowHandle[]>([]);
 
   const removeTickerMutation = trpc.ticker.deleteFromWatchlist.useMutation({
     onSuccess: () => {multipleTickerQuery.refetch()}
   });
 
-  const multipleTickerQuery = trpc.ticker.getMultipleTickers.useQuery(undefined, {
+  const multipleTickerQuery = trpc.ticker.getWatchlist.useQuery(undefined, {
     onSuccess: (data) => {
       setAvailability(true);
       setTickers(data)
@@ -89,7 +82,9 @@ const Watchlist: NextPage = () => {
           )}
         </div>
         :
-        <div>
+        <div
+            className="mx-0 flex justify-center"
+        >
           <ClipLoader color="#395144" />
         </div>
       }

@@ -1,7 +1,7 @@
 import { router, protectedProcedure, publicProcedure } from "../trpc";
 import { number, z } from 'zod';
-import { getMultipleTickers, getQuoteList, getRecommendations, getTickerInfo, getTrending, search } from "../../../utils/yahooFinance";
-import { addToWatchlist, deleteFromWatchlist, getWatchlist } from "../../../utils/pg";
+import { getMultipleTickers, getMultipleTickersAsObjects, getQuoteList, getRecommendations, getTickerInfo, getTrending, search } from "../../../utils/yahooFinance";
+import { addToWatchlist, deleteFromWatchlist, getHistory, getWatchlist, HistoryRowInterface } from "../../../utils/pg";
 import { TRPCError } from "@trpc/server";
 import { defaultError } from "../../../utils/serverUtils";
 
@@ -111,13 +111,6 @@ export const tickerRouter = router({
         throw new TRPCError(defaultError)
       }
     }),
-  getWatchlist: protectedProcedure
-    .query(async ({ ctx }) => {
-      const userId = ctx.session.user.id;
-      const dbResult = await getWatchlist(userId);
-      const result = dbResult.map((row: { user_id: number; ticker: string; }) => row.ticker);
-      return result;
-    }),
   deleteFromWatchlist: protectedProcedure
     .input(
        z.object({ ticker: z.string().min(1) })
@@ -138,7 +131,7 @@ export const tickerRouter = router({
         throw new TRPCError(defaultError)
       }
     }),
-  getMultipleTickers: protectedProcedure
+  getWatchlist: protectedProcedure
     .query(async ({ ctx }) => {
       // Get from DB
       const userId = ctx.session.user.id;
@@ -159,4 +152,22 @@ export const tickerRouter = router({
         marketCap: tickerInfo.marketCap,
       }))
     }),
+  getHistory: protectedProcedure
+    .query(async ({ ctx }) => {
+      const userId = ctx.session.user.id;
+      const dbResult: HistoryRowInterface[] = await getHistory(userId);
+      if (dbResult.length === 0) return []
+
+      const tickers = dbResult.map(row => row.ticker);
+      const infoResult = await getMultipleTickersAsObjects(tickers);
+      return dbResult.map((row, index) => ({
+        index,
+        ticker: row.ticker,
+        company: infoResult[row.ticker]?.longName,
+        price: row.stock_price,
+        quantity: row.quantity,
+        totalValue: row.total_value,
+        transactionType: row.transaction_type,
+      }))
+    })
 });

@@ -50,4 +50,8 @@ export const viewWatchlist = `
 `
 
 // TRADE HISTORY
-
+export const viewHistory = `
+  SELECT *, (quantity*stock_price) AS Total_Value FROM transactions
+  WHERE user_id = $1
+  ORDER BY date
+`
