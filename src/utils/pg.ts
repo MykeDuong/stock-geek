@@ -86,7 +86,6 @@ export interface ScreenerInfoInterface {
   create_time: Date,
 }
 
-
 export const saveScreener = async (inputQuery: {
   userId: string,
   name: string,
@@ -147,7 +146,7 @@ export const viewScreeners = async ( userId: string ) => {
     .query(sql.getScreeners, [userId])
     .then(res => {
       console.log(res.rows);
-      return res.rows as ScreenerInfoInterface[]
+      return res.rows
     })
     .catch((e)=> {
       success = false;

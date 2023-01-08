@@ -1,5 +1,5 @@
 import type { NextComponentType } from 'next'
-import React, { useState, forwardRef } from 'react'
+import React, { useState, useRef, forwardRef, useImperativeHandle } from 'react'
 import { VscChromeClose } from 'react-icons/vsc'
 import { ClipLoader } from 'react-spinners'
 import { useScreenerFilter } from '../../store'
@@ -24,14 +24,16 @@ interface ScreenerInfoInterface {
   date: Date
 }
 
-interface RowRef {
+interface RowHandle {
   removeSelected: () => void
 }
 
 const SavedScreener: NextComponentType<any, any, PropsInterface> = ({ onClose, onSelect }) => {
-
   // Store
   const { setValue } = useScreenerFilter();
+
+  // Refs
+  const rowRefs = useRef<RowHandle[]>([])
 
   // States
   const [available, setAvailable] = useState(false)
@@ -105,9 +107,11 @@ const SavedScreener: NextComponentType<any, any, PropsInterface> = ({ onClose, o
   )
 }
 
-const ScreenerRow: forwardRef<RowRef, RowPropsInterface>(({ name, date, header = false }, ref) => {
+const ScreenerRow = forwardRef<RowHandle, RowPropsInterface>(({ name, date, header = false }, ref) => {
 
-  
+  useImperativeHandle(ref,
+
+  )
 
   return (
     <div
