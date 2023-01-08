@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import type { GetStaticPropsContext, InferGetStaticPropsType, NextPage } from "next"
 import { createProxySSGHelpers } from '@trpc/react-query/ssg';
 import Image from 'next/image'
@@ -6,7 +6,7 @@ import { AiOutlineLineChart } from "react-icons/ai"
 import { VscFilter } from "react-icons/vsc";
 import { ClipLoader } from "react-spinners";
 
-import { Filter, TickerInfo, TrendingTickers } from "../../components";
+import { Filter, SaveScreener, TickerInfo, TrendingTickers } from "../../components";
 import { trpc } from "../../utils/trpc"
 import { appRouter } from "../../server/trpc/router/_app";
 import { createContextInner } from "../../server/trpc/context";
@@ -24,6 +24,7 @@ const Screener: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (prop
   const [editScreener, setEditScreener] = useState(false);
   const [viewSavedScreener, setViewSavedScreener] = useState(false);
   const [viewResult, setViewResult] = useState(false);
+  const [viewSaveScreener, setViewSaveScreener] = useState(false);
 
   const [fetchResult, setFetchResult] = useState(false);
 
@@ -38,7 +39,7 @@ const Screener: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (prop
 
   const screenerQuery = trpc.ticker.getScreenerResult.useQuery(queryOptions, {
     enabled: fetchResult,
-    onSuccess: (data) => {
+    onSuccess: () => {
       setFetchResult(false);
     }
   })
@@ -159,6 +160,7 @@ const Screener: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (prop
               >
                 <button
                   className="bg-green-700 float-right p-4 font-raleway text-white text-xl rounded-md hover:scale-105"
+                  onClick={() => setViewSaveScreener(true)}
                 >
                   Save Screener
                 </button>
@@ -169,6 +171,9 @@ const Screener: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (prop
       </div>
       {editScreener && 
         <Filter onClose={() => setEditScreener(false)} onSearch={() => handleSearch()} />
+      }
+      {viewSaveScreener && 
+        <SaveScreener onClose={() => {setViewSaveScreener(false)}} />
       }
     </div>
   )

@@ -125,7 +125,7 @@ const WatchlistRow: NextComponentType<any, any, RowPropsInterface> = ({ index, t
             </p>
             :
             <div
-              className={`rounded-lg w-14 text-center py-2 px-3 ${transactionType === 'buy' ? 'bg-green-700' : 'bg-red-700'}`}
+              className={`rounded-lg w-14 text-center py-2 px-3 capitalize ${transactionType === 'buy' ? 'bg-green-700' : 'bg-red-700'}`}
             >
               <p
                 className="font-raleway text-lg text-white"

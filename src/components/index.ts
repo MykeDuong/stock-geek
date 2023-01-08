@@ -25,3 +25,5 @@ export { default as TickerTechnicalAnalysis } from './TickerTechnicalAnalysis/Ti
 export { default as Error } from './Error/Error';
 
 export { default as PreviewOrder } from './PreviewOrder/PreviewOrder';
+
+export { default as SaveScreener } from './SaveScreener/SaveScreener';

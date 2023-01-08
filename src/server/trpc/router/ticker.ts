@@ -56,6 +56,21 @@ export const tickerRouter = router({
 
       return await getQuoteList()
     }),
+  saveScreener: protectedProcedure
+    .input(
+      z.object({
+        name: z.string().min(1),
+        marketCap: z.object({ min: z.number().nullable(), max: z.number().nullable() }),
+        avgVolume: z.object({ min: z.number().nullable(), max: z.number().nullable() }),
+        PE: z.object({ min: z.number(), max: z.number() }),
+        DE: z.object({ min: z.number(), max: z.number() }),
+        beta: z.object({ min: z.number(), max: z.number() }),
+        price: z.object({ min: z.number(), max: z.number() }),
+      })
+    )
+    .mutation(async () => {
+      
+    }),
   search: protectedProcedure
     .input(
       z.object({ searchText: z.string().min(1) })
@@ -73,7 +88,7 @@ export const tickerRouter = router({
       const { ticker } = input;
       const queryResult = await getTickerInfo(ticker);
 
-      const result = {
+      return {
         volume: queryResult.summaryDetail?.volume,
         dayHigh: queryResult.summaryDetail?.dayHigh,
         dayLow: queryResult.summaryDetail?.dayHigh,
@@ -88,8 +103,6 @@ export const tickerRouter = router({
         summary: queryResult.assetProfile?.longBusinessSummary,
         marketState: queryResult.price?.marketState,
       }
-
-      return result;
     }),
   addToWatchlist: protectedProcedure
     .input(
