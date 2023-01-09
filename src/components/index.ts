@@ -29,3 +29,9 @@ export { default as PreviewOrder } from './PreviewOrder/PreviewOrder';
 export { default as SaveScreener } from './SaveScreener/SaveScreener';
 
 export { default as SavedScreeners } from './SavedScreeners/SavedScreeners';
+
+export { default as PortfolioOverview } from './PortfolioOverview/PortfolioOverview';
+
+export { default as HoldingsInformation } from './HoldingsInformation/HoldingsInformation';
+
+export { default as PortfolioPerformanceChart } from './PortfolioPerformanceChart/PortfolioPerformanceChart';

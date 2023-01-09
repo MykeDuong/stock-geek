@@ -92,12 +92,19 @@ export const viewTransactions = `
   ORDER BY date
 `
 
-// Holdings
+// HOLDINGS
 export const viewHoldingsByTicker = `
   SELECT SUM(quantity) AS quantity FROM holdings
   WHERE user_id = $1 AND ticker = upper($2)
 `
 
+export const viewHoldings = `
+  SELECT ticker, SUM(quantity), SUM(price*quantity)/SUM(quantity) AS purchase_price FROM holdings
+  WHERE user_id=$1
+  GROUP BY ticker
+`
+
+// TRANSACTIONS
 export const addNewTransaction = `
   INSERT INTO transactions (user_id,ticker,transaction_type,stock_price,quantity)
   VALUES ($1,UPPER($2),$3,$4,$5)

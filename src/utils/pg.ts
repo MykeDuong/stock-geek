@@ -410,3 +410,31 @@ export const getHoldingsByTicker = async ( userId: string, ticker: string ) => {
   if (success) return result;
   else throw result;
 }
+
+export interface HoldingsInterface {
+  ticker: string;
+  sum: string;
+  purchase_price: number;
+}
+
+export const getHoldings = async ( userId: string ) => {
+  let success = true;
+
+  const client = await pool.connect()
+ 
+  const result = await client
+    .query(sql.viewHoldings, [userId])
+    .then(res => {
+      return res.rows;
+    })
+    .catch((e)=> {
+      success = false;
+      return e;
+  })
+
+  
+  client.release(true)
+  
+  if (success) return result;
+  else throw result;
+}
