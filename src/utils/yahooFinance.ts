@@ -2,19 +2,49 @@ import axios from "axios"
 import yahooFinance from "yahoo-finance2"
 import type { QuoteSummaryOptions } from "yahoo-finance2/dist/esm/src/modules/quoteSummary";
 
+yahooFinance.setGlobalConfig({ validation: { logErrors: false} });
+
+interface YHErrorInterface {
+  errors: any[];
+  result: any[];
+}
+
+function isYHError(value: unknown): value is YHErrorInterface {
+  return (!!value && !!(value as YHErrorInterface).result && !!(value as YHErrorInterface).errors)
+}
+
 export const headers = {
     'X-RapidAPI-Key': process.env.API_KEY,
     'X-RapidAPI-Host': process.env.API_HOST,
 }
 
 export const getTrending = async () => {
-  const queryOptions = { count: 30, lang: 'en-US' };
+  const queryOptions = { count: 50, lang: 'en-US' };
   const { quotes } = await yahooFinance.trendingSymbols('US', queryOptions);
-  
-  const symbols = quotes.map((quote) => quote.symbol)
 
-  const result = await yahooFinance.quote(symbols)
-  return result;
+  const symbols = quotes.map((quote) => quote.symbol)
+  
+  if (symbols.length === 0) return []
+
+  try {
+    const result = await yahooFinance.quote(symbols)
+    return result.filter(quote => {
+      if (quote.quoteType !== "EQUITY") return false;
+      if (quote.fullExchangeName.includes("Nasdaq")) return true;
+      if (quote.fullExchangeName.includes("NYSE")) return true;
+      return false;
+    })
+  } catch (err) {
+    if (isYHError(err)) {
+      const result = err.result.filter(quote => {
+        if (quote.quoteType !== "EQUITY") return false;
+        if (quote.fullExchangeName.includes("Nasdaq")) return true;
+        if (quote.fullExchangeName.includes("NYSE")) return true;
+        return false;
+      })
+      return result;
+    }
+  }
 }
 
 export const getRecommendations = async (searchTickers: string[] ) => {

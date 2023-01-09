@@ -1,9 +1,10 @@
 import { router, protectedProcedure, publicProcedure } from "../trpc";
 import { number, z } from 'zod';
 import { getMultipleTickers, getMultipleTickersAsObjects, getQuoteList, getRecommendations, getTickerInfo, getTrending, search } from "../../../utils/yahooFinance";
-import { addToWatchlist, deleteFromWatchlist, getHistory, getHoldingsByTicker, getWatchlist, HistoryRowInterface, ScreenerInfoInterface, makeTransaction, saveScreener, viewScreeners } from "../../../utils/pg";
+import { addToWatchlist, deleteFromWatchlist, getHistory, getHoldingsByTicker, getWatchlist, HistoryRowInterface, ScreenerInfoInterface, makeTransaction, saveScreener, viewScreeners, getScreenerById, ScreenerInterface, deleteScreener } from "../../../utils/pg";
 import { TRPCError } from "@trpc/server";
 import { defaultError } from "../../../utils/serverUtils";
+import { m } from "framer-motion";
 
 export const tickerRouter = router({
   getRecommendations: protectedProcedure
@@ -26,6 +27,8 @@ export const tickerRouter = router({
     .query(async () => {
       const quotes = await getTrending();
       
+      if (!quotes) return [];
+
       const filteredQuotes = quotes.filter((quote) => {
         if (quote.quoteType !== "EQUITY") return false;
         if (quote.fullExchangeName.includes("Nasdaq")) return true;
@@ -36,7 +39,7 @@ export const tickerRouter = router({
       const result = filteredQuotes.map((quote) => {
         return quote.symbol;
       })
-
+      
       return result.slice(0, 10);
     }),
   getScreenerResult: protectedProcedure
@@ -78,6 +81,41 @@ export const tickerRouter = router({
         }
       }
 
+    }),
+  getScreenerById: protectedProcedure
+    .input(
+      z.object({ id: z.number().min(1) })
+    )
+    .query(async ({ input }) => {
+      const { id } = input;
+      const result: ScreenerInterface = await getScreenerById(id);
+      const retVal  = {
+        marketCap: { 
+          min: result.market_cap_min, 
+          max: result.market_cap_max,
+        },
+        avgVolume: { 
+          min: result.volume_min, 
+          max: result.volume_max, 
+        },
+        PE: { 
+          min: result.pe_min, 
+          max: result.pe_max,
+        },
+        DE: { 
+          min: result.de_min,
+          max: result.de_max,
+        },
+        beta: { 
+          min: result.beta_min, 
+          max: result.beta_max,
+        },
+        price: { 
+          min: result.price_min, 
+          max: result. price_max, 
+        },
+      }
+      return retVal
     }),
   saveScreener: protectedProcedure
     .input(
@@ -126,6 +164,25 @@ export const tickerRouter = router({
         } else {
           throw defaultError;
         }
+      }
+    }),
+  deleteScreener: protectedProcedure
+    .input(
+      z.object({ id: z.number().min(1) })
+    )
+    .mutation(async ({ input }) => {
+      const { id } = input;
+      try {
+        await deleteScreener(id)
+      } catch (err) {
+        if (err instanceof Error) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: err.message
+          }
+          )
+        }
+        throw defaultError
       }
     }),
   search: protectedProcedure

@@ -1,21 +1,17 @@
 import type { NextComponentType } from 'next'
-import React, { useState, useRef, forwardRef, useImperativeHandle } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
+
 import { VscChromeClose } from 'react-icons/vsc'
 import { ClipLoader } from 'react-spinners'
+
 import { useScreenerFilter } from '../../store'
-import { popupClass } from '../../utils/clientUtils'
+import { popupClass, reverseFormatScreener } from '../../utils/clientUtils'
 import { trpc } from '../../utils/trpc'
+import SavedScreenerRow, { type RowHandle } from './SavedScreenerRow/SavedScreenerRow';
 
 interface PropsInterface {
   onClose: () => void
-  onSelect: () => void
-}
-
-interface RowPropsInterface {
-  header?: boolean
-  name?: string
-  date?: Date
-  onClick? : () => void
+  onSearch: () => void
 }
 
 interface ScreenerInfoInterface {
@@ -24,13 +20,9 @@ interface ScreenerInfoInterface {
   date: Date
 }
 
-interface RowHandle {
-  removeSelected: () => void
-}
-
-const SavedScreener: NextComponentType<any, any, PropsInterface> = ({ onClose, onSelect }) => {
+const SavedScreeners: NextComponentType<any, any, PropsInterface> = ({ onClose, onSearch }) => {
   // Store
-  const { setValue } = useScreenerFilter();
+  const { value, setValue } = useScreenerFilter();
 
   // Refs
   const rowRefs = useRef<RowHandle[]>([])
@@ -38,29 +30,68 @@ const SavedScreener: NextComponentType<any, any, PropsInterface> = ({ onClose, o
   // States
   const [available, setAvailable] = useState(false)
   const [screeners, setScreeners] = useState<ScreenerInfoInterface[]>([])
+  const [selectedIndex, setSelectedIndex] = useState(-1);
+  const [id, setId] = useState(-1)
+  const [fetchById, setFetchById] = useState(false)
 
-  const screenerQuery = trpc.ticker.viewScreeners.useQuery(undefined, {
+  // Change for value
+  useEffect(() => {
+    if (fetchById) {
+      setFetchById(false)
+      onSearch();
+    }
+  }, [value])
+
+  // Queries
+  const savedScreenersQuery = trpc.ticker.viewScreeners.useQuery(undefined, {
     onSuccess: (data) => {
       setAvailable(true)
-      console.log(data);
       setScreeners(data)
     }
   });
 
-  const handleSelect = () => {
-    return
+  const screenerQuery = trpc.ticker.getScreenerById.useQuery({ id }, {
+    enabled: fetchById,
+    onSuccess: (data) => {
+      setValue(reverseFormatScreener(data));
+    }
+  })
+
+  const deleteScreener = trpc.ticker.deleteScreener.useMutation({
+    onSuccess: () => {
+      savedScreenersQuery.refetch();
+    }
+  });
+
+  const handleUpdate = (index: number) => {
+    if (index === selectedIndex) return
+    rowRefs.current[selectedIndex]?.removeSelected();
+    setSelectedIndex(index)
   }
 
-  const handleClose = () => {
-    onClose();
+  const handleSearch = () => {
+    if (selectedIndex === -1) return
+    const id = screeners[selectedIndex]?.id;
+    if (!id) return
+    setId(parseInt(id))
+    setFetchById(true);
+  }
+
+  const handleDelete = () => {
+    if (selectedIndex === -1) return;
+    const id = rowRefs.current[selectedIndex]?.getId()
+    if (!id) return;
+    deleteScreener.mutate({ id })
+    setSelectedIndex(-1)
+    setScreeners(screeners.filter((screener, index) => index !== selectedIndex))
   }
 
   return (
     <div
-      className={`${popupClass} top-[15%]`}
+      className={`${popupClass} top-[10%]`}
     >
       <div
-        className='bg-beige-300 rounded-lg shadow-md mx-20 px-8 pt-20'
+        className='relative bg-beige-300 rounded-lg shadow-md mx-20 px-8 pt-20'
       >
 
         <button
@@ -78,19 +109,44 @@ const SavedScreener: NextComponentType<any, any, PropsInterface> = ({ onClose, o
         <div
           className='flex flex-col'
         >
-
-          <ScreenerRow
-            header={true}
-          />
+          <div
+            className={`flex flex-row items-center rounded-md px-4 h-12`}
+          >
+            <div
+              className='w-[60%]'
+            >
+              <p
+                className={`font-raleway text-xl font-semibold`}
+              >
+                Name
+              </p>
+            </div>
+            <div
+              className='w-[40%]'
+            >
+              <p
+                className={`font-raleway text-xl font-semibold`}
+              >
+                Date
+              </p>
+            </div>
+          </div>
           {available ?
             <div
-              className='flex flex-col'
+              className='flex flex-col overflow-scroll h-[16rem] max-h-[16rem]'
             >
-              {screeners?.map(screener =>
-                <ScreenerRow
+              {screeners?.map((screener, index) =>
+                <SavedScreenerRow
                   key={`key for screener id ${screener.id}`}
+                  index={index}
+                  screenerId={parseInt(screener.id)}
                   name={screener.name}
                   date={screener.date}
+                  ref={ref => {
+                    if (ref !== null)
+                      rowRefs.current[index] = ref}
+                  }
+                  onClick={handleUpdate}
                 />
               )}
             </div>
@@ -102,42 +158,29 @@ const SavedScreener: NextComponentType<any, any, PropsInterface> = ({ onClose, o
             </div>
           }
         </div>
+        <div
+          className="mx-0 relative"
+        >
+          <div
+            className="float-right flex flex-row gap-2 my-6"
+          >
+            <button
+              className="w-28 py-2 bg-green-700 rounded-lg font-raleway text-white text-xl hover:scale-105"
+              onClick={handleSearch}
+            >
+              Search
+            </button>
+            <button
+              className="w-28 py-2 bg-red-700 rounded-lg font-raleway text-white text-xl hover:scale-105"
+              onClick={handleDelete}
+            >
+              Delete
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   )
 }
 
-const ScreenerRow = forwardRef<RowHandle, RowPropsInterface>(({ name, date, header = false }, ref) => {
-
-  useImperativeHandle(ref,
-
-  )
-
-  return (
-    <div
-      className="flex flex-row h-12"
-    >
-      <div
-        className='w-[60%]'
-      >
-        <p
-          className={`font-raleway text-xl ${header ? 'font-semibold' : ''}`}
-        >
-          {header ? "Name" : name}
-        </p>
-      </div>
-      <div
-        className='w-[40%]'
-      >
-        <p
-          className={`font-raleway text-xl ${header ? 'font-semibold' : ''}`}
-        >
-          {header ? "Date" : date?.toLocaleDateString('en-US')}
-        </p>
-      </div>
-    </div>
-  )
-})
-ScreenerRow.displayName = "Screener Row"
-
-export default SavedScreener
+export default SavedScreeners

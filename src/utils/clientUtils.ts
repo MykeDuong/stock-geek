@@ -48,3 +48,41 @@ export const formatScreener = (value: {
 
   return retVal;
 }
+
+interface ReverseFormatScreenerResultInterface {
+  marketCap: { min: number, max: number },
+  avgVolume: { min: number, max: number },
+  PE: { min: number, max: number },
+  DE: { min: number, max: number },
+  beta: { min: number, max: number },
+  price: { min: number, max: number },
+}
+
+export const reverseFormatScreener = (value: {
+  marketCap: { min: number | null, max: number | null },
+  avgVolume: { min: number | null, max: number | null },
+  PE: { min: number, max: number },
+  DE: { min: number, max: number },
+  beta: { min: number, max: number },
+  price: { min: number, max: number },
+}) => {
+  const retVal = structuredClone(value);
+
+  if (retVal.marketCap.min == null) {
+    retVal.marketCap.min = screenerConstants.marketCap.min - 1
+  }
+
+  if (retVal.marketCap.max == null) {
+    retVal.marketCap.max = screenerConstants.marketCap.max + 1
+  }
+
+  if (retVal.avgVolume.min == null) {
+    retVal.avgVolume.min = screenerConstants.avgVolume.min - 1;
+  }
+
+  if (retVal.avgVolume.max == null) {
+    retVal.avgVolume.max = screenerConstants.avgVolume.max + 1
+  }
+
+  return <ReverseFormatScreenerResultInterface>retVal;
+}

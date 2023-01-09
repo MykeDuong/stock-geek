@@ -169,7 +169,7 @@ const Screener: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (prop
       {viewSavedScreeners && 
         <SavedScreeners 
           onClose={() => setViewSavedScreeners(false)}
-          onSelect={async () => {
+          onSearch={async () => {
             setViewSavedScreeners(false);
             await handleSearch();
           }}

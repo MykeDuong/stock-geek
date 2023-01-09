@@ -49,8 +49,13 @@ export const getScreeners = `
   ORDER BY create_time
 `
 
-export const getScreenersById = `
+export const getScreenerById = `
   SELECT * FROM screener
+  WHERE screener_id = $1
+`
+
+export const deleteScreenerById = `
+  DELETE FROM screener
   WHERE screener_id = $1
 `
 

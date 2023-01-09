@@ -86,6 +86,25 @@ export interface ScreenerInfoInterface {
   create_time: Date,
 }
 
+export interface ScreenerInterface {
+  screener_id: number,
+  user_id: number,
+  create_time: Date,
+  screener_name: string,
+  market_cap_max: number | null,
+  market_cap_min: number | null,
+  volume_min: number | null,
+  volume_max: number | null,
+  pe_min: number,
+  pe_max: number,
+  de_min: number,
+  de_max: number,
+  beta_min: number,
+  beta_max: number,
+  price_min: number,
+  price_max: number
+}
+
 export const saveScreener = async (inputQuery: {
   userId: string,
   name: string,
@@ -145,7 +164,6 @@ export const viewScreeners = async ( userId: string ) => {
   const result = await client
     .query(sql.getScreeners, [userId])
     .then(res => {
-      console.log(res.rows);
       return res.rows
     })
     .catch((e)=> {
@@ -160,6 +178,62 @@ export const viewScreeners = async ( userId: string ) => {
   else throw result;
 }
 
+export const getScreenerById = async ( id: number ) => {
+  let success = true;
+
+  const client = await pool.connect()
+ 
+  const result = await client
+    .query(sql.getScreenerById, [id])
+    .then(res => {
+      const result = res.rows[0]
+      if (typeof (result.market_cap_max) === 'string') {
+        result.market_cap_max = parseInt(result.market_cap_max)
+      }
+      if (typeof (result.market_cap_min) === 'string') {
+        result.market_cap_min = parseInt(result.market_cap_min)
+      }
+      if (typeof (result.volume_max) === 'string') {
+        result.volume_max = parseInt(result.volume_max)
+      }
+      if (typeof (result.volume_min) === 'string') {
+        result.volume_min = parseInt(result.volume_min)
+      }
+      return result
+    })
+    .catch((e)=> {
+      success = false;
+      return e;
+  })
+
+  
+  client.release(true)
+  
+  if (success) return result;
+  else throw result;
+}
+
+export const deleteScreener = async ( id: number ) => {
+  let success = true;
+
+  const client = await pool.connect()
+ 
+  const result = await client
+    .query(sql.deleteScreenerById, [id])
+    .then(res => {
+      return res
+    })
+    .catch((e)=> {
+      success = false;
+      return e;
+  })
+
+  
+  client.release(true)
+  
+  if (success) return result;
+  else throw result;
+}
 
 // Watchlist
 export const findInWatchlist  =async ( userId: string, ticker: string ) => {
