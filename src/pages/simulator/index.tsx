@@ -16,7 +16,7 @@ const Simulator: NextPage = () => {
 
   const searchQuery = trpc.ticker.search.useQuery({ searchText }, {
     enabled: fetchResult,
-    onSuccess: (data) => {
+    onSuccess: () => {
       setFetchResult(false);
     }
   })

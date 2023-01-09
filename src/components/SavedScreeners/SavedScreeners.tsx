@@ -43,21 +43,21 @@ const SavedScreeners: NextComponentType<any, any, PropsInterface> = ({ onClose, 
   }, [value])
 
   // Queries
-  const savedScreenersQuery = trpc.ticker.viewScreeners.useQuery(undefined, {
+  const savedScreenersQuery = trpc.screener.viewScreeners.useQuery(undefined, {
     onSuccess: (data) => {
       setAvailable(true)
       setScreeners(data)
     }
   });
 
-  const screenerQuery = trpc.ticker.getScreenerById.useQuery({ id }, {
+  const screenerQuery = trpc.screener.getScreenerById.useQuery({ id }, {
     enabled: fetchById,
     onSuccess: (data) => {
       setValue(reverseFormatScreener(data));
     }
   })
 
-  const deleteScreener = trpc.ticker.deleteScreener.useMutation({
+  const deleteScreener = trpc.screener.deleteScreener.useMutation({
     onSuccess: () => {
       savedScreenersQuery.refetch();
     }

@@ -36,11 +36,11 @@ const Watchlist: NextPage = () => {
   const [availability, setAvailability] = useState(false);
   const [tickers, setTickers] = useState<TickerType[]>([])
 
-  const removeTickerMutation = trpc.ticker.deleteFromWatchlist.useMutation({
+  const removeTickerMutation = trpc.watchlist.deleteFromWatchlist.useMutation({
     onSuccess: () => {multipleTickerQuery.refetch()}
   });
 
-  const multipleTickerQuery = trpc.ticker.getWatchlist.useQuery(undefined, {
+  const multipleTickerQuery = trpc.watchlist.getWatchlist.useQuery(undefined, {
     onSuccess: (data) => {
       setAvailability(true);
       setTickers(data)
@@ -51,6 +51,7 @@ const Watchlist: NextPage = () => {
     setTickers(tickers.filter((singleTicker) => singleTicker.ticker !== ticker))
     removeTickerMutation.mutate({ ticker });
   }
+
 
   return (
     <div>

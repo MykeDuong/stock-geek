@@ -55,7 +55,7 @@ const TickerPage: NextPage = () => {
     marketState: "",
   });
 
-  const addToWatchlistQuery = trpc.ticker.addToWatchlist.useMutation();
+  const addToWatchlistQuery = trpc.watchlist.addToWatchlist.useMutation();
 
   const tickerInfoQuery = trpc.ticker.getTickerInfo.useQuery(
     { ticker },
@@ -66,7 +66,7 @@ const TickerPage: NextPage = () => {
     }
   )
 
-  const availabilityQuery = trpc.ticker.getAvailability.useQuery({ ticker }, {
+  const availabilityQuery = trpc.portfolio.getAvailability.useQuery({ ticker }, {
     onSuccess: (data) => {
       setAvailability(data);
       setReadyToTrade(true);

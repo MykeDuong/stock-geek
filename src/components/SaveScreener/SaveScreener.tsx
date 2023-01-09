@@ -22,7 +22,7 @@ const SaveScreener: NextComponentType<any, any, PropsInterface> = ({ onClose }) 
   const [error, setError] = useState(false);
 
   // Queries/Mutations
-  const saveScreenerQuery = trpc.ticker.saveScreener.useMutation({
+  const saveScreenerQuery = trpc.screener.saveScreener.useMutation({
     onSuccess: () => {
       onClose();
     }

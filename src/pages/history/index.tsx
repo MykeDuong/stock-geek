@@ -35,7 +35,7 @@ const History: NextPage = () => {
 
   const [tickers, setTickers] = useState<TickerInterface[]>([]);
 
-  const historyQuery = trpc.ticker.getHistory.useQuery(undefined,{
+  const historyQuery = trpc.transaction.getHistory.useQuery(undefined,{
     onSuccess: (data) => {
       setTickers(data);
       setAvailability(true);

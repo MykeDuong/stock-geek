@@ -16,7 +16,7 @@ interface PropsInterface {
 const PreviewOrder: NextComponentType<any, any, PropsInterface> = ({ type, ticker, price, quantity, onClose }) => {
   const router = useRouter();
 
-  const makeTransaction = trpc.ticker.makeTransaction.useMutation({
+  const makeTransaction = trpc.transaction.makeTransaction.useMutation({
     onSuccess: () => {
       router.push('/history');
     }

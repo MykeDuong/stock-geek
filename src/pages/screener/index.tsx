@@ -42,7 +42,7 @@ const Screener: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (prop
     price: { min: number, max: number },
   }>(formatScreener(value));
 
-  const screenerQuery = trpc.ticker.getScreenerResult.useQuery(queryValue, {
+  const screenerQuery = trpc.screener.getScreenerResult.useQuery(queryValue, {
     enabled: fetchResult,
     onSuccess: () => {
       setFetchResult(false);

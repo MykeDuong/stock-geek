@@ -8,11 +8,11 @@ interface PropsInterface {
   showButton?: boolean,
 }
 
-export const TickerInfo: NextComponentType<{}, {}, PropsInterface> = ({ ticker, showButton = true }) => {
+export const TickerInfo: NextComponentType<any, any, PropsInterface> = ({ ticker, showButton = true }) => {
 
   const [watchlisted, setWatchlisted] = useState(false);
 
-  const addToWatchlistQuery = trpc.ticker.addToWatchlist.useMutation();
+  const addToWatchlistQuery = trpc.watchlist.addToWatchlist.useMutation();
 
   const router = useRouter()
   const container = useRef<HTMLDivElement>(null);
