@@ -520,7 +520,7 @@ const TickerPage: NextPage = () => {
                       <div
                         className="my-0"
                       >
-                        {transactionInfo.marketState === "CLOSED" ?
+                        {transactionInfo.marketState !== "OPEN" ?
                           <div
                             className="flex flex-row gap-1 items-center"
                           >
@@ -613,7 +613,7 @@ const TickerPage: NextPage = () => {
                       <p
                         className="font-raleway text-black text-2xl"
                       >
-                        {transactionInfo.marketState === "CLOSED" ? "" : (transactionInfo.type === "buy" ? transactionInfo.ask : transactionInfo.bid)}
+                        {transactionInfo.marketState !== "OPEN" ? "" : (transactionInfo.type === "buy" ? transactionInfo.ask : transactionInfo.bid)}
                       </p>
                     </div>
                   </div>
@@ -633,7 +633,8 @@ const TickerPage: NextPage = () => {
                       <p
                         className="font-raleway text-black text-2xl"
                       >
-                        {transactionInfo.marketState === "CLOSED" ? "" : (transactionInfo.quantity * (transactionInfo.type === "buy" ? transactionInfo.ask! : transactionInfo.bid!)).toLocaleString('en-US')}
+                        {console.log(transactionInfo.marketState)}
+                        {transactionInfo.marketState !== "OPEN" ? "" : (transactionInfo.quantity * (transactionInfo.type === "buy" ? transactionInfo.ask! : transactionInfo.bid!)).toLocaleString('en-US')}
                       </p>
                     </div>
                   </div>
@@ -655,7 +656,7 @@ const TickerPage: NextPage = () => {
                 <button
                   className={`py-4 w-1/2 rounded-lg font-raleway text-xl text-white ${readyToTrade ? "bg-green-700 hover:scale-105" : 'pointer-events-none bg-beige-700'}`}
                   onClick={() => {
-                    if (transactionInfo.marketState === "CLOSED") {
+                    if (transactionInfo.marketState !== "OPEN") {
                       setError("MARKET_CLOSED")
                     } else if (transactionInfo.quantity === 0) {
                       setError("ZERO_QUANTITY")

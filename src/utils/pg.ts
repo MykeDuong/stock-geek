@@ -438,3 +438,52 @@ export const getHoldings = async ( userId: string ) => {
   if (success) return result;
   else throw result;
 }
+
+export interface PortfolioRowInterface {
+  user_id: number;
+  date: Date;
+  value: number;
+}
+
+// Portfolio
+export const getPortfolio = async ( userId: string ) => {
+  let success = true;
+
+  const client = await pool.connect()
+ 
+  const result = await client
+    .query(sql.viewPortfolio, [userId])
+    .then(res => {
+      return res.rows;
+    })
+    .catch((e)=> {
+      success = false;
+      return e;
+  })
+  
+  client.release(true)
+  
+  if (success) return result;
+  else throw result;
+}
+
+export const updatePortfolio = async ( userId: string, value: number ) => {
+  let success = true;
+
+  const client = await pool.connect()
+ 
+  const result = await client
+    .query(sql.updatePortfolio, [userId, value])
+    .then(res => {
+      return res.rows;
+    })
+    .catch((e)=> {
+      success = false;
+      return e;
+  })
+  
+  client.release(true)
+  
+  if (success) return result;
+  else throw result;
+}

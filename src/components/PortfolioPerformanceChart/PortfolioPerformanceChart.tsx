@@ -1,6 +1,7 @@
+import type { NextComponentType } from 'next'
 import React from 'react'
 
-const PortfolioPerformanceChart = () => {
+const PortfolioPerformanceChart: NextComponentType = () => {
   return (
     <div>
       

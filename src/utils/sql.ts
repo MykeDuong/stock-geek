@@ -104,6 +104,21 @@ export const viewHoldings = `
   GROUP BY ticker
 `
 
+// PORTFOLIO
+export const viewPortfolio = `
+  SELECT * FROM portfolio
+  WHERE user_id = $1 
+  ORDER BY date 
+`
+
+export const updatePortfolio = `
+  INSERT INTO portfolio (user_id,date,value)
+  VALUES ($1,CURRENT_DATE,$2)
+  ON CONFLICT (user_id, date)
+  DO 
+  UPDATE SET value = $2;
+`
+
 // TRANSACTIONS
 export const addNewTransaction = `
   INSERT INTO transactions (user_id,ticker,transaction_type,stock_price,quantity)
