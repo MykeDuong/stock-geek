@@ -97,7 +97,6 @@ const PortfolioOverview: NextComponentType = () => {
           {dataAvailable ? currencyFormatter.format((totalHoldingsValue + cash)) : ''}
         </p>
       </div>
-      
       {/* Account info */}
       <div
         className="flex flex-col justify-around h-full"

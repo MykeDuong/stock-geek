@@ -18,7 +18,7 @@ const HoldingsRow: NextComponentType<any, any, PropsInterface> = ({ symbol, comp
 
   return (
     <div
-      className="border-slate-400 flex flex-row px-4 mx-0"
+      className="border-slate-400 flex flex-row h-12 px-4 mx-0"
     >
       <div
         className="w-[10%]"
@@ -86,11 +86,11 @@ const HoldingsRow: NextComponentType<any, any, PropsInterface> = ({ symbol, comp
       <div
         className="w-[7%] text-center"
       >
-        <h3
-          className={`${cellTextClass}`}
+        <button
+          className="font-raleway text-lg text-white px-3 py-2 bg-green-700 rounded-lg"
         >
-          Action
-        </h3>
+          Trade
+        </button>
       </div>
     </div>
   )
