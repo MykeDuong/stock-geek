@@ -7,7 +7,9 @@ const titleCardClass = 'text-slate-700 font-raleway text-2xl font-bold'
 
 const Portfolio: NextPage = () => {
   return (
-    <div>
+    <div
+      className="pb-10"
+    >
       <h1
         className={`${pageTitleClass} my-10`}
       >

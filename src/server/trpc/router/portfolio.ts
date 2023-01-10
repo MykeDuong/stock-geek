@@ -27,6 +27,25 @@ export const portfolioRouter = router({
       
       const tickers = dbResult.map((row: HoldingsInterface) => row.ticker);
       const yhResult = await getMultipleTickersAsObjects(tickers);
-      console.log(yhResult);
+
+      return dbResult.map((row: HoldingsInterface) => {
+
+        const rowInfo = yhResult[row.ticker];
+        if (!rowInfo) return
+
+        const currentPrice = (rowInfo.regularMarketPrice ? 
+          rowInfo.regularMarketPrice
+          :
+          rowInfo.postMarketPrice
+        )
+        return {
+          ticker: row.ticker,
+          company: yhResult[row.ticker]?.longName,
+          currentPrice,
+          purchasePrice: row.purchase_price,
+          quantity: parseInt(row.quantity),
+        }
+
+      })
     })
 });

@@ -413,7 +413,7 @@ export const getHoldingsByTicker = async ( userId: string, ticker: string ) => {
 
 export interface HoldingsInterface {
   ticker: string;
-  sum: string;
+  quantity: string;
   purchase_price: number;
 }
 

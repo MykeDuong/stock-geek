@@ -99,7 +99,7 @@ export const viewHoldingsByTicker = `
 `
 
 export const viewHoldings = `
-  SELECT ticker, SUM(quantity), SUM(price*quantity)/SUM(quantity) AS purchase_price FROM holdings
+  SELECT ticker, SUM(quantity) AS quantity, SUM(price*quantity)/SUM(quantity) AS purchase_price FROM holdings
   WHERE user_id=$1
   GROUP BY ticker
 `

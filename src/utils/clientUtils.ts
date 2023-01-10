@@ -4,6 +4,14 @@ export const popupClass = 'fixed left-[41.87%] right-[19.37%] z-10 min-h-fit min
 
 export const pageTitleClass = 'text-center font-raleway text-5xl text-green-700 font-semibold uppercase'
 
+export const portfolioHelperMessages = {
+  accountValue: "Displays the total current value of your portfolio.",
+  buyingPower: "The total value of your cash and margin accounts that can be used to make trades.\nCalculated as: Cash + 50% (Long Stocks) - 150% (Shorted Stocks) (Investopedia)",
+  cash: "Total amount of cash available for making trades.",
+  annualReturn: 'Percentage of return that you have earned if your returns were extrapolated for a year.',
+  cummulativeReturn: 'The total change in the investment price over a set time—an aggregate return, not an annualized one'
+}
+
 export const nFormatter = (num: number, digits: number) => {
   const lookup = [
     { value: 1, symbol: "" },

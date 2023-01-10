@@ -1,13 +1,43 @@
 import type { NextComponentType } from 'next'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { trpc } from '../../utils/trpc'
+import HoldingsRow from './HoldingsRow/HoldingsRow';
 
-const columnNameClass = 'font-raleway text-lg capitalize'
+const columnNameClass = 'font-raleway text-lg font-semibold capitalize'
+
+interface HoldingsInterface {
+  ticker: string;
+  company: string,
+  currentPrice: number,
+  purchasePrice: number,
+  quantity: number
+}
 
 const HoldingsInformation: NextComponentType = () => {
 
-  const [holdings, setHoldings] = useState([])
-  const holdingsQuery = trpc.portfolio.getHoldings.useQuery();
+  const [totalValue, setTotalValue] = useState(0);
+  const [totalPurchase, setTotalPurchase] = useState(0)
+  const [totalChange, setTotalChange] = useState(0);
+  const [holdingsDataAvailable, setHoldingsDataAvailable] = useState(false);
+  const [holdings, setHoldings] = useState<HoldingsInterface[]>([])
+  const holdingsQuery = trpc.portfolio.getHoldings.useQuery(undefined, {
+    onSuccess: (data) => {
+      setHoldings(data)
+    }
+  });
+
+  useEffect(() => {
+    let tv = 0 // totalValue
+    let tp = 0 // totalPurchase
+    setHoldingsDataAvailable(true)
+    holdings.forEach(ticker => {
+      tv += ticker.currentPrice * ticker.quantity;
+      tp += ticker.purchasePrice * ticker.quantity;
+    })
+    setTotalValue(tv);
+    setTotalPurchase(tp);
+    setTotalChange(tv - tp);
+  }, [holdings])
 
   return (
     <div
@@ -23,10 +53,10 @@ const HoldingsInformation: NextComponentType = () => {
             Total Value
           </h3>
           <p
-            className={`font-raleway text-xl`}
+            className={`font-raleway text-xl font-semibold`}
 
           >
-            $10000
+            {`$${totalValue.toLocaleString('en-US')}`}
           </p>
         </div>
         <div>
@@ -37,9 +67,9 @@ const HoldingsInformation: NextComponentType = () => {
             Total Gains/Loss
           </h3>
           <p
-            className={`font-raleway text-xl`}
+            className={`font-raleway text-xl font-semibold ${totalChange > 0 ? 'text-green-700' : 'text-red-700'}`}
           >
-            {`+ $100.00  (10.00%)`}
+            {`${(totalChange > 0) ? "+" : "-"} $${((Math.abs(totalChange)).toLocaleString('en-US'))} (${((totalChange)/ totalPurchase * 100).toLocaleString('en-US')}%)`}
           </p>
         </div>
       </div>
@@ -119,6 +149,32 @@ const HoldingsInformation: NextComponentType = () => {
             Action
           </h3>
         </div>
+      </div>
+
+      {/* Rows */}
+      <div
+        className="flex items-center mt-4"
+      >
+        {holdingsDataAvailable ? 
+          <div
+            className="flex flex-col w-full gap-2"
+          >
+            {holdings.map((ticker) =>
+              <HoldingsRow 
+                key={`key for Holdings Row of ${ticker.ticker}`}
+                symbol={ticker.ticker} 
+                company={ticker.company} 
+                currentPrice={ticker.currentPrice} 
+                purchasePrice={ticker.purchasePrice} 
+                quantity={ticker.quantity} 
+              />
+            )}
+          </div>
+          :
+          <div>
+
+          </div>
+        }
       </div>
     </div>
   )
