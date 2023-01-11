@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 
 import { trpc } from '../../utils/trpc';
-import { useAuthType, useCurrentDir } from "../../store";
+import { useAuthType } from "../../store";
 import { TbAlertCircle } from "react-icons/tb";
 
 const Auth: NextPage = () => {
@@ -17,11 +17,10 @@ const Auth: NextPage = () => {
   const router = useRouter();
 
   const { authType, setAuthSignIn, setAuthSignUp } = useAuthType();
-  const { currentDir } = useCurrentDir();
 
   useEffect(() => {
     if (sessionData) {
-      router.push('/' + currentDir);
+      router.push('/home');
     }
   }, [ sessionData ])
 

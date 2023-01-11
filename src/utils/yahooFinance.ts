@@ -96,8 +96,12 @@ export const getMultipleTickers = async ( tickers: string[] ) => {
 }
 
 export const getMultipleTickersAsObjects = async ( tickers: string[] ) => {
-  const result = await yahooFinance.quote(tickers, { return: 'object' });
-  return result;
+  try {
+    const result = await yahooFinance.quote(tickers, { return: 'object' });
+    return result;
+  } catch(err) {
+    return {}
+  }
 }
 
 

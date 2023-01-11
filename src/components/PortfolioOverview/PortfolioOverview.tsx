@@ -28,12 +28,12 @@ const PortfolioOverview: NextComponentType = () => {
   const [cashAvailable, setCashAvailable] = useState(false);
   const [accountValueHelper, setAccountValueHelper] = useState(false);
 
-  const [cash, setCash] = useState(0)
+  const [cash, setCash] = useState(10000)
   const [totalHoldingsValue, setTotalHoldingsValue] = useState(0);
   const [portfolioAge, setPortfolioAge] = useState(0);
 
   const [firstPortfolioValue, setFirstPortfolioValue] = useState(10000);
-  const [yesterdayPortfolioValue, setYesterdayPortfolioValue] = useState(0);
+  const [yesterdayPortfolioValue, setYesterdayPortfolioValue] = useState(10000);
 
   // Queries/Mutations
   trpc.user.getUserInfo.useQuery(undefined, {
@@ -121,15 +121,15 @@ const PortfolioOverview: NextComponentType = () => {
           <PortfolioInfoCell
             title="Today's Change"
             sign={true}
-            positive={totalHoldingsValue + cash >= yesterdayPortfolioValue}
-            value={currencyFormatter.format(Math.abs(totalHoldingsValue + cash - yesterdayPortfolioValue))}
-            subvalue={percentageFormatter.format(Math.abs(totalHoldingsValue + cash - yesterdayPortfolioValue) / yesterdayPortfolioValue)}
+            positive={dataAvailable ? totalHoldingsValue + cash >= yesterdayPortfolioValue : true}
+            value={dataAvailable ? currencyFormatter.format(Math.abs(totalHoldingsValue + cash - yesterdayPortfolioValue)) : 'loading...'}
+            subvalue={dataAvailable ? percentageFormatter.format(Math.abs(totalHoldingsValue + cash - yesterdayPortfolioValue) / yesterdayPortfolioValue) : ''}
           />
           <PortfolioInfoCell
             title="Total Gain/Loss"
             sign={true}
-            positive={(totalHoldingsValue + cash - firstPortfolioValue) >= 0}
-            value={currencyFormatter.format(Math.abs(totalHoldingsValue + cash - firstPortfolioValue))}
+            positive={dataAvailable ? (totalHoldingsValue + cash - firstPortfolioValue) >= 0 : true}
+            value={dataAvailable ? currencyFormatter.format(Math.abs(totalHoldingsValue + cash - firstPortfolioValue)) : "loading..."}
           />
         </div>
         <div
@@ -137,12 +137,12 @@ const PortfolioOverview: NextComponentType = () => {
         >
           <PortfolioInfoCell
             title="Buying Power"
-            value={currencyFormatter.format(cash + (totalHoldingsValue / 2))}
+            value={dataAvailable ? currencyFormatter.format(cash + (totalHoldingsValue / 2)) : 'loading...'}
             helper={portfolioHelperMessages.buyingPower}
           />
           <PortfolioInfoCell
             title="Cash"
-            value={currencyFormatter.format(cash)}
+            value={dataAvailable ? currencyFormatter.format(cash) : 'loading...'}
             helper={portfolioHelperMessages.cash}
           />
         </div>
@@ -152,15 +152,15 @@ const PortfolioOverview: NextComponentType = () => {
           <PortfolioInfoCell
             title="Cum. Return"
             sign={true}
-            positive={cash + totalHoldingsValue - firstPortfolioValue >= 0}
-            value={percentageFormatter.format(Math.abs(cash + totalHoldingsValue - firstPortfolioValue) / firstPortfolioValue)}
+            positive={dataAvailable ? cash + totalHoldingsValue - firstPortfolioValue >= 0 : true}
+            value={dataAvailable ? percentageFormatter.format(Math.abs(cash + totalHoldingsValue - firstPortfolioValue) / firstPortfolioValue) : 'loading...'}
             helper={portfolioHelperMessages.cummulativeReturn}
           />
           <PortfolioInfoCell
             title="Annual Return"
             sign={true}
-            positive={cash + totalHoldingsValue - firstPortfolioValue >= 0}
-            value={percentageFormatter.format(Math.abs((1 + (cash + totalHoldingsValue - firstPortfolioValue) / firstPortfolioValue)**(365 / portfolioAge) - 1))}
+            positive={dataAvailable ? cash + totalHoldingsValue - firstPortfolioValue >= 0 : true}
+            value={dataAvailable ? percentageFormatter.format(Math.abs((1 + (cash + totalHoldingsValue - firstPortfolioValue) / firstPortfolioValue)**(365 / portfolioAge) - 1)) : 'loading...'}
             helper={portfolioHelperMessages.annualReturn}
           />
         </div>
