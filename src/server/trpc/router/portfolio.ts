@@ -57,7 +57,6 @@ export const portfolioRouter = router({
       await updatePortfolio(userId, totalValue);
       const dbResult: PortfolioRowInterface[] = await getPortfolio(userId);
       
-      console.log(dbResult);
       return dbResult
     }),
 });

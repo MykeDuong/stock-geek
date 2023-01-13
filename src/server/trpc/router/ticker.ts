@@ -1,5 +1,6 @@
 import { router, protectedProcedure, publicProcedure } from "../trpc";
 import { z } from 'zod';
+import { DateTime } from 'luxon'
 import { getRecommendations, getSPFiveHundred, getTickerInfo, getTrending, search } from "../../../utils/yahooFinance";
 import { today } from "../../../utils/constants";
 
@@ -80,15 +81,20 @@ export const tickerRouter = router({
       const { startingPoint } = input;
       const historicalResult = await getSPFiveHundred(startingPoint);
       const todayResult = await getTickerInfo("^GSPC");
-      const historicalData = historicalResult.map(row => ({
-        time: row.date,
-        value: row.close,
-      }))
-      console.log(today);
+      
+      const historicalData = historicalResult.map(row => {
+        const stringDate = row.date.toISOString().slice(0, -1)
+        console.log(DateTime.fromISO(stringDate, { zone: 'America/New_York' }).toJSDate());
+        return {
+          time: DateTime.fromISO(stringDate, { zone: 'America/New_York' }).toJSDate(),
+          value: row.close,
+        }
+      });
       historicalData.push({
-        time: today, // today
+        time: new Date(),
         value: todayResult.price?.regularMarketPrice,
       });
+      console.log(historicalData);
       return historicalData;
     })
 });

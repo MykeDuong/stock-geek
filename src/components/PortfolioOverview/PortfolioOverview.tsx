@@ -5,7 +5,6 @@ import { AiFillQuestionCircle } from 'react-icons/ai'
 import { trpc } from '../../utils/trpc'
 import PortfolioInfoCell from './PortfolioInfoRow/PortfolioInfoCell'
 import { portfolioHelperMessages } from '../../utils/clientUtils'
-import { today } from '../../utils/constants'
 
 const questionPromptClass = { height: '1rem', width: '1rem' }
 
@@ -61,7 +60,7 @@ const PortfolioOverview: NextComponentType = () => {
     onSuccess: (data) => {
       if (data[0]) {
         setFirstPortfolioValue(data[0].value);
-        setPortfolioAge(Math.floor(((today).getTime() - data[0].date.getTime()) / (1000 * 3600 * 24)) );
+        setPortfolioAge(Math.floor(((new Date()).getTime() - data[0].date.getTime()) / (1000 * 3600 * 24)) );
       }
       const yesterday = data[data.length - 2]
       if (yesterday) setYesterdayPortfolioValue(yesterday.value)

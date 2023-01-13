@@ -7,4 +7,4 @@ export const screenerConstants = {
   price: { min: 0, max: 200 },
 }
 
-export const today = new Date(new Date().toLocaleString("en-US", {timeZone: "America/New_York"}));
+export const today = new Date((new Date()).toLocaleString("en-US", {timeZone: "America/New_York"}));

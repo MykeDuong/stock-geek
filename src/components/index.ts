@@ -38,3 +38,12 @@ export { default as HoldingsInformation } from './HoldingsInformation/HoldingsIn
 
 export const PortfolioPerformanceChart = dynamic(() => import ('./PortfolioPerformanceChart/PortfolioPerformanceChart'), { ssr: false })
 
+export { default as TickerBanner } from './TickerBanner/TickerBanner';
+
+export { default as MarketPerformance } from './MarketPerformance/MarketPerformance';
+
+export { default as News } from './News/News';
+
+export { default as MarketOverview } from './MarketOverview/MarketOverview';
+
+export { default as Watchlist } from './Watchlist/Watchlist';

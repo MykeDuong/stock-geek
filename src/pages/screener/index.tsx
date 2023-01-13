@@ -15,16 +15,13 @@ import { useRouter } from 'next/router';
 import { formatScreener, pageTitleClass } from "../../utils/clientUtils";
 import { screenerConstants } from "../../utils/constants";
 
-const Screener: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (props) => {
+const Screener: NextPage = (props) => {
 
   // Router
   const router = useRouter();
 
   // Store
   const { value } = useScreenerFilter()
-
-  // Queries/Mutations
-  const { data: trendingTickers } = trpc.ticker.getTrending.useQuery();
 
   // States
   const [editScreener, setEditScreener] = useState(false);
@@ -52,7 +49,7 @@ const Screener: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (prop
   const handleSearch = async () => {
     setViewResult(true);
     setEditScreener(false);
-    
+
     setQueryValue(formatScreener(value));
     setFetchResult(true)
 
@@ -68,29 +65,27 @@ const Screener: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (prop
       >
         <div
           className="relative h-72 w-full overflow-hidden"
-        > 
-          <Image src={"/images/screener-image.png"} alt={"screener-image"} style={{"objectFit": "cover"}} fill />
-        </div>
-        <div
-          className=""
         >
-          <h1
-            className={`${pageTitleClass} mt-8`}
-          >
-            Stock Screener
-          </h1>
+          <Image src={"/images/screener-image.png"} alt={"screener-image"} style={{ "objectFit": "cover" }} fill />
+        </div>
+
+        <h1
+          className={`${pageTitleClass} mt-8 mb-10`}
+        >
+          Stock Screener
+        </h1>
+        <div>
           <div
-            className="flex flex-row ml-6 mt-6 mb-2 gap-2 items-center"
+            className="flex flex-row items-center gap-2 mb-3"
           >
-            <AiOutlineLineChart style={{ height: '2.4rem', width: '2.4rem'}}/>
+            <AiOutlineLineChart style={{ height: '2.4rem', width: '2.4rem' }} color="#395144" />
             <h2
               className="text-2xl font-raleway font-bold text-slate-700"
             >
               Trending Tickers
             </h2>
           </div>
-          <TrendingTickers tickers={trendingTickers} />
-        
+          <TrendingTickers />
         </div>
         <div
           className={`mt-10 pt-8 flex flex-col ${viewResult && 'min-h-screen'}`}
@@ -100,13 +95,13 @@ const Screener: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (prop
             className="flex flex-row justify-center gap-40"
           >
             <button
-              className={`py-5 px-6 max-h-fit text-xl text-white font-raleway rounded-xl hover:scale-105 ${editScreener ? "bg-beige-600" : "bg-green-700" }`}
+              className={`py-5 px-6 max-h-fit text-xl text-white font-raleway rounded-xl hover:scale-105 ${editScreener ? "bg-beige-600" : "bg-green-700"}`}
               onClick={() => setEditScreener(!editScreener)}
             >
               Create New Screener
             </button>
             <button
-              className={`py-5 px-6 text-xl text-white font-raleway rounded-xl hover:scale-105 ${viewSavedScreeners ? "bg-beige-600" : "bg-green-700" }`}
+              className={`py-5 px-6 text-xl text-white font-raleway rounded-xl hover:scale-105 ${viewSavedScreeners ? "bg-beige-600" : "bg-green-700"}`}
               onClick={() => setViewSavedScreeners(!viewSavedScreeners)}
             >
               View Saved Screeners
@@ -139,11 +134,11 @@ const Screener: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (prop
                   <div
                     className="flex flex-col gap-4"
                   >
-                    {screenerQuery.data.map(ticker => 
+                    {screenerQuery.data.map(ticker =>
                       <TickerInfo ticker={ticker} key={`ticker of ${ticker}`} />
                     )}
-                  </div> 
-                    : 
+                  </div>
+                  :
                   <ClipLoader color="" />
                 }
               </div>
@@ -160,14 +155,14 @@ const Screener: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (prop
           }
         </div>
       </div>
-      {editScreener && 
+      {editScreener &&
         <Filter onClose={() => setEditScreener(false)} onSearch={() => handleSearch()} />
       }
-      {viewSaveScreener && 
-        <SaveScreener onClose={() => {setViewSaveScreener(false)}} />
+      {viewSaveScreener &&
+        <SaveScreener onClose={() => { setViewSaveScreener(false) }} />
       }
-      {viewSavedScreeners && 
-        <SavedScreeners 
+      {viewSavedScreeners &&
+        <SavedScreeners
           onClose={() => setViewSavedScreeners(false)}
           onSearch={async () => {
             setViewSavedScreeners(false);
@@ -177,22 +172,6 @@ const Screener: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (prop
       }
     </div>
   )
-}
-
-export async function getStaticProps(context: GetStaticPropsContext) {
-  const ssg = await createProxySSGHelpers({
-    router: appRouter,
-    ctx: await createContextInner({ session: null }),
-  });
-
-  await ssg.ticker.getTrending.prefetch();
-  
-  return {
-    props: {
-      trpcState: ssg.dehydrate(),
-    },
-    revalidate: 86400
-  }
 }
 
 export default Screener

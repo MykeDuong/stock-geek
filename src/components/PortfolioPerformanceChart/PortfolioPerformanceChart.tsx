@@ -1,9 +1,8 @@
 import type { NextComponentType } from 'next'
 import { useRef, useEffect, useState } from 'react'
-import { createChart, ColorType, BarPrice } from 'lightweight-charts'
-import { number } from 'zod';
+import type { BarPrice } from 'lightweight-charts';
+import { createChart, ColorType } from 'lightweight-charts'
 import { trpc } from '../../utils/trpc';
-import { today } from '../../utils/constants';
 
 const colors = {
 	backgroundColor: 'transparent',
@@ -30,7 +29,7 @@ const PortfolioPerformanceChart: NextComponentType = () => {
 
 	// Queries/Mutations
 		
-	const SPFiveHundredQuery = trpc.ticker.getSPFiveHundred.useQuery({ startingPoint: portfolioData[0] ? portfolioData[0].time : today }, {
+	const SPFiveHundredQuery = trpc.ticker.getSPFiveHundred.useQuery({ startingPoint: portfolioData[0] ? portfolioData[0].time : new Date() }, {
 		enabled: portfolioAvailable,
 		onSuccess: (data) => {
 			setSPFiveHundredData(data);
@@ -99,20 +98,24 @@ const PortfolioPerformanceChart: NextComponentType = () => {
 			topColor: colors.areaTopColor, 
 			bottomColor: colors.areaBottomColor 
 		});
-		portfolioSeries.setData(portfolioData.map(row => ({
-			...row,
-			time: row.time.toUTCString(),
-		})));
+		portfolioSeries.setData(portfolioData.map(row => {
+			return {
+				...row,
+				time: row.time.toLocaleDateString('en-US', { timeZone: 'America/New_York' }),
+			}
+		}));
 
 		const SPSeries = chart.addAreaSeries({ 
 			lineColor: colors.SPLineColor, 
 			topColor: colors.areaTopColor, 
 			bottomColor: colors.areaBottomColor 
 		});
-		SPSeries.setData(SPFiveHundredData.map(row => ({
-			value: row.value / SPFiveHundredData[0]!.value * 10000,
-			time: row.time.toUTCString(),
-		})));
+		SPSeries.setData(SPFiveHundredData.map(row => {
+			return {
+				value: row.value / SPFiveHundredData[0]!.value * 10000,
+				time: row.time.toLocaleDateString('en-US', { timeZone: 'America/New_York' }),
+			}
+		}));
 
 		const handleResize = () => {
 			if (!container.current) return;

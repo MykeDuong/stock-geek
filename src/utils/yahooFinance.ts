@@ -107,10 +107,10 @@ export const getMultipleTickersAsObjects = async ( tickers: string[] ) => {
 
 export const getSPFiveHundred = async ( startingPoint: Date ) => {
   try {
-    
+    const date = new Date()
     const result = await yahooFinance.historical("^GSPC", {
-      period1: startingPoint,
-      period2: today.setDate(today.getDate() - 1),
+      period1: new Date(startingPoint),
+      period2: date.setDate(date.getDate() - 1),
     })
     return result;
   } catch(err) {
