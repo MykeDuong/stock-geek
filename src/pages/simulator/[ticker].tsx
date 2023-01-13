@@ -61,6 +61,7 @@ const TickerPage: NextPage = () => {
     { ticker },
     {
       onSuccess: (data) => {
+        console.log(data.marketState);
         setTransactionInfo({ ...transactionInfo, bid: data.bid, ask: data.ask, marketState: data.marketState })
       }
     }
@@ -497,7 +498,9 @@ const TickerPage: NextPage = () => {
                               value="buy"
                               className="font-raleway text-xl capitalize p-3 text-left hover:bg-beige-600 rounded-md"
                               onClick={(e) => {
-                                setTransactionInfo({ ...transactionInfo, type: e.target.value })
+                                const value = (e.target as HTMLButtonElement).value
+                                if (value === "buy")
+                                  setTransactionInfo({ ...transactionInfo, type: value })
                                 setOpenType(false)
                               }}
                             >
@@ -507,7 +510,9 @@ const TickerPage: NextPage = () => {
                               value="sell"
                               className="font-raleway text-xl capitalize p-3 text-left hover:bg-beige-600 rounded-md"
                               onClick={(e) => {
-                                setTransactionInfo({ ...transactionInfo, type: e.target.value })
+                                const value = (e.target as HTMLButtonElement).value
+                                if (value === "sell")
+                                  setTransactionInfo({ ...transactionInfo, type: value })
                                 setOpenType(false)
                               }}
                             >
@@ -520,7 +525,7 @@ const TickerPage: NextPage = () => {
                       <div
                         className="my-0"
                       >
-                        {transactionInfo.marketState !== "OPEN" ?
+                        {transactionInfo.marketState !== "REGULAR" ?
                           <div
                             className="flex flex-row gap-1 items-center"
                           >
@@ -534,7 +539,9 @@ const TickerPage: NextPage = () => {
                             </p>
                           </div>
                           :
-                          <div>
+                          <div
+                            className="flex flex-row gap-1 items-center"
+                          >
                             <BiCheckCircle
                               style={{ color: "#395144", height: "1.25rem", width: '1.25rem' }}
                             />
@@ -613,7 +620,7 @@ const TickerPage: NextPage = () => {
                       <p
                         className="font-raleway text-black text-2xl"
                       >
-                        {transactionInfo.marketState !== "OPEN" ? "" : (transactionInfo.type === "buy" ? transactionInfo.ask : transactionInfo.bid)}
+                        {transactionInfo.marketState !== "REGULAR" ? "" : (transactionInfo.type === "buy" ? transactionInfo.ask : transactionInfo.bid)}
                       </p>
                     </div>
                   </div>
@@ -634,7 +641,7 @@ const TickerPage: NextPage = () => {
                         className="font-raleway text-black text-2xl"
                       >
                         {console.log(transactionInfo.marketState)}
-                        {transactionInfo.marketState !== "OPEN" ? "" : (transactionInfo.quantity * (transactionInfo.type === "buy" ? transactionInfo.ask! : transactionInfo.bid!)).toLocaleString('en-US')}
+                        {transactionInfo.marketState !== "REGULAR" ? "" : (transactionInfo.quantity * (transactionInfo.type === "buy" ? transactionInfo.ask! : transactionInfo.bid!)).toLocaleString('en-US')}
                       </p>
                     </div>
                   </div>
@@ -656,7 +663,7 @@ const TickerPage: NextPage = () => {
                 <button
                   className={`py-4 w-1/2 rounded-lg font-raleway text-xl text-white ${readyToTrade ? "bg-green-700 hover:scale-105" : 'pointer-events-none bg-beige-700'}`}
                   onClick={() => {
-                    if (transactionInfo.marketState !== "OPEN") {
+                    if (transactionInfo.marketState !== "REGULAR") {
                       setError("MARKET_CLOSED")
                     } else if (transactionInfo.quantity === 0) {
                       setError("ZERO_QUANTITY")

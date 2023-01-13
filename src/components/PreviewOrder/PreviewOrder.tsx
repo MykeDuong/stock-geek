@@ -16,9 +16,12 @@ interface PropsInterface {
 const PreviewOrder: NextComponentType<any, any, PropsInterface> = ({ type, ticker, price, quantity, onClose }) => {
   const router = useRouter();
 
+  const userQuery = trpc.user.getUserInfo.useQuery();
+
   const makeTransaction = trpc.transaction.makeTransaction.useMutation({
     onSuccess: () => {
       router.push('/history');
+      userQuery.refetch();
     }
   });
 

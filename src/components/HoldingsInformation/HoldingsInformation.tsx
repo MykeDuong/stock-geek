@@ -67,9 +67,9 @@ const HoldingsInformation: NextComponentType = () => {
             Total Gains/Loss
           </h3>
           <p
-            className={`font-raleway text-xl font-semibold ${totalChange > 0 ? 'text-green-700' : 'text-red-700'}`}
+            className={`font-raleway text-xl font-semibold ${totalChange >= 0 ? 'text-green-700' : 'text-red-700'}`}
           >
-            {`${(totalChange > 0) ? "+" : "-"} $${((Math.abs(totalChange)).toLocaleString('en-US'))} (${((totalChange)/ totalPurchase * 100).toLocaleString('en-US')}%)`}
+            {`${(totalChange >= 0) ? "+" : "-"} $${((Math.abs(totalChange)).toLocaleString('en-US'))} (${(totalPurchase > 0 ? (totalChange)/ totalPurchase * 100 : 0).toLocaleString('en-US')}%)`}
           </p>
         </div>
       </div>

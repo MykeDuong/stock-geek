@@ -113,10 +113,11 @@ export const viewPortfolio = `
 
 export const updatePortfolio = `
   INSERT INTO portfolio (user_id,date,value)
-  VALUES ($1,CURRENT_DATE,$2)
+  VALUES ($1, (CURRENT_TIMESTAMP AT TIME ZONE 'America/New_York')::DATE, $2)
   ON CONFLICT (user_id, date)
   DO 
-  UPDATE SET value = $2;
+  UPDATE SET value = $2
+  RETURNING *;
 `
 
 // TRANSACTIONS
