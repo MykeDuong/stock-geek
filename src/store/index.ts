@@ -1,5 +1,4 @@
 import create from 'zustand';
-import { persist } from 'zustand/middleware';
 
 import { screenerConstants } from '../utils/constants';
 
@@ -25,8 +24,8 @@ interface ScreenerFilterInterface {
 }
 
 const intialScreener = {
-  marketCap: { min: screenerConstants.marketCap.min - 1, max: screenerConstants.marketCap.max + 1 },
-  avgVolume: { min: screenerConstants.avgVolume.min - 1, max: screenerConstants.avgVolume.max + 1 },
+  marketCap: { min: 0, max: Number.MAX_SAFE_INTEGER},
+  avgVolume: { min: 0, max: Number.MAX_SAFE_INTEGER },
   PE: { min: screenerConstants.PE.min , max: screenerConstants.PE.max },
   DE: { min: screenerConstants.DE.min , max: screenerConstants.DE.max },
   beta: { min: screenerConstants.beta.min , max: screenerConstants.beta.max },
@@ -37,9 +36,11 @@ export const useScreenerFilter = create<ScreenerFilterInterface>()(
   (set) => ({
     value: intialScreener,
     setValue: (props) => set((state) => ({
+      ...state,
       value: props
     })),
     resetValue: () => set((state) => ({
+      ...state,
       value: intialScreener
     }))
   })

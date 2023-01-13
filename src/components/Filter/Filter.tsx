@@ -6,6 +6,8 @@ import { VscChromeClose } from 'react-icons/vsc'
 import MultiRangeSlider from '../MultiRangeSlider/MultiRangeSlider'
 import { useScreenerFilter } from '../../store'
 import { popupClass } from '../../utils/clientUtils'
+import DiscreteSlider from '../DiscreteSlider/DiscreteSlider'
+import { avgVolumeValues, marketCapValues } from '../../utils/constants'
 
 interface PropsInterface {
   onClose: () => unknown;
@@ -91,7 +93,7 @@ const Filter: NextComponentType<any, any, PropsInterface> = ({ onClose, onSearch
         <div
           className="w-3/5"
         >
-          <MultiRangeSlider size={"large"} filterType="marketCap" />
+          <DiscreteSlider filterType="marketCap" values={marketCapValues} />
         </div>
       </div>
 
@@ -129,7 +131,7 @@ const Filter: NextComponentType<any, any, PropsInterface> = ({ onClose, onSearch
         <div
           className="w-3/5"
         >
-          <MultiRangeSlider size={"large"} filterType="avgVolume" />
+          <DiscreteSlider filterType="avgVolume" values={avgVolumeValues} />
         </div>
       </div>
 
