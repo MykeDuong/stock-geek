@@ -59,3 +59,22 @@ export const useAuthType = create<AuthTypeInterface>()(
     setAuthSignUp: () => set((state) => ({ authType: "signup" })),
   })
 )
+
+// Error Popup
+interface ErrorInterface {
+  errorAppear: boolean
+  message: string
+  setAppear: () => void
+  setDisappear: () => void
+  setMessage: (newMessage: string) => void
+}
+
+export const useError = create<ErrorInterface>()(
+  (set) =>({
+    errorAppear: false,
+    message: '',
+    setAppear: () => set((state) => ({ ...state, errorAppear: true })),
+    setDisappear: () => set((state) => ({ ...state, errorAppear: false })),
+    setMessage: (newMessage) => set((state) => ({ ...state, message: newMessage }))
+  })
+)

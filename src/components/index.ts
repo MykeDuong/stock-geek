@@ -47,3 +47,7 @@ export { default as News } from './News/News';
 export { default as MarketOverview } from './MarketOverview/MarketOverview';
 
 export { default as Watchlist } from './Watchlist/Watchlist';
+
+export { default as TradeOptions } from './TradeOptions/TradeOptions'
+
+export { default as CompanyProfile } from './CompanyProfile/CompanyProfile'

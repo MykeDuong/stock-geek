@@ -12,7 +12,11 @@ const Watchlist: NextPage = () => {
       >
         Watchlist
       </h1>
-      <WatchlistComponent />
+      <div
+        className="mx-10"
+      >
+        <WatchlistComponent />
+      </div>
     </div>
   )
 }
