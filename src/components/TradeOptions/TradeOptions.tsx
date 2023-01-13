@@ -29,6 +29,12 @@ const errorMessage = {
   MARKET_CLOSED: "The market is currently closed. Please try again later."
 }
 
+const AccountInfoHelper = {
+  accountValue: "Displays the total current value of your portfolio.",
+  buyingPower: "The total value of your cash and margin accounts that can be used to make trades.\nCalculated as: Cash + 50% (Long Stocks) - 150% (Shorted Stocks) (Investopedia)",
+  cash: 'Total amount of cash available for making trades.',
+}
+
 const TradeOptions: NextComponentType<any, any, PropsInterface> = ({ onPreview }) => {
   // Route
   const router = useRouter();
@@ -134,7 +140,11 @@ const TradeOptions: NextComponentType<any, any, PropsInterface> = ({ onPreview }
         <div
           className="w-2/5"
         >
-          <AccountInformation name="AccountValue" value={userCash + holdingsValue} />
+          <AccountInformation 
+            name="Account Value" 
+            value={userCash + holdingsValue} 
+            helper={AccountInfoHelper.accountValue}  
+          />
         </div>
 
         {/* Buying Power */}
@@ -144,6 +154,7 @@ const TradeOptions: NextComponentType<any, any, PropsInterface> = ({ onPreview }
           <AccountInformation
             name="Buying Power"
             value={userCash + holdingsValue / 2}
+            helper={AccountInfoHelper.accountValue}  
           />
         </div>
 
@@ -154,6 +165,7 @@ const TradeOptions: NextComponentType<any, any, PropsInterface> = ({ onPreview }
           <AccountInformation
             name="Cash"
             value={userCash}
+            helper={AccountInfoHelper.accountValue}  
           />
         </div>
       </div>

@@ -61,7 +61,7 @@ const HoldingsRow: NextComponentType<any, any, PropsInterface> = ({ symbol, comp
         <h3
           className={`${cellTextClass}`}
         >
-          {purchasePrice.toLocaleString('en-US')}
+          {purchasePrice.toLocaleString('en-US', { maximumFractionDigits: 2})}
         </h3>
       </div>
       <div
@@ -79,7 +79,7 @@ const HoldingsRow: NextComponentType<any, any, PropsInterface> = ({ symbol, comp
         <h3
           className={`${cellTextClass}`}
         >
-          {totalValue.toLocaleString("en-US")}
+          {totalValue.toLocaleString("en-US", { maximumFractionDigits: 2})}
         </h3>
       </div>
       <div
@@ -88,7 +88,7 @@ const HoldingsRow: NextComponentType<any, any, PropsInterface> = ({ symbol, comp
         <h3
           className={`${cellTextClass} ${totalChange >=  0 ? 'text-green-700' : 'text-red-700'}`}
         >
-          {totalChange.toLocaleString('en-US')}
+          {totalChange.toLocaleString('en-US', { maximumFractionDigits: 2})}
         </h3>
       </div>
       <div
