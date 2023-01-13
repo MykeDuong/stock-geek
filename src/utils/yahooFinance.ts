@@ -1,6 +1,7 @@
 import axios from "axios"
 import yahooFinance from "yahoo-finance2"
 import type { QuoteSummaryOptions } from "yahoo-finance2/dist/esm/src/modules/quoteSummary";
+import { today } from "./constants";
 
 yahooFinance.setGlobalConfig({ validation: { logErrors: false} });
 
@@ -104,7 +105,20 @@ export const getMultipleTickersAsObjects = async ( tickers: string[] ) => {
   }
 }
 
-
+export const getSPFiveHundred = async ( startingPoint: Date ) => {
+  try {
+    
+    const result = await yahooFinance.historical("^GSPC", {
+      period1: startingPoint,
+      period2: today.setDate(today.getDate() - 1),
+    })
+    return result;
+  } catch(err) {
+    if (isYHError(err))
+      return err.result
+    return []
+  }
+}
 
 const shuffleArray = (array: any[]) => {
   let currentIndex = array.length, randomIndex;

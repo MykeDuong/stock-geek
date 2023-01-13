@@ -1,3 +1,5 @@
+import dynamic from 'next/dynamic';
+
 export { default as SideBar } from './SideBar/SideBar';
 
 export { default as AppWrap  } from './Wrapper/Wrapper'; 
@@ -34,4 +36,5 @@ export { default as PortfolioOverview } from './PortfolioOverview/PortfolioOverv
 
 export { default as HoldingsInformation } from './HoldingsInformation/HoldingsInformation';
 
-export { default as PortfolioPerformanceChart } from './PortfolioPerformanceChart/PortfolioPerformanceChart';
+export const PortfolioPerformanceChart = dynamic(() => import ('./PortfolioPerformanceChart/PortfolioPerformanceChart'), { ssr: false })
+

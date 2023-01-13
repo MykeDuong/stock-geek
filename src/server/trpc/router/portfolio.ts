@@ -52,7 +52,6 @@ export const portfolioRouter = router({
       holdings.forEach(row => {
         totalValue += yhResult[row.ticker]!.regularMarketPrice! * parseInt(row.quantity);
       })
-      console.log(totalValue);
 
       // Update portfolio
       await updatePortfolio(userId, totalValue);

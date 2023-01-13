@@ -5,6 +5,7 @@ import { AiFillQuestionCircle } from 'react-icons/ai'
 import { trpc } from '../../utils/trpc'
 import PortfolioInfoCell from './PortfolioInfoRow/PortfolioInfoCell'
 import { portfolioHelperMessages } from '../../utils/clientUtils'
+import { today } from '../../utils/constants'
 
 const questionPromptClass = { height: '1rem', width: '1rem' }
 
@@ -60,7 +61,7 @@ const PortfolioOverview: NextComponentType = () => {
     onSuccess: (data) => {
       if (data[0]) {
         setFirstPortfolioValue(data[0].value);
-        setPortfolioAge(Math.floor(((new Date).getTime() - data[0].date.getTime()) / (1000 * 3600 * 24)) );
+        setPortfolioAge(Math.floor(((today).getTime() - data[0].date.getTime()) / (1000 * 3600 * 24)) );
       }
       const yesterday = data[data.length - 2]
       if (yesterday) setYesterdayPortfolioValue(yesterday.value)
@@ -73,10 +74,10 @@ const PortfolioOverview: NextComponentType = () => {
 
   return (
     <div
-      className={`h-full w-full bg-beige-300 shadow-lg flex flex-col px-6 pt-6`}
+      className={`h-full w-full bg-beige-300 shadow-lg flex flex-col px-6 py-6`}
     >
       <div
-        className="flex flex-col mb-10"
+        className="flex flex-col mb-6"
       >
         <div
           className="flex flex-row gap-2 items-center"
@@ -113,7 +114,7 @@ const PortfolioOverview: NextComponentType = () => {
       </div>
       {/* Account info */}
       <div
-        className="flex flex-col justify-around h-full"
+        className="flex flex-col justify-around gap-6"
       >
         <div
           className={rowClass}

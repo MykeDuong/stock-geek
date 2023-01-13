@@ -1,5 +1,4 @@
-import { NextPage } from "next"
-import { AiFillQuestionCircle } from "react-icons/ai"
+import type { NextPage } from "next"
 import { HoldingsInformation, PortfolioOverview, PortfolioPerformanceChart } from "../../components"
 import { pageTitleClass } from "../../utils/clientUtils"
 
@@ -29,7 +28,7 @@ const Portfolio: NextPage = () => {
             Overview
           </h2>
           <div
-            className="min-h-[30rem]"
+            className="min-h-[26rem]"
           >
             <PortfolioOverview />
 
@@ -45,7 +44,7 @@ const Portfolio: NextPage = () => {
             Performance
           </h2>
           <div
-            className="min-h-[30rem]"
+            className="min-h-[26rem]"
           >
             <PortfolioPerformanceChart />
 

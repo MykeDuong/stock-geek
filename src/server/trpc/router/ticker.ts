@@ -1,6 +1,7 @@
 import { router, protectedProcedure, publicProcedure } from "../trpc";
 import { z } from 'zod';
-import { getRecommendations, getTickerInfo, getTrending, search } from "../../../utils/yahooFinance";
+import { getRecommendations, getSPFiveHundred, getTickerInfo, getTrending, search } from "../../../utils/yahooFinance";
+import { today } from "../../../utils/constants";
 
 export const tickerRouter = router({
   getRecommendations: protectedProcedure
@@ -71,4 +72,23 @@ export const tickerRouter = router({
         marketState: queryResult.price?.marketState,
       }
     }),
+  getSPFiveHundred: protectedProcedure
+    .input(
+      z.object({ startingPoint: z.date() })
+    )
+    .query(async ({ input }) => {
+      const { startingPoint } = input;
+      const historicalResult = await getSPFiveHundred(startingPoint);
+      const todayResult = await getTickerInfo("^GSPC");
+      const historicalData = historicalResult.map(row => ({
+        time: row.date,
+        value: row.close,
+      }))
+      console.log(today);
+      historicalData.push({
+        time: today, // today
+        value: todayResult.price?.regularMarketPrice,
+      });
+      return historicalData;
+    })
 });
