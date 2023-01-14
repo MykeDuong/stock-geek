@@ -6,7 +6,7 @@ import { pageTitleClass} from "../../utils/clientUtils"
 const Watchlist: NextPage = () => {
   return (
     <div>
-      <HeaderImage src={"/images/watchlist-image.png"} alt={"watchlist-image"} />
+      <HeaderImage src={"/assets/watchlist-image.png"} alt={"watchlist-image"} />
       <h1
         className={`${pageTitleClass} my-6`}
       >

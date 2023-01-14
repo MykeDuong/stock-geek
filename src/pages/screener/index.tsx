@@ -66,7 +66,7 @@ const Screener: NextPage = (props) => {
         <div
           className="relative h-72 w-full overflow-hidden"
         >
-          <Image src={"/images/screener-image.png"} alt={"screener-image"} style={{ "objectFit": "cover" }} fill />
+          <Image src={"/assets/screener-image.png"} alt={"screener-image"} style={{ "objectFit": "cover" }} fill />
         </div>
 
         <h1

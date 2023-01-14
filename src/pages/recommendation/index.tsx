@@ -36,7 +36,7 @@ const Recommendation: NextPage = () => {
     <div
       className="flex flex-col items-center mb-10"
     >
-      <HeaderImage src="/images/recommendation-image.png" alt="recommendation-image" />
+      <HeaderImage src="/assets/recommendation-image.png" alt="recommendation-image" />
 
       <h1
         className={`${pageTitleClass} mt-6 mb-16`}

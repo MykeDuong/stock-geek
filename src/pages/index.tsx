@@ -32,7 +32,7 @@ const Home: NextPage = () => {
         <div
           className="relative max-w-screen w-screen min-h-[26rem] overflow-hidden"
         >
-          <Image src="/images/landing-page-image.png" alt="landing-page-image" fill style={{ objectFit: 'cover' }} />
+          <Image src="/assets/landing-page-image.png" alt="landing-page-image" fill style={{ objectFit: 'cover' }} />
           <div
             className="absolute left-16 top-10 z-10 flex flex-col gap-8"
           >
@@ -92,7 +92,7 @@ const Home: NextPage = () => {
           <div
             className="relative w-2/5 min-h-[26rem] overflow-hidden mr-10"
           >
-            <Image src="/images/trading-guy.png" alt="trading person" fill style={{ objectFit: 'contain', position: 'absolute',  }} />
+            <Image src="/assets/trading-guy.png" alt="trading person" fill style={{ objectFit: 'contain', position: 'absolute',  }} />
           </div>
         </div>
       </div>
@@ -103,7 +103,7 @@ const Home: NextPage = () => {
         <div
           className="relative w-full min-h-[32rem]"
         >
-          <Image src="/images/portfolio-mac.png" alt="portfolio-mac" fill style={{ objectFit: 'contain'}} />
+          <Image src="/assets/portfolio-mac.png" alt="portfolio-mac" fill style={{ objectFit: 'contain'}} />
         </div>
 
         <div
@@ -149,28 +149,28 @@ const Home: NextPage = () => {
           side="left"
           header="My Portfolio"
           description="Manage your portfolio effectively with real-time performance tracking and key statistics."
-          imgSrc="/images/portfolio.png"
+          imgSrc="/assets/portfolio.png"
         />
 
         <ImageInfo
           side="right"
           header='Trade Simulator'
           description="Practice stock trading with virtual money and sharpen your knowledge with technical and fundamental analysis."
-          imgSrc="/images/simulator.png"
+          imgSrc="/assets/simulator.png"
         />
 
         <ImageInfo
           side="left"
           header='Stock Recommendation'
           description="Diversify your portfolio with recommended stocks featuring real-time statistics to help inform your decision."
-          imgSrc="/images/recommendation.png"
+          imgSrc="/assets/recommendation.png"
         />
 
         <ImageInfo
           side="right"
           header='Stock Screener'
           description="Decide which stocks worth your attention in thousands available in market exchange. "
-          imgSrc="/images/screener.png"
+          imgSrc="/assets/screener.png"
         />
       </div>
       <div

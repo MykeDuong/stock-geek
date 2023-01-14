@@ -44,7 +44,7 @@ const History: NextPage = () => {
 
   return (
     <div>
-      <HeaderImage src={"/images/history-image.png"} alt="history image" />
+      <HeaderImage src={"/assets/history-image.png"} alt="history image" />
       <h1
         className={`${pageTitleClass} my-6`}
       >
