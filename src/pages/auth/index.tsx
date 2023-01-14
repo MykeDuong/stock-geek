@@ -70,6 +70,11 @@ const Auth: NextPage = () => {
     <div
       className="relative bg-auth-image h-screen w-screen bg-cover flex justify-end items-center pr-60"
     >
+      <div
+        className="absolute z-[-10] w-screen h-screen"
+      >
+        <Image src={"/assets/auth-image.png"} alt="background-image"/>
+      </div>
       <div 
         className={`relative min-w-fit px-10 bg-beige-400 rounded-md flex flex-col items-center shadow-lg ${authType === 'signup' ? "h-4/5" : "h-3/5"}`}
       >

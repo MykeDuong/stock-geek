@@ -105,7 +105,7 @@ const SavedScreeners: NextComponentType<any, any, PropsInterface> = ({ onClose, 
         >
           Saved Screeners
         </h1>
-        <hr className="border-green-700 mt-6 mb-20" />
+        <hr className="border-green-700 mt-6 mb-6 2xl:mb-16" />
         <div
           className='flex flex-col'
         >

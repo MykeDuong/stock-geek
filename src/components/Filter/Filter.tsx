@@ -45,7 +45,7 @@ const Filter: NextComponentType<any, any, PropsInterface> = ({ onClose, onSearch
 
   return (
     <div
-      className={`${popupClass} top-[5%] bg-beige-300 rounded-lg shadow-md max-h-[80vh]`}
+      className={`${popupClass} top-[10%] bg-beige-300 rounded-lg shadow-md max-h-[80vh]`}
     >
       <button
         className="absolute top-2 right-2 pointer-events-auto"
@@ -59,9 +59,8 @@ const Filter: NextComponentType<any, any, PropsInterface> = ({ onClose, onSearch
         Create Filters
       </h1>
       <div
-        className={`max-h-[70] overflow-scroll`}
+        className={`max-h-[70vh] overflow-scroll`}
       >
-
         {/* Market Cap */}
         <div
           className="flex flex-row my-2 p-3 bg-beige-200 rounded-md shadow-lg items-center"
@@ -289,24 +288,24 @@ const Filter: NextComponentType<any, any, PropsInterface> = ({ onClose, onSearch
             <MultiRangeSlider filterType="price" />
           </div>
         </div>
+      </div>
 
-        {/* Button */}
-        <div
-          className="w-full flex flex-row justify-end gap-4 mt-4"
+      {/* Button */}
+      <div
+        className="w-full flex flex-row justify-end gap-4 mt-2"
+      >
+        <button
+          className="w-24 px-2 py-2 text-white bg-green-700 rounded-lg text-xl hover:scale-105"
+          onClick={handleSearch}
         >
-          <button
-            className="w-24 px-2 py-2 text-white bg-green-700 rounded-lg text-xl hover:scale-105"
-            onClick={handleSearch}
-          >
-            Search
-          </button>
-          <button
-            className="w-24 px-2 py-2 text-white bg-red-700 rounded-lg text-xl hover:scale-105"
-            onClick={handleReset}
-          >
-            Clear
-          </button>
-        </div>
+          Search
+        </button>
+        <button
+          className="w-24 px-2 py-2 text-white bg-red-700 rounded-lg text-xl hover:scale-105"
+          onClick={handleReset}
+        >
+          Clear
+        </button>
       </div>
     </div>
   )
