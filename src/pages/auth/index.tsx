@@ -86,8 +86,8 @@ const Auth: NextPage = () => {
       </div>
       <div 
         className={`
-          relative min-w-fit w-fit px-10 bg-beige-400 rounded-md flex flex-col items-center shadow-lg 
-          ${authType === 'signup' ? "h-4/5" : "h-3/5"}
+          relative min-w-fit w-fit px-10 bg-beige-400 rounded-md flex flex-col items-center shadow-lg
+          min-h-fit h-fit 
         `}
       >
         {/* Website name */}
@@ -178,7 +178,7 @@ const Auth: NextPage = () => {
               Sign up
             </button>
             <div
-              className="flex justify-center absolute bottom-6 left-0 right-0"
+              className="flex justify-center my-6  bottom-6 left-0 right-0"
             >
               <div
                 className="flex flex-row"
@@ -195,7 +195,6 @@ const Auth: NextPage = () => {
                 >
                   Sign in
                 </button>
-
               </div>
             </div>
           </form>
@@ -235,7 +234,7 @@ const Auth: NextPage = () => {
               Sign in
             </button>
             <div
-              className="flex justify-center absolute bottom-6 left-0 right-0"
+              className="flex justify-center mt-6 mb-6 bottom-6 left-0 right-0"
             >
               <div
                 className="flex flex-row"
