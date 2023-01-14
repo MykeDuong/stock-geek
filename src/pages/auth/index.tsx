@@ -1,12 +1,12 @@
-import { NextPage } from "next";
+import type { NextPage } from "next";
 import { useState, useEffect } from "react";
 import { signIn } from 'next-auth/react';
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
+import Image from 'next/image'
 
 import { trpc } from '../../utils/trpc';
 import { useAuthType } from "../../store";
-import { TbAlertCircle } from "react-icons/tb";
 
 const Auth: NextPage = () => {
   const { data: sessionData } = useSession();
@@ -68,12 +68,12 @@ const Auth: NextPage = () => {
 
   return (
     <div
-      className="relative bg-auth-image h-screen w-screen bg-cover flex justify-end items-center pr-60"
+      className="relative h-screen w-screen bg-cover flex justify-end items-center pr-60"
     >
       <div
-        className="absolute z-[-10] w-screen h-screen"
+        className="fit z-[-10] w-screen h-screen min-w-screen min-h-screen"
       >
-        <Image src={"/assets/auth-image.png"} alt="background-image"/>
+        <Image src="/assets/auth-image.png" alt="background-image" fill style={{ objectFit: 'cover'}} />
       </div>
       <div 
         className={`relative min-w-fit px-10 bg-beige-400 rounded-md flex flex-col items-center shadow-lg ${authType === 'signup' ? "h-4/5" : "h-3/5"}`}
