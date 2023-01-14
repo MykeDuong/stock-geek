@@ -8,6 +8,15 @@ import Image from 'next/image'
 import { trpc } from '../../utils/trpc';
 import { useAuthType } from "../../store";
 
+const inputStyle = `bg-transparent border-b border-slate-400 caret-slate-400 text-slate-700 text-xl font-raleway outline-none w-full`
+
+const buttonStyle = `
+  bg-green-700 text-white font-raleway self-center px-8 py-2 rounded-lg text-lg duration-300 hover:scale-105
+  mt-4
+  2xl:mt-8
+`
+
+
 const Auth: NextPage = () => {
   const { data: sessionData } = useSession();
 
@@ -76,17 +85,34 @@ const Auth: NextPage = () => {
         <Image src="/assets/auth-image.png" alt="background-image" fill style={{ objectFit: 'cover'}} />
       </div>
       <div 
-        className={`relative min-w-fit px-10 bg-beige-400 rounded-md flex flex-col items-center shadow-lg ${authType === 'signup' ? "h-4/5" : "h-3/5"}`}
+        className={`
+          relative min-w-fit w-fit px-10 bg-beige-400 rounded-md flex flex-col items-center shadow-lg 
+          ${authType === 'signup' ? "h-4/5" : "h-3/5"}
+        `}
       >
         {/* Website name */}
         <h1
-          className={`text-green-700 text-5xl font-pacifico ${authType === 'signup' ? "mt-16" : "mt-12"}`}
+          className={`
+            text-green-700 font-pacifico
+            text-5xl mt-6
+            2xl:text-5xl 2xl:mt-12
+          `}
         >
           Stock Geek
         </h1>
-        <hr className="border-green-700 h w-full mt-8 mb-8" />
+        <hr 
+          className={`
+            border-green-700 h w-full 
+            mt-4 mb-3
+            2xl:mt-8 2xl:mb-8
+          `} 
+        />
         <h1
-          className="text-green-700 text-3xl font-raleway font-medium mb-8 px-3"
+          className={`
+            text-green-700 font-raleway font-medium px-3
+            text-2xl mb-4
+            2xl:text-3xl 2xl:mb-8
+          `}
         >
           Welcome to Stock Geek!
         </h1>
@@ -103,7 +129,7 @@ const Auth: NextPage = () => {
               Username
             </label>
             <input 
-              className="bg-transparent border-b border-slate-400 caret-slate-400 text-slate-700 text-xl font-raleway outline-none w-full"
+              className={`${inputStyle}`}
               type="text" id="username" name="username"
               onChange={(e:React.ChangeEvent<HTMLInputElement>) => setSignUpForm({ ...signUpForm, username: e.target.value})}
             /><br />
@@ -114,7 +140,7 @@ const Auth: NextPage = () => {
               Email
             </label>
             <input 
-              className="bg-transparent border-b border-slate-400 caret-slate-400 text-slate-700 text-xl font-raleway outline-none w-full"
+              className={`${inputStyle}`}
               type="text" id="email" name="username"
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSignUpForm({ ...signUpForm, email: e.target.value})}
             /><br />
@@ -126,7 +152,7 @@ const Auth: NextPage = () => {
               Password
             </label>
             <input
-              className="bg-transparent border-b border-slate-400 caret-slate-400 text-slate-700 text-xl font-raleway outline-none w-full"
+              className={`${inputStyle}`}
               type="password" id="password" name="password"
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSignUpForm({ ...signUpForm, password: e.target.value})}
             /><br />
@@ -138,14 +164,14 @@ const Auth: NextPage = () => {
               Confirm password
             </label>
             <input
-              className="bg-transparent border-b border-slate-400 caret-slate-400 text-slate-700 text-xl font-raleway outline-none w-full"
+              className={`${inputStyle}`}
               type="password" id="retyped-password" name="retyped-password"
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSignUpForm({ ...signUpForm, retypedPassword: e.target.value})}
             /><br />
 
             {/* Submit button */}
             <button
-              className="bg-green-700 text-white font-raleway mt-8 self-center px-8 py-2 rounded-lg text-lg hover:px-9 hover:py-3 hover:mt-7 duration-300"
+              className={`${buttonStyle}`}
               type="submit"
               onClick={handleSignUp}
             >
@@ -184,7 +210,7 @@ const Auth: NextPage = () => {
               Username or Email
             </label>
             <input 
-              className="bg-transparent border-b border-slate-400 caret-slate-400 text-slate-700 text-xl font-raleway outline-none w-full"
+              className={`${inputStyle}`}
               type="text" id="username-or-email" name="username-or-email"
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSignInForm({ ...signInForm, usernameOrEmail: e.target.value})}
             /><br />
@@ -195,14 +221,14 @@ const Auth: NextPage = () => {
               Password
             </label>
             <input
-              className="bg-transparent border-b border-slate-400 caret-slate-400 text-slate-700 text-lg font-raleway outline-none w-full"
+              className={`${inputStyle}`}
               type="password" id="password" name="password"
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSignInForm({ ...signInForm, password: e.target.value})}
             /><br />
 
             {/* Submit button */}
             <button
-              className="bg-green-700 text-white font-raleway mt-8 self-center px-8 py-2 rounded-lg text-lg hover:px-9 hover:py-3 hover:mt-7 duration-300"
+              className={`${buttonStyle}`}
               type="submit"
               onClick={handleSignIn}
             >
