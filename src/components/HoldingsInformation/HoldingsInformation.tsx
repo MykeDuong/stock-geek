@@ -7,8 +7,8 @@ const columnNameClass = 'font-raleway text-lg font-semibold capitalize'
 
 interface HoldingsInterface {
   ticker: string;
-  company: string,
-  currentPrice: number,
+  company: string | undefined,
+  currentPrice: number | undefined,
   purchasePrice: number,
   quantity: number
 }
@@ -20,7 +20,8 @@ const HoldingsInformation: NextComponentType = () => {
   const [totalChange, setTotalChange] = useState(0);
   const [holdingsDataAvailable, setHoldingsDataAvailable] = useState(false);
   const [holdings, setHoldings] = useState<HoldingsInterface[]>([])
-  const holdingsQuery = trpc.portfolio.getHoldings.useQuery(undefined, {
+  
+  trpc.portfolio.getHoldings.useQuery(undefined, {
     onSuccess: (data) => {
       setHoldings(data)
     }
@@ -31,7 +32,7 @@ const HoldingsInformation: NextComponentType = () => {
     let tp = 0 // totalPurchase
     setHoldingsDataAvailable(true)
     holdings.forEach(ticker => {
-      tv += ticker.currentPrice * ticker.quantity;
+      tv += (ticker.currentPrice ? ticker.currentPrice : 0) * ticker.quantity;
       tp += ticker.purchasePrice * ticker.quantity;
     })
     setTotalValue(tv);

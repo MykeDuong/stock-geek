@@ -10,7 +10,6 @@ import { TbNotebook } from 'react-icons/tb'
 import { ClipLoader } from "react-spinners";
 
 import { trpc } from '../../utils/trpc';
-import { useCurrentDir } from "../../store";
 
 const buttonIconStyle = {
   height: "30px",

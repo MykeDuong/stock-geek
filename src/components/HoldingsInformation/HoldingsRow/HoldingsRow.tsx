@@ -4,8 +4,8 @@ import React from 'react'
 
 interface PropsInterface {
   symbol: string;
-  company: string;
-  currentPrice: number;
+  company: string | undefined;
+  currentPrice: number | undefined;
   purchasePrice: number;
   quantity: number;
 }
@@ -20,7 +20,7 @@ const HoldingsRow: NextComponentType<any, any, PropsInterface> = ({ symbol, comp
   const router = useRouter();        
 
   // States
-  const totalValue = currentPrice * quantity;
+  const totalValue = (currentPrice ? currentPrice : 0) * quantity;
   const buyValue = purchasePrice * quantity
   const totalChange = totalValue - buyValue;
 
@@ -52,7 +52,7 @@ const HoldingsRow: NextComponentType<any, any, PropsInterface> = ({ symbol, comp
         <h3
           className={`${cellTextClass}`}
         >
-          {currentPrice}
+          {currentPrice ? currentPrice : 'Data not available'}
         </h3>
       </div>
       <div
