@@ -56,7 +56,8 @@ export const authOptions: NextAuthOptions = {
             password: result.password 
           }
 
-          const match = comparePassword(password, user.password);
+          const match = await comparePassword(password, user.password);
+          console.log(match);
           if (!match) throw ({ message: "Password mismatch" });          
         } catch (err) {
           let message = "Unknown error";
