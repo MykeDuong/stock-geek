@@ -22,6 +22,9 @@ const config = {
 		esmExternals: false, // optional
 		externalDir: true, // optional
 		outputFileTracingRoot: path.join(__dirname, '../../'), // monorepo option
+    // images: {
+    //   allowFutureImage: true,
+    // }
 	}
 };
 export default config;

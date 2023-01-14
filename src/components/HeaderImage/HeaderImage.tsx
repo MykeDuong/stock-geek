@@ -1,5 +1,5 @@
 import { NextComponentType } from 'next'
-import Image from 'next/image'
+import Image from 'next/future/image'
 import React from 'react'
 
 interface PropsInterface {

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import type { GetStaticPropsContext, InferGetStaticPropsType, NextPage } from "next"
 import { createProxySSGHelpers } from '@trpc/react-query/ssg';
-import Image from 'next/image'
+import Image from 'next/future/image'
 import { AiOutlineLineChart } from "react-icons/ai"
 import { VscFilter } from "react-icons/vsc";
 import { ClipLoader } from "react-spinners";
