@@ -27,7 +27,7 @@ const Home: NextPage = () => {
       className="min-h-screen bg-green-600 overflow-x-hidden"
     >
       <div
-        className='w-screen max-w-screen h-screen bg-green-700'
+        className='w-screen max-w-screen bg-green-700'
       >
         <div
           className="relative max-w-screen w-screen min-h-[26rem] overflow-hidden"
