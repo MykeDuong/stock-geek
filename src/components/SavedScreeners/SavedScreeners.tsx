@@ -133,7 +133,7 @@ const SavedScreeners: NextComponentType<any, any, PropsInterface> = ({ onClose, 
           </div>
           {available ?
             <div
-              className='flex flex-col overflow-scroll '
+              className='flex flex-col overflow-scroll max-h-[25vh]'
             >
               {screeners?.map((screener, index) =>
                 <SavedScreenerRow

@@ -38,19 +38,19 @@ export const formatScreener = (value: {
   price: { min: number, max: number },
 }) => {
   const retVal = structuredClone(value)
-  if (retVal.marketCap.min === screenerConstants.marketCap.min - 1) {
+  if (retVal.marketCap.min && retVal.marketCap.min <= screenerConstants.marketCap.min - 1) {
     retVal.marketCap.min = null;
   }
 
-  if (retVal.marketCap.max === screenerConstants.marketCap.max + 1) {
+  if (retVal.marketCap.max && retVal.marketCap.max >= screenerConstants.marketCap.max + 1) {
     retVal.marketCap.max = null;
   }
 
-  if (retVal.avgVolume.min === screenerConstants.avgVolume.min - 1) {
+  if (retVal.avgVolume.min && retVal.avgVolume.min <= screenerConstants.avgVolume.min - 1) {
     retVal.avgVolume.min = null;
   }
 
-  if (retVal.avgVolume.max === screenerConstants.avgVolume.max + 1) {
+  if (retVal.avgVolume.max && retVal.avgVolume.max >= screenerConstants.avgVolume.max + 1) {
     retVal.avgVolume.max = null;
   }
 

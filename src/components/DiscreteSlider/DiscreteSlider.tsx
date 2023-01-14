@@ -75,7 +75,7 @@ const MultiRangeSlider: NextComponentType<any, any, PropsInterface> = ({ onChang
 
       {/* Slider */}
       <div
-        className="items-center justify-center"
+        className="items-center justify-center relative"
       >
         <input 
           type="range"
