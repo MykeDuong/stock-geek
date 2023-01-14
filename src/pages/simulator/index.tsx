@@ -1,4 +1,4 @@
-import { NextPage } from "next"
+import type { NextPage } from "next"
 import { useRouter } from "next/router"
 import { useRef, useState } from "react"
 import { AiOutlineWarning } from "react-icons/ai"
@@ -21,7 +21,6 @@ const Simulator: NextPage = () => {
     }
   })
 
-
   const handleSearch = () => {
     setSearchText(searchRef.current ? searchRef.current.value : '');
     if (searchText === '') {
@@ -32,7 +31,7 @@ const Simulator: NextPage = () => {
 
   return (
     <div
-      className="max-h-screen bg-beige-400"
+      className="min-h-fit pb-20 bg-beige-400"
     >
       <h1
         className={`${pageTitleClass} my-6`}
@@ -45,11 +44,11 @@ const Simulator: NextPage = () => {
         Enter a Stock Symbol to Search
       </p>
       <div
-        className="flex flex-row gap-2 w-full justify-center mb-5"
+        className="flex flex-row gap-2 mx-10 justify-center mb-5 text-center"
       >
         <AiOutlineWarning color="#000000" style={{ height: '1.5rem', width: '1.5rem' }} />
         <p
-          className="font-raleway text-xl italic"
+          className="font-raleway text-xl italic text-center"
         >
           If there is no result, you may have entered an invalid stock symbol. Please clear input and try again.
         </p>

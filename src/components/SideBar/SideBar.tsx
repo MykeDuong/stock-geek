@@ -22,7 +22,17 @@ const avatarIconStyle = {
   color: 'white',
 }
 
-const buttonStyle = 'text-white text-left text-2xl h-14 pl-4 rounded-md flex flex-row items-center gap-6 hover:bg-green-600'
+const buttonStyle = `
+  text-white text-left rounded-md flex flex-row items-center hover:bg-green-600
+  text-lg h-10 gap-3 pl-3 
+  2xl:gap-6 2xl:pl-4 2xl:h-14 2xl:text-2xl
+`
+
+const categoryStyle = `
+  text-slate-400 uppercase
+  text-lg ml-3 
+  2xl:text-2xl 2xl:ml-4
+`
 
 const chosenButtonStyle = 'bg-beige-600 hover:bg-beige-600'
 
@@ -38,14 +48,16 @@ const SideBar: NextComponentType = () => {
 
   return (
     <div  
-      className="bg-green-700 w-sidebar h-screen max-h-screen fixed flex flex-col"
+      className="bg-green-700 w-sidebar h-screen fixed flex flex-col overflow-scroll"
     >
       {/* Logo */}
       <div
         className="w-100 my-10 mx-8 flex"
       >
         <h1
-          className="text-white font-pacifico text-5xl"
+          className={`
+            text-white font-pacifico text-3xl lg:text-4xl 2xl:text-5xl
+          `}
         >
           Stock Geek
         </h1>
@@ -84,7 +96,7 @@ const SideBar: NextComponentType = () => {
         className='flex flex-col mx-4'
       >
         <h3
-          className='text-slate-400 text-2xl ml-4 uppercase'
+          className={`${categoryStyle}`}
         >
           My Portal
         </h3>
@@ -121,7 +133,7 @@ const SideBar: NextComponentType = () => {
           Watchlist
         </button>
         <h3
-          className='text-slate-400 text-2xl ml-4 mt-2 uppercase'
+          className={`${categoryStyle} mt-2`}
         >
           Discover
         </h3>
@@ -150,7 +162,7 @@ const SideBar: NextComponentType = () => {
           Recommendations
         </button>
         <h3
-          className='text-slate-400 text-2xl ml-4 mt-2 uppercase'
+          className={`${categoryStyle} mt-2`}
         >
           others
         </h3>

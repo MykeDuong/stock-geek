@@ -1,6 +1,5 @@
 import { useState } from "react";
-import type { GetStaticPropsContext, InferGetStaticPropsType, NextPage } from "next"
-import { createProxySSGHelpers } from '@trpc/react-query/ssg';
+import type { NextPage } from "next"
 import Image from 'next/image'
 import { AiOutlineLineChart } from "react-icons/ai"
 import { VscFilter } from "react-icons/vsc";
@@ -8,14 +7,11 @@ import { ClipLoader } from "react-spinners";
 
 import { Filter, SavedScreeners, SaveScreener, TickerInfo, TrendingTickers } from "../../components";
 import { trpc } from "../../utils/trpc"
-import { appRouter } from "../../server/trpc/router/_app";
-import { createContextInner } from "../../server/trpc/context";
 import { useScreenerFilter } from "../../store";
 import { useRouter } from 'next/router';
 import { formatScreener, pageTitleClass } from "../../utils/clientUtils";
-import { screenerConstants } from "../../utils/constants";
 
-const Screener: NextPage = (props) => {
+const Screener: NextPage = () => {
 
   // Router
   const router = useRouter();

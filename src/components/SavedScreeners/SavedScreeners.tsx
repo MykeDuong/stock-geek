@@ -50,7 +50,7 @@ const SavedScreeners: NextComponentType<any, any, PropsInterface> = ({ onClose, 
     }
   });
 
-  const screenerQuery = trpc.screener.getScreenerById.useQuery({ id }, {
+  trpc.screener.getScreenerById.useQuery({ id }, {
     enabled: fetchById,
     onSuccess: (data) => {
       setValue(reverseFormatScreener(data));
@@ -133,7 +133,7 @@ const SavedScreeners: NextComponentType<any, any, PropsInterface> = ({ onClose, 
           </div>
           {available ?
             <div
-              className='flex flex-col overflow-scroll h-[16rem] max-h-[16rem]'
+              className='flex flex-col overflow-scroll '
             >
               {screeners?.map((screener, index) =>
                 <SavedScreenerRow

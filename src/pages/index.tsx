@@ -73,7 +73,7 @@ const Home: NextPage = () => {
           </div>
         </div>
         <div
-          className="flex flex-row mt-16 mx-40 text-center items-center"
+          className="flex flex-row pt-16 px-40 pb-20 min-h-fit text-center items-center justify-center"
         >
           <div
             className="w-3/5 pr-32"
