@@ -1,12 +1,15 @@
-import { router, protectedProcedure } from "../trpc";
 import { z } from 'zod';
-import { findUserById, getHoldings, getHoldingsByTicker, getPortfolio, PortfolioRowInterface, updatePortfolio } from "../../../utils/pg";
-import type { HoldingsInterface } from "../../../utils/pg";
+import { DateTime } from 'luxon'
+
+import { router, protectedProcedure } from "../trpc";
+import { findUserById, getHoldings, getHoldingsByTicker, getPortfolio, updatePortfolio } from "../../../utils/pg";
+import type { HoldingsInterface , PortfolioRowInterface} from "../../../utils/pg";
 import { defaultError } from "../../../utils/serverUtils";
 import { getMultipleTickersAsObjects } from "../../../utils/yahooFinance";
-import { Filter } from "../../../components";
+import { constants } from 'buffer';
 
 export const portfolioRouter = router({
+
   getAvailability: protectedProcedure
     .input(
       z.object({ ticker: z.string().min(1) })
@@ -56,7 +59,16 @@ export const portfolioRouter = router({
       // Update portfolio
       await updatePortfolio(userId, totalValue);
       const dbResult: PortfolioRowInterface[] = await getPortfolio(userId);
-      
-      return dbResult
+     
+      const result = dbResult.map(row =>{
+        const stringDate = row.date.toISOString().slice(0, -1);
+        const time = DateTime.fromISO(stringDate, { zone: 'America/New_York' }).toJSDate();
+        return {
+          date: time,
+          value: row.value
+        }
+      })
+      console.log(result);
+      return result
     }),
 });

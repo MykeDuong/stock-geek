@@ -83,8 +83,8 @@ export const tickerRouter = router({
       const todayResult = await getTickerInfo("^GSPC");
       
       const historicalData = historicalResult.map(row => {
-        const stringDate = row.date.toISOString().slice(0, -1)
-        console.log(DateTime.fromISO(stringDate, { zone: 'America/New_York' }).toJSDate());
+        const stringDate = row.date.toISOString().slice(0, -1);
+
         return {
           time: DateTime.fromISO(stringDate, { zone: 'America/New_York' }).toJSDate(),
           value: row.close,
