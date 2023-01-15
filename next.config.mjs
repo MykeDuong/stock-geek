@@ -18,10 +18,5 @@ const config = {
     defaultLocale: "en",
   },
   output: 'standalone',
-  experimental: {
-		esmExternals: false, // optional
-		externalDir: true, // optional
-		outputFileTracingRoot: path.join(__dirname, '../../'), // monorepo option
-	}
 };
 export default config;
