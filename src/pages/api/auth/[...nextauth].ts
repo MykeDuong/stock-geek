@@ -31,6 +31,9 @@ export const authOptions: NextAuthOptions = {
       }
       return session;
     },
+    redirect: async ({ url, baseUrl }) => {
+      return `${baseUrl}/home`
+    }
   },
   session: {
     strategy: 'jwt',
@@ -73,7 +76,6 @@ export const authOptions: NextAuthOptions = {
       }
     }),
   ],
-  secret: process.env.NEXTAUTH_SECRET,
   pages: {  
     signIn: '/auth/',
     signOut: '/auth/',
