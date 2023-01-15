@@ -23,21 +23,21 @@ export const authOptions: NextAuthOptions = {
     jwt: async ({ token, user }) => {
       if (user)
         token.user = user;
-      return token;
+      return Promise.resolve(token);
     },
     session: async ({ session, token }) =>{
       if (token.user) {
         session.user = token.user as UserInterface;
       }
-      return session;
+      console.log("returning session: ")
+      console.log(session);
+      return Promise.resolve(session);
     },
-    redirect: async ({ url, baseUrl }) => {
-      return `${baseUrl}/home`
-    }
   },
   session: {
     strategy: 'jwt',
   },
+  debug: true,
   providers: [
     CredentialsProvider({
       credentials: {
@@ -77,10 +77,8 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   pages: {  
-    signIn: '/auth/',
-    signOut: '/auth/',
-    error: '/auth/error',
-    newUser: '/auth',
+    signIn: '/auth',
+    signOut: '/auth',
   }
 };
 

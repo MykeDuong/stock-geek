@@ -4,10 +4,8 @@
  * This is especially useful for Docker builds.
  */
 
-import path from 'path'
 !process.env.SKIP_ENV_VALIDATION && (await import("./src/env/server.mjs"));
 
-const __dirname = path.resolve();
 
 /** @type {import("next").NextConfig} */
 const config = {
