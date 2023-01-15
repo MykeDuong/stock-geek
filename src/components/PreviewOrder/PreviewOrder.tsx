@@ -1,4 +1,4 @@
-import { NextComponentType } from 'next'
+import type { NextComponentType } from 'next'
 import { useRouter } from 'next/router';
 import React from 'react'
 import { VscChromeClose } from 'react-icons/vsc';
@@ -44,7 +44,7 @@ const PreviewOrder: NextComponentType<any, any, PropsInterface> = ({ type, ticke
           <VscChromeClose style={{ height: '1.5rem', width: '1.5rem' }} />
         </button>
         <h1
-          className="mt-12 text-4xl font-raleway font-medium text-green-700 mb-4"
+          className="mt-6 text-4xl font-raleway font-medium text-green-700 mb-4"
         >
           Preview Order
         </h1>
@@ -87,7 +87,7 @@ const PreviewOrder: NextComponentType<any, any, PropsInterface> = ({ type, ticke
         {/* Order */}
         <div>
           <div
-          className="mt-20 mb-5 mx-12 flex flex-col gap-8"
+          className="mt-6 mb-5 mx-12 flex flex-col gap-4"
         >
           <OrderRow
             name="Est. Price"
@@ -116,7 +116,7 @@ const PreviewOrder: NextComponentType<any, any, PropsInterface> = ({ type, ticke
         </div>
 
         <div
-          className="mt-20 flex flex-row justify-end gap-6"
+          className="mt-6 flex flex-row justify-end gap-6"
         >
           <button
             className="w-32 py-3 bg-red-700 rounded-lg font-raleway text-xl text-white hover:scale-105"
