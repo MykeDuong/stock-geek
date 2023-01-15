@@ -32,7 +32,7 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
     redirect: async ({ url, baseUrl }) => {
-      return `${baseUrl}/home`
+      return baseUrl;
     }
   },
   session: {
