@@ -32,6 +32,7 @@ export const authOptions: NextAuthOptions = {
       console.log("returning session: ")
       console.log(session);
       return Promise.resolve(session);
+
     },
   },
   session: {
