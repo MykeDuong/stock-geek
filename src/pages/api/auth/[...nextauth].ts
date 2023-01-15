@@ -29,11 +29,9 @@ export const authOptions: NextAuthOptions = {
       if (token.user) {
         session.user = token.user as UserInterface;
       }
+      console.log("Session Ready")
       return session;
     },
-    redirect: async ({ url, baseUrl }) => {
-      return baseUrl;
-    }
   },
   session: {
     strategy: 'jwt',
