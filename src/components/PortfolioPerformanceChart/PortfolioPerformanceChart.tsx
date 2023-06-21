@@ -138,6 +138,7 @@ const PortfolioPerformanceChart: NextComponentType = () => {
 			topColor: colors.areaTopColor, 
 			bottomColor: colors.areaBottomColor 
 		});
+		console.log(SPFiveHundredData)
 		SPSeries.setData(
 			SPFiveHundredData
 				.filter(row => {
