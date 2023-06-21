@@ -60,11 +60,10 @@ export const portfolioRouter = router({
       await updatePortfolio(userId, totalValue);
       const dbResult: PortfolioRowInterface[] = await getPortfolio(userId);
      
-      const result = dbResult.map(row =>{
-        const stringDate = row.date.toISOString().slice(0, -1);
-        const time = DateTime.fromISO(stringDate, { zone: 'America/New_York' }).toJSDate();
+      const result = dbResult.map(row => {
+
         return {
-          date: time,
+          date: row.date,
           value: row.value
         }
       })

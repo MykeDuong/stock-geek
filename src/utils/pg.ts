@@ -1,10 +1,27 @@
-import { Pool, PoolConfig } from 'pg';
+import pg, { Pool, PoolConfig } from 'pg';
+import { DateTime } from 'luxon'
 
 import * as sql from './sql';
 
 const config: PoolConfig = {
   connectionString: `postgres://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_DATABASE}?options`,
 }
+
+pg.types.setTypeParser(1082, (stringValue: string) => {
+  const items = stringValue.split("-")
+  const dateTime = DateTime.fromObject({
+    day: Number(items[2]),
+    month: Number(items[1]),
+    year: Number(items[0]),
+  }, {
+    zone: 'America/New_York',
+  })
+
+  console.log("Luxon Date: " + dateTime.toISODate())
+  const date = dateTime.toJSDate()
+  console.log("JSDate: " + date.toLocaleDateString('en-US', {timeZone: "America/New_York"}))
+  return date
+});
 
 const pool = new Pool(config);
 export default pool;

@@ -3,6 +3,8 @@ import { useRef, useEffect, useState } from 'react'
 import type { BarPrice } from 'lightweight-charts';
 import { createChart, ColorType } from 'lightweight-charts'
 import { trpc } from '../../utils/trpc';
+import { DateTime } from 'luxon'
+import { convertToLocalDate, getNYTime } from '../../utils/clientUtils';
 
 const colors = {
 	backgroundColor: 'transparent',
@@ -18,6 +20,19 @@ interface HistoricalDataInterface {
 	value: number;
 }
 
+const getTimezoneCorrectedTime = (utcTime: Date, returnAsUnixTimestamp = false) => {
+	if(utcTime instanceof Date) {
+			utcTime = new Date(utcTime.getTime()/1000)
+	}
+
+	const timezoneOffsetMinutes = new Date().getTimezoneOffset()
+	const correctedTime = new Date(utcTime.getTime() + (timezoneOffsetMinutes*60))
+
+	if(returnAsUnixTimestamp) return correctedTime
+
+	return new Date(correctedTime.getTime() * 1000)
+}
+
 const PortfolioPerformanceChart: NextComponentType = () => {
 
 	// States
@@ -26,10 +41,14 @@ const PortfolioPerformanceChart: NextComponentType = () => {
 
 	const [portfolioAvailable, setPortfolioAvailable] = useState(false)
 	const [dataAvailable, setDataAvailable] = useState(false)
+	const [dates, setDates] = useState<string[]>([])
+
 
 	// Queries/Mutations
 		
-	const SPFiveHundredQuery = trpc.ticker.getSPFiveHundred.useQuery({ startingPoint: portfolioData[0] ? portfolioData[0].time : new Date() }, {
+	const SPFiveHundredQuery = trpc.ticker.getSPFiveHundred.useQuery({ 
+		startingPoint: portfolioData[0] ? portfolioData[0].time : new Date() 
+	}, {
 		enabled: portfolioAvailable,
 		onSuccess: (data) => {
 			setSPFiveHundredData(data);
@@ -38,10 +57,19 @@ const PortfolioPerformanceChart: NextComponentType = () => {
 
 	trpc.portfolio.getTimeSeriesValues.useQuery(undefined, {
 		onSuccess: (data) => {
-			setPortfolioData(data.map(row => ({
-				time: row.date,
-				value: row.value
-			})))
+			const date: string[] = []
+			data.forEach(row => {
+				date.push(row.date.toLocaleDateString('en-US', {timeZone: 'America/New_York'}))
+			})
+			console.log("date: " + date)
+			setDates(date)
+			console.log('dates: ' + dates)
+			setPortfolioData(data.map(row => {
+				return {
+					time: row.date,
+					value: row.value
+				}
+			}))
 		}
 	})
 
@@ -100,8 +128,8 @@ const PortfolioPerformanceChart: NextComponentType = () => {
 		});
 		portfolioSeries.setData(portfolioData.map(row => {
 			return {
-				...row,
-				time: row.time.toLocaleDateString('en-US', { timeZone: 'America/New_York' }),
+				value: row.value,
+				time: convertToLocalDate(row.time)
 			}
 		}));
 
@@ -110,12 +138,23 @@ const PortfolioPerformanceChart: NextComponentType = () => {
 			topColor: colors.areaTopColor, 
 			bottomColor: colors.areaBottomColor 
 		});
-		SPSeries.setData(SPFiveHundredData.map(row => {
-			return {
-				value: row.value / SPFiveHundredData[0]!.value * 10000,
-				time: row.time.toLocaleDateString('en-US', { timeZone: 'America/New_York' }),
-			}
-		}));
+		SPSeries.setData(
+			SPFiveHundredData
+				.filter(row => {
+					for (let i = 0; i < dates.length; i++) {
+						if (dates[i] === getNYTime(row.time)) { 
+							return true; 
+						}
+					}
+					return false
+				}).map(row => {
+					return {
+						value: row.value / SPFiveHundredData[0]!.value * 10000,
+						// time: getTimezoneCorrectedTime(row.time).toString(),
+						time: convertToLocalDate(row.time)
+					}
+				})
+		);
 
 		const handleResize = () => {
 			if (!container.current) return;

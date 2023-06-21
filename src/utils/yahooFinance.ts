@@ -2,6 +2,7 @@ import axios from "axios"
 import yahooFinance from "yahoo-finance2"
 import type { QuoteSummaryOptions } from "yahoo-finance2/dist/esm/src/modules/quoteSummary";
 import { today } from "./constants";
+import { DateTime } from 'luxon';
 
 yahooFinance.setGlobalConfig({ validation: { logErrors: false} });
 
@@ -107,12 +108,16 @@ export const getMultipleTickersAsObjects = async ( tickers: string[] ) => {
 
 export const getSPFiveHundred = async ( startingPoint: Date ) => {
   try {
-    const date = new Date()
+    
+    const period1 = new Date(startingPoint).toLocaleDateString('en-US', {timeZone: 'America/New_York'})
     const result = await yahooFinance.historical("^GSPC", {
-      period1: new Date(startingPoint),
-      period2: date.setDate(date.getDate() - 1),
+      period1, //period2
     })
-    return result;
+    return result.map(row => {
+      const stringDate = row.date.toISOString().slice(0, -1);
+      const time = DateTime.fromISO(stringDate, { zone: 'America/New_York' }).toJSDate();
+      return { ...row, date: time, }
+    });
   } catch(err) {
     if (isYHError(err))
       return err.result

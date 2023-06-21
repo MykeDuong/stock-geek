@@ -1,3 +1,4 @@
+import { DateTime } from "luxon";
 import { screenerConstants } from "./constants";
 
 export const popupClass = 'fixed left-[41.87%] right-[19.37%] z-10 min-h-fit min-w-fit px-6 py-10 flex flex-col'
@@ -93,4 +94,16 @@ export const reverseFormatScreener = (value: {
   }
 
   return <ReverseFormatScreenerResultInterface>retVal;
+}
+
+export const getNYTime = (time: Date) => time.toLocaleDateString('en-US', { timeZone: 'America/New_York' })
+
+export const convertToLocalDate = (time: Date) => {
+  const item = getNYTime(time).split("/")
+  const dateTime = DateTime.fromObject({
+    year: Number(item[2]),
+    month: Number(item[0]),
+    day: Number(item[1])
+  }, { zone: 'local' })
+  return dateTime
 }

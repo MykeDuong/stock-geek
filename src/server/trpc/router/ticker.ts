@@ -83,17 +83,15 @@ export const tickerRouter = router({
       const todayResult = await getTickerInfo("^GSPC");
       
       const historicalData = historicalResult.map(row => {
-        const stringDate = row.date.toISOString().slice(0, -1);
-
         return {
-          time: DateTime.fromISO(stringDate, { zone: 'America/New_York' }).toJSDate(),
+          time: row.date,
           value: row.close,
         }
       });
-      historicalData.push({
-        time: new Date(),
-        value: todayResult.price?.regularMarketPrice,
-      });
+      // historicalData.push({
+      //   time: new Date(),
+      //   value: todayResult.price?.regularMarketPrice,
+      // });
       console.log(historicalData);
       return historicalData;
     })
