@@ -47,6 +47,7 @@ const TickerPage: NextPage = () => {
   }, [viewProfile, viewTrade]);
 
   const openPreview = (transaction: TransactionInfoType) => {
+    console.log(transaction);
     setTransactionInfo(transaction)
     setPreview(true);
   }

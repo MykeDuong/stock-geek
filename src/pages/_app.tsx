@@ -1,5 +1,8 @@
+'use client'
+
 import { type AppType } from "next/app";
 import { type Session } from "next-auth";
+import { usePathname } from 'next/navigation'
 import { SessionProvider } from "next-auth/react";
 
 import { trpc } from "../utils/trpc";
@@ -11,9 +14,11 @@ const MyApp: AppType<{ session: Session | null }> = ({
   pageProps: { session, ...pageProps },
   ...appProps
 }) => {
+  const pathname = usePathname()
+
   return (
     <SessionProvider session={session}>
-      {([`/auth`, `/`].includes(appProps.router.pathname)) ?
+      {([`/auth`, `/`].includes(pathname || "")) ?
         <Component {...pageProps} /> :
         <AppWrap>
           <Component {...pageProps} />
